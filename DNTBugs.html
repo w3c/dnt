@@ -1,0 +1,690 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>DNT 1.1</title>
+    <meta charset='utf-8'>
+    <script src='https://www.w3.org/Tools/respec/respec-w3c-common'
+            async class='remove'></script>
+    <script class='remove'>
+      var respecConfig = {
+          specStatus: "unofficial",
+          copyrightStart: 2016,
+          shortName: "DNT Bugs",
+          editors: [
+      {
+          name: "Mike O'Neill",
+          url: "https://uk.linkedin.com/in/mikeoneill1",
+          company: "Baycloud Systems",
+          companyURL: "https://baycloud.com/"
+      },
+      {
+          name: "Rob van Eijk",
+          url: "https://nl.linkedin.com/in/rvaneijk88 ",
+          company: "Leiden University",
+          companyURL: "https://www.universiteitleiden.nl/en"
+      }
+          ],
+          wg:           "W3C Tracking Protection Working Group",
+          wgURI:        "http://www.w3.org/2011/tracking-protection/",
+          wgPublicList: "Bugs",
+          wgPatentURI: "http://www.w3.org/2004/01/pp-impl/49311/status"
+      };
+    </script>
+</head>
+<body>
+    <section id='abstract'>
+        <p>
+            Some suggestions for improvements to the TPE, to help increase transparency and make implementation easier. This is based on building the Chrome and Firefox browser extension Bouncer, which implements the full Javascript API,
+            together with experience creating user consent systems based on the API on European ePrivacy compliant websites.
+        </p>
+    </section>
+
+    <section id='sotd'>
+        <p>
+
+        </p>
+    </section>
+
+    <section id="scope-and-goals">
+        <h2>Scope</h2>
+        <p></p>
+    </section>
+
+    <section>
+        <h2>Introduction</h2>
+        <p>
+            Sites and third-party servers are not likely to implement DNT (either the W3C TCS or the EFF flavour) unless there is a scalable way to override
+            the DNT general preference on particular domains i.e. to whitelist them.
+            Moreover, the TCS scope section specifically requires browser support for the JavaScript Exceptions or Consent API.
+            The API has proven to be implementable in browsers and browser extensions,
+            but there has been no use of it by a high profile site such as a publisher or third-party advertiser.
+            Until the API is more widely supported the out-of-band mechanism is the only way for domains to be white-listed, but it suffers from a lack of verifiability and transparency.
+        </p>
+        <p>
+            There have been a few implementations of the <a href="https://www.w3.org/wiki/Privacy/TPWG/TPE_Implementation_Report" target="_blank">Tracking Status Resource or the <code>Tk</code> response</a>.
+            Moreover there also been very few declarations by sites of one of the valid EFF DNT policies at <code>/.well-known/dnt-policy.txt</code>
+        </p>
+        <p>
+            Some sites such as www.w3.org, pixel.piwik.org and gchq.gov.uk have the Tk response header, but with an incorrect value.
+            This could partly to do with lack of clarity,
+            but also hints at the problems for server side code detecting (in a scalable way) out-of-band consent using cookies.
+            Server side code capable of changing HTTP headers is often maintained by a different team, even a different company,
+            than the team responsible for the logic of a web application. A way for the application team to declare the header using a "meta tag" approach could help here,
+            as it has for other recommendations such as the Content-Security-Policy header.
+        </p>
+        <p>
+            The GDPR and the principles laid out in the EU-US Privacy Shield arrangements both call for increased transparency.
+            Embedded third-parties now have to be identified and declare their legal basis and purpose for personal data processing.
+            This requirement is a good fit with facilities in browsers, or browser extensions, to present information clearly,
+            which in turn relies on it being available in a standardised machine readable way.
+            The Tracking Status Resource is perfect mechanism for that, but it would help if this could be deployed more flexibly. Giving
+            sites the option to vary the location of the TSR, and to declare it within an HTML document using meta tags would make it easier for sites to deploy it.
+
+        </p>
+
+        <p>
+            This suggested changes are an attempt to address these issues:
+            <ul>
+                <li>
+                    <h3>DNT:0 header deliverable using  well-known named cookie.</h3>
+                    Origin specific user consent should be implementable by script libraries when the underlying JavaScript API is not implemented by a particular user-agent.
+                    Delivering the protocol elements, e.g. may not be possible in a DNT request header but would be possible as the value of an HTTP cookie
+                    with a standardised name. We propose using the cookie name <code>__DNT</code> for this.
+                    This will allow the user to override their general preference not to be tracked in a standardised and verifiable way.
+                    Although this would be simple method to replace the web-wide API,
+                    it would not be easy to use it for site-specific consent due to the lack of support for double-keyed cookies.
+                </li>
+                <li>
+                    <h3>
+                        New API functionality.
+                    </h3>
+                    The new <code>confirmTrackingException</code> and enhanced <code>storeSiteSpecificTrackingException</code> MAY return a Promise with a fulfilment value of <code>TrackingStatusObject</code>.
+                    This helps the API be more in line with the asynchronous nature of client side JavaScript, and creates callback functionality so web applications can respond dynamically in cases
+                    where the user agent confirms Consent with the user before granting DNT:0.
+                </li>
+                <li>
+                    <h3>useSameParty to replace cookie type subdomain rules</h3>
+                    The use of the domain parameter wastes unnecessary cycles on checking for potential grants for subdomains. The API dictionary now includes a <code>useSameDomain</code>
+                    property which, if set <code>true</code>, will signal the user agent that a particular Consent Grant should also apply to the domains referred to by the <dfn>same-party</dfn>
+                    TSR array property. The user-agent MAY check that the targeted domains contain TSRs that refer back to the host domain of the calling origin.
+                </li>
+                <li>
+                    <h3>Enhanced transparency through extending the Tracking Status Resource</h3>
+                    The new US-EU PrivacyShield requires companies to uphold certain privacy principles, including the right of users to access, amend or erase personal data, the duty to notify users on the purposes for personal data use and the identity of data controllers,
+                    and the ability of users to opt-out (or in some circumstances require them to opt-in) for processing.
+                    The GDPR (coming in 2 year)s will increase the likelihood these principles will be enforced, and made more robust.
+                </li>
+                <li>
+                    <h3>The current TPE document has the following minor bug</h3>
+                    https://www.w3.org/2011/tracking-protection/drafts/tracking-dnt.html#dnt-header-field "A user agent must not generate a DNT header field if the user's tracking preference is not enabled"
+                    Contradicts EU requirement for DNT:0 to override DNT unset.
+                </li>
+            </ul>
+        </p>
+    </section>
+
+    <section>
+        <h2>Tracking Status Resource in the Tk Response Header field</h2>
+        <p>
+            Organisations often manage very many websites, developed and maintained by marketing agencies and other contracted parties.
+            Logistically it can be difficult to manage the declaration of a common Tracking Status Resource by multiple servers run by these disparate parties,
+            but relatively easy to supply a JavaScript library reference to be inserted in every HTML head-section, as this is a well understood industry practice.
+        </p>
+        <p>
+            While it is possible in the current TPE to target any URI as the declared Tracking Status Resource using a chain of HTTP Redirects,
+            getting all a company's servers to initiate the correct server-side redirection code can be difficult.
+        </p>
+
+        <p>
+            This proposal calls for the ability to specify the Tracking Status Resource within the value of the <code>Tk</code> response header,
+            and be able to declare any <code>Tk</code> response header in an HTML <code>head</code> section using a <code>meta</code> tag with
+            the standard <code>http-equiv</code> attribute.
+        </p>
+        <p>
+            In future there is likely to be a standardised policy resource for entire origin (e.g web site) where security and policy oriented headers can be declared.
+            The motivation for this is the "header bloat" issue arising from new recommendations such as Content-Security-Policy.
+            It would make sense to append the Tracking Status Resource to this, and incorporating a reference inside a header is a natural way to do it.
+        </p>
+        <p>
+            A valid URI after a "%" character in the <code>Tk</code> header will be construed as a valid Tracking Status Resource, unless a valid resource is also located at <code>{origin server domain}/.well-known/dnt</code>,
+            in whch case that resource is taken as the only valid one.
+        </p>
+        <p>
+            If a <code>Tk</code> response header exists the <code>meta</code> tag is ignored. If a Tracking Status Resource exists at <code>{origin server domain}/.well-known/dnt</code>
+            then any "%" component of any <code>Tk</code> response , in a header or in the HTML, is ignored.
+        </p>
+        <p>
+            The new Tk response header is defined formally by the following ABNF
+            <pre class="abnf">
+            <dfn>Tk-field-name</dfn>  = "TK"
+            <dfn>Tk-field-value</dfn> = TSV [ ";" status-id] [ "%" URI-reference]
+            <dfn>status-id</dfn> =  1*id-char
+            <dfn>id-char</dfn> =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
+            URI-reference is defined as per [[RFC3986]]
+         </pre>
+        </p>
+        <h3>Tk response header via meta tag </h3>
+        <p>
+            The server MAY supply a Tk response via an HTML <code><a data-link-type="element" href="http://www.w3.org/TR/html5/document-metadata.html#the-meta-element">meta</a></code> elements
+            with <code><a data-link-type="element-attr" href="http://www.w3.org/TR/html5/document-metadata.html#attr-meta-http-equiv">http-equiv</a></code> attributes that are an <a data-link-type="dfn" href="http://www.w3.org/TR/html5/infrastructure.html#ascii-case-insensitive">
+                ASCII case-insensitive
+                match
+            </a> for the string "<code>Tk</code>". For
+            example:
+        </p>
+
+
+        <pre class="example" id="example-ff79af85"><a class="self-link" href="#example-ff79af85"></a>&lt;meta http-equiv="Tk" content="N">
+</pre>
+        <pre class="example" id="example-ff79af86"><a class="self-link" href="#example-ff79af86"></a>&lt;meta http-equiv="Tk" content="C%https://corporate-site.com/.well-known/dnt">
+</pre>
+
+        <p>
+            Add the following entry to the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/document-metadata.html#pragma-directives">pragma directives</a> for the <code><a data-link-type="element" href="http://www.w3.org/TR/html5/document-metadata.html#the-meta-element">meta</a></code>
+            element:
+        </p>
+
+
+        <dl>
+
+            <dt>
+                Tracking response
+                (<code>http-equiv="Tk"</code>)
+
+
+
+            <dd>
+
+                <ol>
+                    <li>
+                        If a Tk response header exists abort these steps.
+                    </li>
+
+                    <li>
+                        If the Document’s <code><a data-link-type="element" href="http://www.w3.org/TR/html5/document-metadata.html#the-head-element">head</a></code> element is not an ancestor of the
+                        <code><a data-link-type="element" href="http://www.w3.org/TR/html5/document-metadata.html#the-meta-element">meta</a></code> element, abort these steps.
+                    </li>
+
+
+                    <li>
+                        If the <code><a data-link-type="element" href="http://www.w3.org/TR/html5/document-metadata.html#the-meta-element">meta</a></code> element lacks a <code><a data-link-type="element-attr" href="http://www.w3.org/TR/html5/document-metadata.html#attr-meta-content">content</a></code> attribute, abort
+                        these steps.
+                    </li>
+
+
+                    <li>
+                        Let <var>trackingResponse</var> be the value of the <code><a data-link-type="element-attr" href="http://www.w3.org/TR/html5/document-metadata.html#attr-meta-content">content</a></code>
+                        attribute of the <code><a data-link-type="element" href="http://www.w3.org/TR/html5/document-metadata.html#the-meta-element">meta</a></code> element.
+                    </li>
+
+
+
+                </ol>
+
+
+
+
+        </dl>
+
+
+        <p>
+            Authors are <em>strongly encouraged</em> to place <code><a data-link-type="element" href="http://www.w3.org/TR/html5/document-metadata.html#the-meta-element">meta</a></code> elements as early
+            in the document as possible, because policies in <code><a data-link-type="element" href="http://www.w3.org/TR/html5/document-metadata.html#the-meta-element">meta</a></code> elements are not
+            applied to content which precedes them.
+        </p>
+
+
+        <p class="note" role="note">
+            Note: Modifications to the <code><a data-link-type="element-attr" href="http://www.w3.org/TR/html5/document-metadata.html#attr-meta-content">content</a></code> attribute of a <code><a data-link-type="element" href="http://www.w3.org/TR/html5/document-metadata.html#the-meta-element">meta</a></code> element
+            after the element has been parsed will be ignored.
+        </p>
+
+
+
+    </section>
+
+    <section>
+        <h2>well-known named cookie to indicate consent</h2>
+        <p>
+            If a user agent does not support the JavaScript API i.e. if <code>navigator.confirmWebWideTrackingException</code> is <code>undefined</code>,
+            and so cannot indicate a DNT exception by sending <code>DNT: 0</code> to the appropriate origin server,
+            then there should be an alternative method to indicate user consent,
+            i.e. that <code>DNT: 1</code> has been overridden, by arranging for the user agent to send a cookie with a "well known" name.
+            It is envisioned that a JavaScript library could be installed on a page to be activated if the required functionality is not implemented by a particular user agent.
+        </p>
+        <p>
+            For transparency and verifiability the cookie should have a standard name <code>__DNT0</code>, MUST have the <code>Secure</code> flag, and must only be placed if
+            the user has given their affirmative consent for web-wide tracking by the origin server, i.e. as the result of the appropriate call to the JavaScript DNT Exception API.
+        </p>
+        <p>
+            If the server recognises the consent indication it MUST respond with a Tk: C header,
+            or an HTML response containing a <code><meta http-equiv="Tk" consent="C" /></code> in the <code>head</code> section.
+        </p>
+        <p>
+            The recognition of web-wide consent for origin server is straight forward using this method, as the cookie would be present in every request.
+            For site-specific consent the data needed could be encoded in the cookie's value, perhaps to be matched against the domain specified in a <code>Referer</code> header.
+            If the recognition requires servers held in the server linked by singling-out via a UID this should be encoded here,
+            and in that case the <code>qualifier</code> TSR property MUST include the <code>i</code> code.
+        </p>
+        <p>
+            <pre>Cookie:__DNT0=1a5b43ea7</pre>
+        </p>
+    </section>
+        <section id='status-representation-additions'>
+            <h3>Tracking Status Representation - Additional Properties</h3>
+
+
+            <section id='rep.status-object'>
+                <h4>Status Object</h4>
+                <p>
+                    The tracking status representation can have the following additional or amendedproperties, as illustrated by the following
+                    Orderly schema [<a href="http://orderly-json.org/">Orderly</a>]:
+                </p>
+<pre class="orderly">
+object {
+    string tracking;                 // as per the Orderly schema in the TPE
+    array { string; } compliance?;   //                 ''                   
+    string qualifiers?;              // amended below 
+    array { string; } controller?;   // as per the Orderly schema in the TPE
+    array { string; } same-party?;   //                 '' 
+    array { string; } audit?;        //                 '' 
+    string policy?;                  //                 '' 
+    string config?;                  //                 '' 
+    array { object { string name; string uri} } controllerDescription; // Legal name of the data controller and a URI of a page providing the user with information about it;
+    <!--array { object { string domain; string commitment? ["T", "N"] } } otherParties?; // domains and status of contracting parties-->
+    object { long overall_retention?; // A positive number of seconds indicating the overall maximum lifetime of the client storage.
+             array object { string type ["C","L","I"]; // storage type C = a cookie, L = localStorage item, I = indexdedDB table, "E" = cache item e.g. ETag 
+                            string match; // a regular expression used to match an item of storage when applied to the item name or cookie name and value pair
+                            array { string ["n","t","i","f","a","u","O","!f","!l","!s","!d"]* purpose;};
+                            array { string sharedWith; }; // the main domains names managed by the entities the data may be shared with.
+                            long retention?; // A positive number of seconds indicating the maximum lifetime of the storage item.
+                          } 
+           } storageUse; // matches any client data item e.g. a cookie, item in localStorage etc., used by the origin server
+    string deleteDataUri?; // URI of resource that causes all tracking data on this origin to be deleted
+    string optInUri?; // URI of resource that causes the origin server or its JavaScript browsing context to register tracking consent
+    string optOutUri?; // URI of resource that causes the origin server or its JavaScript browsing context to revoke any tracking consent
+    string dataHeldUri; // URI of resource that will return HTML content identifying tracking data held by the origin server,  
+                        // giving the user the ability to access, amend or delete it.
+    object {integer {,48} bitLength?; integer maxAge}} trackingIdConstraint?; // declared tracking identifier entropy and expiry
+    array { string; } currentAudienceSelector?; // array of audience categories derived from the current <dfn data-dfn-type="dfn">DNT-identifier</dfn>
+}*;
+</pre>
+
+            </section>
+            <section id='rep.controllerDescription'>
+                <h4>controllerDescription</h4>
+                <p>
+                    An origin server MAY send a property named <code><dfn>controllerDescription</dfn></code> containing an array of objects representing one or more Data Controllers responsible for an origin.
+                    Each object contains a string <code><dfn>name</dfn></code> indicating the unique name of the Data Controller entity along with a string <code><dfn>url</dfn></code> containing the URI of a human readable web page describing the entity.
+                    If the <dfn>controller</dfn> TSR property is present the <code><dfn>url</dfn></code> property need not be. If the <code><dfn>url</dfn></code> property is present it overrides the value of any TSR <dfn>controller</dfn> property.
+                </p>
+            </section>
+            <!--<section id='rep.otherParties'>
+                <h4>otherParties</h4>
+                <p>
+                    An origin server MAY send a property named <code><dfn>otherParties</dfn></code> containing an array of objects representing embedded or contracted third-parties.
+                    Each object contains a string <code><dfn>domain</dfn></code> indicating the URI authority name of an embedded or contracted third-party <dfn>target</dfn> along with a status value of either "T" or "N".
+                    If a party can receive personal data and has contracted with the origin server the status will be "T".
+                    If the party is known not to receive personal data from the interaction, or any data collected is solely used to fulfil a service requested by the user,
+                    the status will be "N".
+                </p>
+                <p>
+                    The origin server for each declared domain with a status of "T" must support a Tracking Status Resource
+                    also containing an <code><dfn>otherParties</dfn></code> property,
+                    with a reference back to the declaring origin server's authority.
+                    This enables the user agent to confirm that the contracting parties are mutually aware.
+                </p>
+            </section>-->
+            <section>
+                <h2>qualifiers</h2>
+                <p>
+                    This contains a set of characters corresponding to explanations or limitations on tracking.
+                    The meaning of each character is explained by one or more of the regimes listed in the <code>compliance</code> property.
+                    For example the codes referred to in the default W3C compliance document are:
+                </p>
+                <p>
+                    <table class="simple">
+                        <tbody>
+                            <tr>
+                                <th>qualifier</th>
+
+                                <th>permitted use</th>
+                            </tr>
+
+                            <tr>
+                                <td>c</td>
+
+                                <td>
+                                    <a data-lt="frequency capping" href="#dfn-frequency-capping" class="internalDFN" data-link-type="dfn">frequency capping</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>f</td>
+
+                                <td>
+                                    <a data-lt="billing and auditing" href="#dfn-billing-and-auditing" class="internalDFN" data-link-type="dfn">financial logging</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>s</td>
+
+                                <td>
+                                    <a data-lt="security" href="#dfn-security" class="internalDFN" data-link-type="dfn">security</a>
+                                </td>
+                            </tr>
+
+                        <tr>
+                            <td>d</td>
+
+                            <td>
+                                <a data-lt="debugging" href="#dfn-debugging" class="internalDFN" data-link-type="dfn">debugging</a>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>t</td>
+
+                            <td>
+                                <a data-lt="transferred" href="#dfn-debugging" class="internalDFN" data-link-type="dfn">transferred</a>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </p>
+                <p>
+                    Additional codes for use in implementing site-specific consent in the absence of support for the JavaScript Consent API (and to help
+                    comply with Recital 66 of the European ePrivacy directive) could be:
+                </p>
+                <p>
+                    <table class="simple">
+                        <tbody>
+                            <tr>
+                                <th>qualifier</th>
+
+                                <th>purpose</th>
+                                <th>
+                                    description
+                                </th>
+                            </tr>
+
+                            <tr>
+                                <td>n</td>
+
+                                <td>
+                                    <a data-lt="strictly necessary" href="#dfn-strictly-necessary" class="internalDFN" data-link-type="dfn">strictly necessary</a>
+                                </td>
+                                <td>
+                                    strictly necessary to fulfil a service requested by the user, e.g. authentication
+                                </td>
+                            </tr>
+
+                        <tr>
+                            <td>T</td>
+
+                            <td>
+                                <a data-lt="transmission" href="#dfn-transmission" class="internalDFN" data-link-type="dfn">transmission</a>
+                            </td>
+                            <td>
+                                solely used for the purpose of carrying out the transmission of a communication
+                            </td>
+                        </tr>
+                            <tr>
+                                <td>L</td>
+
+                                <td>
+                                    <a data-lt="login" href="#dfn-transmission" class="internalDFN" data-link-type="dfn">first-party login</a>
+                                </td>
+                                <td>
+                                    solely used for registering an authenticated user. If the cookie accessible to an embedded third-party then the duration MUST be limited to no more than 24 hours
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>i</td>
+
+                                <td>
+                                    <a data-lt="consent" href="#dfn-consent" class="internalDFN" data-link-type="dfn">site-specific consent</a>
+                                </td>
+                                <td>
+                                    tracking solely for the purpose of detecting whether site-specific consent had been given
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>o</td>
+
+                                <td>
+                                    <a data-lt="consent" href="#dfn-consent" class="internalDFN" data-link-type="dfn">other</a>
+                                </td>
+                                <td>
+                                    tracking for any other purpose for which informed consent has been given
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </p>
+            </section>
+
+            <section id='rep.declaredData'>
+                <h4>storageUse</h4>
+                <p>
+                    This is an object representing user agent storage employed by the origin server for tracking or other purposes.
+                    This gives the origin server the ability to transparently describe in a standardised way the overall retention time for client storage
+                    and the purpose and retention period for each storage item. User agents MAY present this information
+                    to the user, and privacy regulators, audit services etc. will be able use website scanning tools to verify it.
+                    In addition Privacy Enhancing Technology components, such as TrackingBlocker or AdBlocker extensions,
+                    can make intelligent decisions regarding content blocking or storage removal when enforcing a user's privacy preferences.
+                    The object contains a long integer <code><dfn>overall_retention</dfn></code> a positive number of seconds indicating the maximum lifetime of all the declared data.
+                    and an array of objects describing individual storage items controlled by the origin server.
+                    Each of these contains a <code><dfn>selector</dfn></code> string used to match the name or name-value pair of a particular item ,
+                    a string <code><dfn>type</dfn></code> representing the class of storage used where "C" is an HTTP cookie, "L" is local HTML5 storage and "I" is indexedDB.
+                    The <code><dfn>selector</dfn></code> string MAY contains a <code>=</code> character to demarcate between Regex match strings for the name and value of a name-value pair.
+                    The purposes for each item is encoded in the <code><dfn>purpose</dfn></code> array of strings. If this is present it MUST contain one or more of the following purpose identifiers.
+
+                    N.B. Need to specify Qualifiers.
+
+                    <table>
+                        <tr>
+                            <th>
+                                Code
+                            </th>
+                            <th>
+                                Purpose
+                            </th>
+                            <th>
+                                Definition
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>n</td>
+                            <td>Necessary</td>
+                            <td>
+                                Strictly necessary to fulfil a service requested by the user.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>t</td>
+                            <td>Transmission</td>
+                            <td>
+                                Solely used for the purpose of carrying out the transmission of a communication.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>i</td>
+                            <td>Site-Specific Consent</td>
+                            <td>
+                                Solely for the purpose of detecting whether site-specific consent had been given when the user agent does not support JavaScript Exception API.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>f</td>
+                            <td>Functional</td>
+                            <td>
+                                Retains information in the user agent solely used to retain state between HTTP transactions without a unique user identifier.
+                                Any data retained is generic in nature and will not be used to profile the user.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>a</td>
+                            <td>Analytics</td>
+                            <td>
+                                Used to collect anonymous statistical information about visitors to a web site. No attempt will be made to single-out the user
+                                for profiling purposes. Any unique identifier used will not be shared with any other party.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>u</td>
+                            <td>Tracking</td>
+                            <td>
+                                Used to single-out or track a user, i.e. a unique user identifier.
+                                If this is shared with another party their domain MUST be indicated in the <code><dfn>sharedWith</dfn></code> attribute below.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>O</td>
+                            <td>Opt-out</td>
+                            <td>
+                                This identifies an HTTP cookie used by some non-standard systems to indicate that a user has opted-out from tracking.
+                                If the same cookie name is also used as a UID tracking identifier then the <code><dfn>selector</dfn></code> must uniquely identify the opt-out case e.g.
+                                <code>UID=opted-out</code>. A properly identified opt-out cookie MUST not be deleted by a user agent when other storage is deleted,
+                                for example when the <code>overall_retention</code> period expires.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>!f</td>
+                            <td>Permitted capping</td>
+                            <td>
+                                Used for <dfn>frequency capping</dfn>, i.e.to limit the number of times that a user sees a particular advertisement, often called frequency capping, as long as the data retained do not reveal the user’s browsing history.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>!l</td>
+                            <td>Permitted logging</td>
+                            <td>
+                                Used for <dfn>financial logging</dfn>, i.e. for billing and auditing related to the current network interaction and concurrent transactions. This may include counting ad impressions to unique visitors, verifying positioning and quality of ad impressions and auditing compliance with this specification and other standards.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>!s</td>
+                            <td>Permitted security</td>
+                            <td>
+                                Used for <dfn>security</dfn>, i.e. to the extent reasonably necessary to detect security incidents, protect the service against malicious, deceptive, fraudulent, or illegal activity, and prosecute those responsible for such activity, provided that such data is not used for operational behaviour beyond what is reasonably necessary to protect the service or institute a graduated response.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>!d</td>
+                            <td>Permitted debugging</td>
+                            <td>
+                                Used for <dfn>debugging</dfn>, i.e.  solely collected, retained or used for debugging purposes to identify and repair errors that impair existing intended functionality.
+                            </td>
+                        </tr>
+                    </table>
+                    The long integer <code><dfn>retention</dfn></code> contains a positive number of seconds indicating the maximum lifetime of the storage item.
+                    The optional array of strings <code><dfn>sharedWith</dfn></code> represents the main domains of any entities that any data is shared with.
+
+                </p>
+            </section>
+            <section id='rep.deleteDataUri'>
+                <h4>deleteDataUri</h4>
+                <p>
+                    An origin server MAY send a property named <code><dfn>deleteDataUri</dfn></code> indicating the URI (relative to the origin domain) of a resource
+                    that will delete any personal data held in the user agent such as identifiers used for non-permitted tracking.
+
+                </p>
+
+            </section>
+        <section id='rep.optInUri'>
+            <h4>optInUri</h4>
+            <p>
+                The URI of a resource to communicate a user opt-in (explicit consent) to an origin server. When a user opts-in using a user agent
+                based UI, an HTTP GET MAY be sent to this URI to communicate the change in consent
+
+            </p>
+
+        </section>
+        <section id='rep.optOutUri'>
+            <h4>optOutUri</h4>
+            <p>
+                The URI of a resource to communicate a user opt-out (revoked consent) to a server. When a user opts-out using a user agent
+                based UI, or the user agent detects that the Consent Grant has expired, an HTTP GET MAY be sent to this URI to communicate the change in consent.
+            </p>
+
+        </section>
+        <section id='rep.dataHeldUri'>
+            <h4>dataHeldUri</h4>
+            <p>
+                The URI of resource that will return HTML content identifying tracking data held by the origin server,
+                giving the user the ability to access, amend or delete it.
+            </p>
+        </section>
+        </section>
+        <section>
+            <h2>API</h2>
+            <p>
+                The [[tracking-dnt]]] JavaScript API is enhanced in the following ways:
+                <ul>
+                    <li>
+                        If the <code>userSameParty</code> boolean is <code>true</code> then an exception will also be requested for any domains specified
+                        in the origin server's [<a href="http://www.w3.org/TR/tracking-dnt#status-resource/">TSR</a>] <dfn><code>same-party</code></dfn> property, as long as the reciprocal <dfn><code>same-party</code></dfn>
+                        also references the origin server requesting the exception.
+                        The <dfn><code>domain</code></dfn> property will then no longer be necessary.
+                    </li>
+                    <li>
+                        All functions will return a Promise to guarantee asynchronous completion when the Promise is resolved. The Promise has a TrackingStatusObject fulfilment value.
+                    </li>
+                    <li>
+                        A TrackingStatusObject contains a DOMString Status indicating the success or failure of the call. It MAY also contain a unique DOMString value GrantID identifying
+                        the consent instance. The GrantId will be associated in the user agent with the other information representing a consent instance, and MAY be
+                        communicated to an origin server so that a proof-of-consent system can be implemented.
+                    </li>
+                    <li>
+                        There is a new <dfn><code>confirmTrackingException</code></dfn> function to replace <dfn><code>confirmSiteSpecificTrackingException</code></dfn>
+                        and <dfn><code>confirmWebWideTrackingException</code></dfn>. This will return a promise resolving to an object indicating more information about the
+                        exception, e.g. whether it was WebWide or SiteSpecfic, the version level of the API, whether the user has been prompted for confirmation etc.
+
+                    </li>
+                </ul>
+            </p>
+            <p>
+                <pre class="idl">
+            partial interface Navigator {
+                Promise&lt;TrackingStatusObject&gt; 
+                    storeSiteSpecificTrackingException (TrackingPermission properties);
+                Promise&lt;TrackingStatusObject&gt; 
+                    confirmTrackingException(TrackingPermission properties);
+            };
+            dictionary TrackingStatusObject {
+                DomString Status; // string value indicating "OK" for success or any other value for failure
+                DOMString GrantId; // a unique value registered for this granted exception, 
+                                   // or consent receipt. 
+                                   // This can be communicated to a server so the grant  can be matched to one stored 
+                                   // within the user agent for proof-of-consent purposes.
+            };
+            dictionary StoreExceptionPropertyBag {
+            DOMString? domain;
+            DOMString? siteName;
+            DOMString? explanationString;
+            DOMString? detailURI;
+            DOMString? expires;
+            long? maxAge;
+            };
+            dictionary TrackingPermission : StoreExceptionPropertyBag {
+                boolean? useSameParty; // true to specify UGE is also for same-parties
+                boolean? resetTargets; // clears any pre-existing arrayOfDomainNames property from a previous granted exception
+                DOMString? DNTVal; // the DNT field-name to be sent in future requests to this origin server, optionally its same-parties, and any targets. 
+                                   // if the property is present the first character must be either "0" or "1"
+                                   // The user agent will strip any characters after the field value which defaults to "0".
+                DOMString? optIn; // the URI of a resource to communicate a user opt-in (explicit consent) to a server. When a user opts-in using a user agent
+                                  // based UI, an HTTP GET MAY be sent to this URI.
+                DOMString? optOut; // the URI of a resource to communicate a user opt-out (revoked consent) to a server. When a user opts-out using a user agent
+                                  // based UI, or the user agent detects that the Consent Grant has expired, an HTTP GET MAY be sent to this URI.
+            };
+        </pre>
+
+            </p>
+        </section>
+
+</body>
+</html>
