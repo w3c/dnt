@@ -107,7 +107,7 @@
             the user without the need for "cookie syncing", while giving more control to the user.
         </p>
         <p>
-            It is transmitted only as an extension to a DNT:0 header (readable by script via <code>navigator.doNotTrack</code>),
+            It is transmitted only as an extension to a <code>DNT:0</code> header (readable by script via <code>navigator.doNotTrack</code>),
             and the identifier is erased when the DNT Exception expires or is revoked.
         </p>
         <p>
@@ -115,6 +115,12 @@
             this is indicated to the receiving server by including a <dfn data-dfn-type="dfn">DNT-target</dfn> DNT extension.
             This tells the server that it has been given site-specific consent and should not, for example,
             store a UUID in a persistent HTTP cookie which can be read in the context of other first-party sites.
+        </p>
+        <p>
+            To discourage the potentially opaque use of other communications channels between a first-party and its embedded third-parties a
+            <dfn data-dfn-type="dfn">DNT-information</dfn> DNT Extension is defined,
+            which can be used for example to communicate the publisher determined audience category of the user.
+            This is restricted to 5 or less visible characters to minimise its potential use as a cross-origin unique identifier.
         </p>
         <p>
             Because it is tied to explicit user consent (it only exists when DNT is "0"), user-agents would not ordinarily block its use,
@@ -162,11 +168,22 @@
                     indicating the same value for on-line identifier, and indicating this request is being sent to a target.
                 </p>
             </li>
+
             <li>
                 <p>
                     <dfn data-dfn-type="dfn">DNT-target</dfn>.
                     When included in a <code>DNT:0</code> header this indicates that the request is to an embedded third-party sub-resource,
                     and that a DNT site-specific Exception for this target has been granted.
+                    This extension should not be present within a <code>DNT:1</code> header and MUST be ignored if it is.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <dfn data-dfn-type="dfn">DNT-information</dfn>.
+                    When included in a <code>DNT:0</code> header this indicates information given to third-party sub-resources by the first-party site.
+                    For example, this could indicate the advertiser relevant audience category of the current user.
+                    The value is a length restricted string of no more tan 5 visible characters.
+                    This is to reduce the bit length (entropy) to minimise its use as a unique user identifier.
                     This extension should not be present within a <code>DNT:1</code> header and MUST be ignored if it is.
                 </p>
             </li>
@@ -185,10 +202,11 @@
             <pre class="abnf">
             <dfn>DNT-field-name</dfn>  = "DNT"
             <dfn>DNT-field-value</dfn> = ( "0" / "1" ) *( LWSP DNT-qualifier "&")
-            <dfn>DNT-qualifier</dfn> = DNT-identifier / DNT-target / DNT-revoked / DNT-extension
+            <dfn>DNT-qualifier</dfn> = DNT-identifier / DNT-target / DNT-information / DNT-revoked / DNT-extension
             <dfn>DNT-identifier</dfn>   = "i=" 1*(%x30-39 / %x41-46 / %x62-66)
             <dfn>DNT-revoked</dfn>   = "r"
             <dfn>DNT-target</dfn>   = "t"
+            <dfn>DNT-information</dfn>   = "a=" 1*5(VCHAR)
             <dfn>DNT-extension</dfn>   = ALPHA "=" *(%x21 %x23-25 / %x27-2B / %x2D-3A / %x3C-5B / %x5D-7E) ; first character is lower-case alphanumeric qualifier then rest excludes "&", ";", CTL, SP, DQUOTE, comma, backslash
             <!--<dfn>DNT-permission</dfn>   = "p=" 1*(DNT-Range ",")
             <dfn>DNT-range</dfn>   = DNT-index *("-" DNT-index)
@@ -263,8 +281,10 @@
             long? maxAge;
             };
             dictionary TrackingPermission : StoreExceptionPropertyBag {
-                <!--boolean? gateway; // true to request transitive consent indication (p extension will be inserted)-->
                 boolean? trackingId; // true to request a trackingId (i extension will be inserted)
+                DOMString information; // a string of no more than 5 characters which the first-party can use to convey information to user-consented embedded sub-resources.
+                                       // This can be used for example to communicate a publisher determined audience category for the current user. 
+                <!--boolean? gateway; // true to request transitive consent indication (p extension will be inserted)-->
                 <!--boolean? useSameParty; // true to specify UGE is also for same-parties-->
                 <!--DOMString? DNTVal; // the DNT field-name to be sent in future requests to this origin server, optionally its same-parties, and any targets. 
                                    // The user agent will strip any characters after the field value which defaults to "0".
