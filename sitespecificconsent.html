@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DNT Implementing Site-Specific Consent</title>
+    <meta charset='utf-8'>
+    <script src='https://www.w3.org/Tools/respec/respec-w3c-common'
+            async class='remove'></script>
+    <script class='remove'>
+      var respecConfig = {
+          specStatus: "unofficial",
+          copyrightStart: 2016,
+          shortName: "DNT Bugs",
+          editors: [
+      {
+          name: "Mike O'Neill",
+          url: "https://uk.linkedin.com/in/mikeoneill1",
+          company: "Baycloud Systems",
+          companyURL: "https://baycloud.com/"
+      }
+          ],
+          wg:           "W3C Tracking Protection Working Group",
+          wgURI:        "http://www.w3.org/2011/tracking-protection/",
+          wgPublicList: "Bugs",
+          wgPatentURI: "http://www.w3.org/2004/01/pp-impl/49311/status"
+      };
+    </script>
+</head>
+<body>
+    <section id='abstract'>
+        <p>
+            This is a proposal for new [[tracking-dnt]] building-blocks to improve the usability and verifiability of consent based tracking.
+        </p>
+    </section>
+
+    <section id='sotd'>
+        <p>
+
+        </p>
+    </section>
+
+    <section id="scope-and-goals">
+    </section>
+
+<section>
+    <h2>Introduction</h2>
+
+    <p>
+        The [[tracking-dnt]] allows for the registration and communication of site-specific consent, but there is no verifiable or transparent way to implement this using HTTP cookies.
+        Although servers can stop using UID cookies when the DNT:1 header exists (or in Europe if the DNT:0 header does not exist),
+        any server receiving DNT:0 could theoretically store a UID which then would be capable of tracking the use across the entire web.
+    </p>
+    <p>
+        This is because the current specification for HTTP cookies does not differentiate between first-party and third-party accesses.
+        Irrespective of context, once a cookie is associated with a particular origin then it will be communicated in all requests to that origin.
+        The same third-party sub-resources are often embedded on very many separate websites
+        so once such a “third-party” cookie is stored it can be used to report on subsequent visits to any of these websites.
+    </p>
+    <p>
+        This “bug” in the specification of HTTP cookies was the "original sin" that led to the explosion of invisible user cross-origin tracking.
+    </p>
+    <p>
+        To mitigate the risk of this, some browsers allow the user to set the browser to restrict the storage of, or block,
+        some “third-party” cookies, but this is both inadequate as a privacy measure and can seriously diminish the capabilities of the web platform.
+        Not only can third-party cookie blocking break applications such as federated login or the use of localStorage for non-identifying audience categorization,
+        it is easily circumvented through the inclusion of third-party script on first-party sites.
+        This script can use standard APIs to arrange for values encoded in first-party cookies to be embedded in URIs and
+        communicated to third-party servers by dynamic element creation. These values can then be correlated with those on other first-party sites
+        by linking them with third-party cookies (“cookie syncing”).
+        Also, it is very easy to bypass partial third-party cookie blocking, such as the Safari "only visited" option, via first-party link redirection,
+        so that the browser is fooled into seeing the request as a first-party one, unable to detect that the cookie use is in fact by a third-party.
+    </p>
+    <p>
+        What is needed is for an efficient way to communicate a tracking identifier amongst a group of origins but only within the context of a first-party site.
+    </p>
+    <p>
+        There has been talk of "double keyed" cookies, the ability to segregate sub-resource cookies into first-party scoped cookie stores,
+        but while there is some activity in Mozilla on this, e.g. the recent work on <a target="_blank" href="https://wiki.mozilla.org/Security/Contextual_Identity_Project/Containers#Site-specific_Containers">containers</a> , it has not yet become a W3C issue.
+        There is some discussion about referring to them in the upgrade to the IETF cookie standard (<a target="_blank" href="https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-00">RFC 6265bis</a>).
+    </p>
+    <p>
+        The proposed e-Privacy Regulation requires that user consent be obtained before the
+        "use of processing and storage capabilities of terminal equipment and the collection of information from end-users’ terminal equipment, including about its software and hardware".
+        There are exception to usage solely necessary for fulfilling a service requested by the user, for carrying out the basic transmission, or for "web audience measuring, provided that such measurement is carried out by the provider of the information society service requested by the end-user".
+        In addition there is now explicit obligations on software (e.g. browser) providers to "offer the option to prevent third parties from storing information on the terminal equipment of an end-user or processing information already stored on that equipment".
+    </p>
+    <p>
+        The new obligations on browsers to obtain, register and communicate consent, together with taking an active role in safeguarding users’ data, creates
+        an opportunity to introduce a form of double-keyed identifier, tied to browser managed user consent.
+        This identifier can be carried in an extension to the DNT header,
+        but it would exist only when the user has given consent, i.e. when the DNT value’s first character is “0”.
+        The browser would be responsible for creating the value so it could not be used for arbitrary cross-origin tracking on its own.
+        There would be no need for “cookie syncing”, or in fact any use of HTTP cookies,
+        because the same browser managed value would be sent in the DNT header only to the named third-party resources the user has agreed to, and only in the context of the controlling first-party site.
+        Third-parties can prove they are respecting users' site-specific consent by only relying on this method, and avoiding the use of HTTP cookies which may in any case be blocked.
+    </p>
+
+</section>
+    <section>
+        <h3>Publisher (or Advertiser) ID</h3>
+        <p>
+            This is a unique user identifier which is associated with a first-party site when a site-specific DNT exception is granted,
+            following the invocation of a particular variant of the Exception API.
+        </p>
+        <p>
+            The Publisher ID is only communicated to its associated first-party site and the specifically named third-party sub-resources accessed
+            in the context of the associated first-party site. This gives explicitly trusted advertisers a cross-origin on-line identifier to single-out
+            the user without the need for "cookie syncing", while giving more control to the user.
+        </p>
+        <p>
+            It is transmitted only as an extension to a DNT:0 header (readable by script via <code>navigator.doNotTrack</code>),
+            and the identifier is erased when the DNT Exception expires or is revoked.
+        </p>
+        <p>
+            When a request is sent to an embedded sub-resource target (i.e. it's domain is included in the relevant <code>arrayOfDomainStrings</code> property ),
+            this is indicated to the receiving server by including a <dfn data-dfn-type="dfn">DNT-target</dfn> DNT extension.
+            This tells the server that it has been given site-specific consent and should not, for example,
+            store a UUID in a persistent HTTP cookie which can be read in the context of other first-party sites.
+        </p>
+        <p>
+            Because it is tied to explicit user consent (it only exists when DNT is "0"), user-agents would not ordinarily block its use,
+            so it could be available even when full third-party cookie blocking is configured as a general preference.
+        </p>
+    </section>
+    <section>
+
+        <h2>Extensions to the DNT Header field</h2>
+        <p>
+            The following extensions to the DNT header are proposed. There can be 0 or more extensions each separated by "&" following the DNT header field value.
+            Extensions are determined by the user agent as a result of calls to the extended API described below.
+            If the Do Not Track general preference has not been set and an extension has been specified a DNT header will be inserted without a DNT field value, see the example below.
+        </p>
+        <ul>
+            <li>
+                <p>
+                    <dfn data-dfn-type="dfn">DNT-identifier</dfn>. This is a user agent generated on-line identifier ("publisher ID") initiated by a call to the API
+                    and denoted by <code>i=</code> followed by a hexadecimal encoded bit string.
+                    <!--The user agent will ensure that bit length (entropy) and expiry time of the identifier is no greater
+                than that declared in the origin server's [<a href="http://www.w3.org/TR/tracking-dnt#status-resource/">TSR</a>].-->
+                </p>
+                <p>
+                    The value of the bit string should be calculated by obtaining a cryptographic quality random number as described in section 4.5 of [[RFC4122]] for the 47 bit
+                    UUID node. It is important that no information about the client is leaked
+                    i.e. the identifier should not be derived from an IEEE MAC address.
+                </p>
+                <p>
+                    An identical identifier will be inserted into requests to consented-to embedded third-parties i.e.
+                    origin servers "targets" referenced by the descendant browsing contexts of this origin server where the DNT field value is "0".
+                </p>
+                <!--<p>
+                For example an HTTP request to an ad exchange containing
+                <pre>DNT:0 i=1f54acef29&p=0-2,4</pre>
+                would indicate consent to it and its contracting domains along with an identifier for this user.
+            </p>-->
+                <p>
+                    For example, the origin servers for the first-party site would receive
+                    <pre>DNT:0&i=1f54acef29</pre>
+                    indicating the on-line identifier (Publisher ID).
+                </p>
+                <p>
+                    While the origin servers for the consented-to embedded third-parties would receive
+                    <pre>DNT:0&i=1f54acef29&t</pre>
+                    indicating the same value for on-line identifier, and indicating this request is being sent to a target.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <dfn data-dfn-type="dfn">DNT-target</dfn>.
+                    When included in a <code>DNT:0</code> header this indicates that the request is to an embedded third-party sub-resource,
+                    and that a DNT site-specific Exception for this target has been granted.
+                    This extension should not be present within a <code>DNT:1</code> header and MUST be ignored if it is.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <dfn data-dfn-type="dfn">DNT-revoked</dfn>. When included in a <code>DNT:1</code> header this indicates that a previous DNT:0 consent indication has been revoked by the user agent.
+                    Invoking either the <code>storeWebWideTrackingException</code> or <code>storeWebWideTrackingException</code> JavaScript functions in the origin server's browsing context
+                    will result in the removal of this qualifier. The qualifier will also be removed after the original Tracking Consent has expired.
+                </p>
+                <p>This qualifier can be used by an origin server to adjust its behaviour on receipt of <code>DNT:1</code>. For example it could decide not initiate another request for consent when the user has already revoked it.</p>
+                <p>This qualifier has no meaning if it is in a DNT:0 header and in that case MUST be ignored.</p>
+            </li>
+        </ul>
+        <p>
+            The extensions are defined formally by the following ABNF
+            <pre class="abnf">
+            <dfn>DNT-field-name</dfn>  = "DNT"
+            <dfn>DNT-field-value</dfn> = ( "0" / "1" ) *( LWSP DNT-qualifier "&")
+            <dfn>DNT-qualifier</dfn> = DNT-identifier / DNT-target / DNT-revoked / DNT-extension
+            <dfn>DNT-identifier</dfn>   = "i=" 1*(%x30-39 / %x41-46 / %x62-66)
+            <dfn>DNT-revoked</dfn>   = "r"
+            <dfn>DNT-target</dfn>   = "t"
+            <dfn>DNT-extension</dfn>   = ALPHA "=" *(%x21 %x23-25 / %x27-2B / %x2D-3A / %x3C-5B / %x5D-7E) ; first character is lower-case alphanumeric qualifier then rest excludes "&", ";", CTL, SP, DQUOTE, comma, backslash
+            <!--<dfn>DNT-permission</dfn>   = "p=" 1*(DNT-Range ",")
+            <dfn>DNT-range</dfn>   = DNT-index *("-" DNT-index)
+            <dfn>DNT-index</dfn>   = 1*DIGIT-->
+            </pre>
+        </p>
+
+    </section>
+
+
+    <section>
+        <h2>DNT header extensions via a cookie</h2>
+        <p>
+            If a user agent does not support the ability to encode DNT extensions such as the <dfn>DNT-identifier</dfn> or the <dfn>DNT-permission</dfn>
+            i.e. <code>navigator.confirmTrackingException</code> is <code>undefined</code>, then the extensions can be delivered in an HTTP cookie.
+            It is envisioned that a JavaScript library emulating the <dfn>DNT-identifier</dfn> functionality could be installed on a page to be activated if the
+            required functionality is not implemented by a particular user agent.
+        </p>
+        <p>
+            To retain transparency and verifiability the cookie should have a standard name <code>$DNT</code>, with the value encoding the DNT-extensions as they would
+            appear in the DNT header. The cookie should only exist when the DNT field value is "0", and MUST be ignored when it is "1".
+            If the user agent does not support the [[tracking-dnt]]] exceptions API then the value of the DNT field value in the <code>$DNT</code>
+            cookie overrides the field value in any DNT header.
+            In this case the $DNT cookie should be stored with an expiry equivalent to that in the exceptions API, and the server MUST respond with a Tk: C header.
+
+        </p>
+        <p>
+            Extensions should look like cookie subkeys using the ASP.NET convention.
+        </p>
+        <p>
+            <pre>Cookie:$DNT=0&i=1f54acef29&r</pre>
+        </p>
+    </section>
+    <section>
+        <h2>API</h2>
+        <p>
+            The [[tracking-dnt]]] JavaScript API is enhanced in the following ways:
+            <ul>
+                <li>
+                    Properties are added to the input parameter dictionary to request the insertion of <dfn>DNT-identifier</dfn> extensions.
+                </li>
+                <!--<li>
+                    If the <code>userSameParty</code> boolean is <code>true</code> then an exception will also be requested for any domains specified
+                    in the origin server's [<a href="http://www.w3.org/TR/tracking-dnt#status-resource/">TSR</a>] <dfn><code>same-party</code></dfn> property, as long as the reciprocal <dfn><code>same-party</code></dfn>
+                    also references the origin server requesting the exception.
+                    The <dfn><code>domain</code></dfn> property will then no longer be necessary.
+                </li>-->
+                <li>
+                    the <code>navigator.storeSiteSpecificTrackingException</code> function will return a Promise resolving to an object <code>TrackingStatusObject</code>.
+                </li>
+                <li>
+                    A TrackingStatusObject contains a DOMString DNTval indicating the value of the DNT header that will now be sent.
+                </li>
+            </ul>
+        </p>
+        <p>
+            <pre class="idl">
+            partial interface Navigator {
+                Promise&lt;TrackingStatusObject&gt; 
+                    storeSiteSpecificTrackingException (TrackingPermission properties);
+            };
+            dictionary TrackingStatusObject {
+                DomString DNTval; // string value indicating the full DNT header which will  be sent to the first-party and the named targets. 
+                                  // This includes the encoded Publisher ID calculated by the user-agent.
+            };
+            dictionary StoreExceptionPropertyBag {
+            DOMString? domain;
+            DOMString? siteName;
+            DOMString? explanationString;
+            DOMString? detailURI;
+            DOMString? expires;
+            long? maxAge;
+            };
+            dictionary TrackingPermission : StoreExceptionPropertyBag {
+                <!--boolean? gateway; // true to request transitive consent indication (p extension will be inserted)-->
+                boolean? trackingId; // true to request a trackingId (i extension will be inserted)
+                <!--boolean? useSameParty; // true to specify UGE is also for same-parties-->
+                <!--DOMString? DNTVal; // the DNT field-name to be sent in future requests to this origin server, optionally its same-parties, and any targets. 
+                                   // The user agent will strip any characters after the field value which defaults to "0".
+                -->
+            };
+        </pre>
+
+        </p>
+    </section>
+
+</body>
+</html>

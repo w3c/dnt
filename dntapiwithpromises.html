@@ -36,22 +36,25 @@
 
         </p>
     </section>
+    <section property="bibo:hasPart" resource="#exceptions-javascript-api" typeof="bibo:Chapter" id="exceptions-javascript-api">
+        <h3 resource="#h-exceptions-javascript-api" id="h-exceptions-javascript-api"><span property="xhv:role" resource="xhv:heading"><span class="secno">7.4 </span>Site-specific Exceptions</span></h3>
 
-    <section property="bibo:hasPart" resource="#exceptions-javascript-api-rqst" typeof="bibo:Chapter" id="exceptions-javascript-api-rqst">
-        <h4 resource="#h-exceptions-javascript-api-rqst" id="h-exceptions-javascript-api-rqst"><span property="xhv:role" resource="xhv:heading"><span class="secno">7.4.1 </span>API to Request a Site-specific Exception</span></h4>
+        <section property="bibo:hasPart" resource="#exceptions-javascript-api-rqst" typeof="bibo:Chapter" id="exceptions-javascript-api-rqst">
+            <section property="bibo:hasPart" resource="#exceptions-javascript-api-rqst" typeof="bibo:Chapter" id="exceptions-javascript-api-rqst">
+                <h4 resource="#h-exceptions-javascript-api-rqst" id="h-exceptions-javascript-api-rqst"><span property="xhv:role" resource="xhv:heading"><span class="secno">7.4.1 </span>API to Request a Site-specific Exception</span></h4>
 
-        <pre class="idl"><span class="idlInterface" id="idl-def-Navigator-1">partial interface <span class="idlInterfaceID">Navigator</span> {
+                <pre class="idl"><span class="idlInterface" id="idl-def-Navigator-1">partial interface <span class="idlInterfaceID">Navigator</span> {
 <span class="idlMethod">    <span class="idlMethType">Promise&lt;void&gt;</span> <span class="idlMethName"><a href="#widl-Navigator-storeSiteSpecificTrackingException-promise-StoreSiteSpecificExceptionPropertyBag-properties">storeSiteSpecificTrackingException</a></span> (<span class="idlParam"><span class="idlParamType"><a class="idlType" href="#idl-def-StoreSiteSpecificExceptionPropertyBag"><code>StoreSiteSpecificExceptionPropertyBag</code></a></span> <span class="idlParamName">properties</span></span>);</span>
 };</span></pre><section property="bibo:hasPart" resource="" typeof="bibo:Chapter">
-            <dl class="methods">
-                <dt id="widl-Navigator-storeSiteSpecificTrackingException-promise-StoreSiteSpecificExceptionPropertyBag-properties"><code>storeSiteSpecificTrackingException</code></dt>
-                <dd>
-                    Called by a page to store a site-specific tracking exception.
-                    <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">properties</td><td class="prmType"><code><a class="idlType" href="#idl-def-StoreSiteSpecificExceptionPropertyBag"><code>StoreSiteSpecificExceptionPropertyBag</code></a></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>Promise</code> resolving to <code>void</code></div>
-                </dd>
-            </dl>
-        </section>
-        <pre class="idl"><span class="idlDictionary" id="idl-def-StoreExceptionPropertyBag">dictionary <span class="idlDictionaryID">StoreExceptionPropertyBag</span> {
+                    <dl class="methods">
+                        <dt id="widl-Navigator-storeSiteSpecificTrackingException-promise-StoreSiteSpecificExceptionPropertyBag-properties"><code>storeSiteSpecificTrackingException</code></dt>
+                        <dd>
+                            Called by a page to store a site-specific tracking exception.
+                            <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">properties</td><td class="prmType"><code><a class="idlType" href="#idl-def-StoreSiteSpecificExceptionPropertyBag"><code>StoreSiteSpecificExceptionPropertyBag</code></a></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>Promise</code> resolving to <code>void</code></div>
+                        </dd>
+                    </dl>
+                </section>
+                <pre class="idl"><span class="idlDictionary" id="idl-def-StoreExceptionPropertyBag">dictionary <span class="idlDictionaryID">StoreExceptionPropertyBag</span> {
 <span class="idlMember">             <span class="idlMemberType">DOMString?</span> <span class="idlMemberName"><a href="#widl-StoreExceptionPropertyBag-domain">domain</a></span>;</span>
 <span class="idlMember">             <span class="idlMemberType">DOMString?</span> <span class="idlMemberName"><a href="#widl-StoreExceptionPropertyBag-siteName">siteName</a></span>;</span>
 <span class="idlMember">             <span class="idlMemberType">DOMString?</span> <span class="idlMemberName"><a href="#widl-StoreExceptionPropertyBag-explanationString">explanationString</a></span>;</span>
@@ -59,374 +62,374 @@
 <span class="idlMember">             <span class="idlMemberType">DOMString?</span> <span class="idlMemberName"><a href="#widl-StoreExceptionPropertyBag-expires">expires</a></span>;</span>
 <span class="idlMember">             <span class="idlMemberType">long?</span>      <span class="idlMemberName"><a href="#widl-StoreExceptionPropertyBag-maxAge">maxAge</a></span>;</span>
 };</span></pre><section property="bibo:hasPart" resource="" typeof="bibo:Chapter">
-            <dl class="dictionary-members">
-                <dt id="widl-StoreExceptionPropertyBag-detailURI"><code>detailURI</code> of type <span class="idlMemberType">DOMString</span>, nullable</dt>
-                <dd>
-                    A location at which further information about this request
-                    can be found.
-                </dd>
-                <dt id="widl-StoreExceptionPropertyBag-domain"><code>domain</code> of type <span class="idlMemberType">DOMString</span>, nullable</dt>
-                <dd>
-                    a cookie-domain as defined in [<cite><a href="#bib-RFC6265" class="bibref">RFC6265</a></cite>],
-                    to which the exception applies.
-                </dd>
-                <dt id="widl-StoreExceptionPropertyBag-expires"><code>expires</code> of type <span class="idlMemberType">DOMString</span>, nullable</dt>
-                <dd>
-                    A date and time, encoded as described for the cookie
-                    <code>Expires</code> attribute described in [<cite><a href="#bib-RFC6265" class="bibref">RFC6265</a></cite>],
-                    indicating the maximum lifetime of the remembered grant.
-                </dd>
-                <dt id="widl-StoreExceptionPropertyBag-explanationString"><code>explanationString</code> of type <span class="idlMemberType">DOMString</span>, nullable</dt>
-                <dd>A short explanation of the request.</dd>
-                <dt id="widl-StoreExceptionPropertyBag-maxAge"><code>maxAge</code> of type <span class="idlMemberType">long</span>, nullable</dt>
-                <dd>
-                    A positive number of seconds indicating the maximum lifetime
-                    of the remembered grant.
-                </dd>
-                <dt id="widl-StoreExceptionPropertyBag-siteName"><code>siteName</code> of type <span class="idlMemberType">DOMString</span>, nullable</dt>
-                <dd>A user-readable string for the name of the top-level origin.</dd>
-            </dl>
-        </section>
-        <pre class="idl"><span class="idlDictionary" id="idl-def-StoreSiteSpecificExceptionPropertyBag">dictionary <span class="idlDictionaryID">StoreSiteSpecificExceptionPropertyBag</span> : <span class="idlSuperclass"><a class="idlType" href="#idl-def-StoreExceptionPropertyBag"><code>StoreExceptionPropertyBag</code></a></span> {
+                    <dl class="dictionary-members">
+                        <dt id="widl-StoreExceptionPropertyBag-detailURI"><code>detailURI</code> of type <span class="idlMemberType">DOMString</span>, nullable</dt>
+                        <dd>
+                            A location at which further information about this request
+                            can be found.
+                        </dd>
+                        <dt id="widl-StoreExceptionPropertyBag-domain"><code>domain</code> of type <span class="idlMemberType">DOMString</span>, nullable</dt>
+                        <dd>
+                            a cookie-domain as defined in [<cite><a href="#bib-RFC6265" class="bibref">RFC6265</a></cite>],
+                            to which the exception applies.
+                        </dd>
+                        <dt id="widl-StoreExceptionPropertyBag-expires"><code>expires</code> of type <span class="idlMemberType">DOMString</span>, nullable</dt>
+                        <dd>
+                            A date and time, encoded as described for the cookie
+                            <code>Expires</code> attribute described in [<cite><a href="#bib-RFC6265" class="bibref">RFC6265</a></cite>],
+                            indicating the maximum lifetime of the remembered grant.
+                        </dd>
+                        <dt id="widl-StoreExceptionPropertyBag-explanationString"><code>explanationString</code> of type <span class="idlMemberType">DOMString</span>, nullable</dt>
+                        <dd>A short explanation of the request.</dd>
+                        <dt id="widl-StoreExceptionPropertyBag-maxAge"><code>maxAge</code> of type <span class="idlMemberType">long</span>, nullable</dt>
+                        <dd>
+                            A positive number of seconds indicating the maximum lifetime
+                            of the remembered grant.
+                        </dd>
+                        <dt id="widl-StoreExceptionPropertyBag-siteName"><code>siteName</code> of type <span class="idlMemberType">DOMString</span>, nullable</dt>
+                        <dd>A user-readable string for the name of the top-level origin.</dd>
+                    </dl>
+                </section>
+                <pre class="idl"><span class="idlDictionary" id="idl-def-StoreSiteSpecificExceptionPropertyBag">dictionary <span class="idlDictionaryID">StoreSiteSpecificExceptionPropertyBag</span> : <span class="idlSuperclass"><a class="idlType" href="#idl-def-StoreExceptionPropertyBag"><code>StoreExceptionPropertyBag</code></a></span> {
 <span class="idlMember">             <span class="idlMemberType">sequence&lt;DOMString&gt;</span> <span class="idlMemberName"><a href="#widl-StoreSiteSpecificExceptionPropertyBag-arrayOfDomainStrings">arrayOfDomainStrings</a></span>;</span>
 };</span></pre><section property="bibo:hasPart" resource="" typeof="bibo:Chapter"><dl class="dictionary-members"><dt id="widl-StoreSiteSpecificExceptionPropertyBag-arrayOfDomainStrings"><code>arrayOfDomainStrings</code> of type <span class="idlMemberType">sequence&lt;DOMString&gt;</span>,         </dt><dd>A JavaScript array of strings.</dd></dl></section>
-        <p>
-            The <code>storeSiteSpecificTrackingException</code> method takes
-            a dictionary argument of type <a class="idlType" href="#idl-def-StoreSiteSpecificExceptionPropertyBag"><code>StoreSiteSpecificExceptionPropertyBag</code></a>
-            that allows optional information to be provided.
-        </p>
-        <p>
-            If the request does not include the
-            <code>arrayOfDomainStrings</code>, then this request is for a
-            site-wide exception. Otherwise each string in
-            <code>arrayOfDomainStrings</code> specifies a
-            <strong>target</strong>. When called,
-            <code>storeSiteSpecificTrackingException</code> <em title="MUST" class="rfc2119">MUST</em> return
-            immediately with a Promise resolving to a <code>void</code> or rejected with a <code>DOMException</code> SYNTAX_ERR.
-        </p>
-        <p>
-            If the list <code>arrayOfDomainStrings</code> is supplied, the
-            user agent <em title="MAY" class="rfc2119">MAY</em> choose to store a site-wide exception. If it does
-            so it <em title="MUST" class="rfc2119">MUST</em> indicate this in the return value.
-        </p>
-        <p>
-            If <code>domain</code> is not specified or is null or empty then
-            the execution of this API and the use of the resulting permission
-            (if granted) use the 'implicit' parameter, when the API is called,
-            the <strong>document origin</strong>. This forms the first part of
-            the duplet in the logical model, and hence in operation will be
-            compared with the <strong>top-level origin</strong>.
-        </p>
-        <p>
-            If permission is stored for an explicit list, then the set of
-            duplets (one per target):
-        </p>
-        <pre>[document-origin, target]</pre>
-        <p>
-            is added to the database of remembered grants.
-        </p>
-        <p>
-            If permission is stored for a site-wide exception, then the
-            duplet:
-        </p>
-        <pre>[document-origin, * ]</pre>
-        <p>
-            is added to the database of remembered grants.
-        </p>
-        <p>
-            If <code>domain</code> is supplied and not empty then it is
-            treated in the same way as the domain parameter to cookies and
-            allows setting for subdomains. The <code>domain</code> argument
-            can be set to fully-qualified right-hand segment of the document
-            host name, up to one level below TLD.
-        </p>
-        <p>
-            For example, <em>www.foo.bar.example.com</em> can set the domain
-            parameter as as <code>"bar.example.com"</code> or
-            <code>"example.com"</code>, but not to
-            <code>"something.else.example.com"</code> or <code>"com"</code>.
-        </p>
-        <p>
-            If the document-origin would not be able to set a cookie on the
-            <code>domain</code> following the cookie domain rules [<cite><a href="#bib-RFC6265" class="bibref">RFC6265</a></cite>]
-            (e.g. <code>domain</code> is not a right-hand match or is a TLD)
-            then the duplet <em title="MUST NOT" class="rfc2119">MUST NOT</em> be entered into the database and the returned Promise is rejected with DOMException 
-            SYNTAX_ERR <em title="SHOULD" class="rfc2119">SHOULD</em> be thrown.
-        </p>
-        <p>
-            If permission is stored for an explicit list, then the set of
-            duplets (one per target):
-        </p>
-        <pre>[*.domain, target]</pre>
-        <p>
-            is added to the database of remembered grants.
-        </p>
-        <p>
-            If permission is stored for a site-wide exception, then the
-            duplet:
-        </p>
-        <pre>[*.domain, * ]</pre>
-        <p>
-            is added to the database of remembered grants.
-        </p>
-        <p>
-            A particular response to the API — like a DNT response header
-            field — is only valid once the returned Promise is resolved; a user might later choose
-            to edit stored exceptions and revoke some or all of them.
-        </p>
-        <p>
-            If <code>expires</code> is supplied and not null or empty the
-            remembered grant will be cancelled (i.e. processed as if the
-            relevant Cancel API had been called) no later than the specified
-            date and time. After this the database of remembered grants will
-            no longer contain any duplets for which the first part is the
-            current document origin; i.e., no duplets
-            <code>[document-origin, target]</code> for any target.
-        </p>
-        <p>
-            If <code>maxAge</code> is supplied and not null, empty or negative
-            the remembered grant will be cancelled (i.e. processed as if the
-            relevant Cancel API had been called) no later than the specified
-            number of seconds following the grant.
-        </p>
-        <p>
-            If both <code>maxAge</code> and <code>expires</code> are supplied,
-            <code>maxAge</code> has precedence. If neither <code>maxAge</code>
-            or <code>expires</code> are supplied, the user agent <em title="MAY" class="rfc2119">MAY</em> retain
-            the remembered grant until it is cancelled.
-        </p>
-    </section>
+                <p>
+                    The <code>storeSiteSpecificTrackingException</code> method takes
+                    a dictionary argument of type <a class="idlType" href="#idl-def-StoreSiteSpecificExceptionPropertyBag"><code>StoreSiteSpecificExceptionPropertyBag</code></a>
+                    that allows optional information to be provided.
+                </p>
+                <p>
+                    If the request does not include the
+                    <code>arrayOfDomainStrings</code>, then this request is for a
+                    site-wide exception. Otherwise each string in
+                    <code>arrayOfDomainStrings</code> specifies a
+                    <strong>target</strong>. When called,
+                    <code>storeSiteSpecificTrackingException</code> <em title="MUST" class="rfc2119">MUST</em> return
+                    immediately with a Promise resolving to a <code>void</code> or rejected with a <code>DOMException</code> SYNTAX_ERR.
+                </p>
+                <p>
+                    If the list <code>arrayOfDomainStrings</code> is supplied, the
+                    user agent <em title="MAY" class="rfc2119">MAY</em> choose to store a site-wide exception. If it does
+                    so it <em title="MUST" class="rfc2119">MUST</em> indicate this in the return value.
+                </p>
+                <p>
+                    If <code>domain</code> is not specified or is null or empty then
+                    the execution of this API and the use of the resulting permission
+                    (if granted) use the 'implicit' parameter, when the API is called,
+                    the <strong>document origin</strong>. This forms the first part of
+                    the duplet in the logical model, and hence in operation will be
+                    compared with the <strong>top-level origin</strong>.
+                </p>
+                <p>
+                    If permission is stored for an explicit list, then the set of
+                    duplets (one per target):
+                </p>
+                <pre>[document-origin, target]</pre>
+                <p>
+                    is added to the database of remembered grants.
+                </p>
+                <p>
+                    If permission is stored for a site-wide exception, then the
+                    duplet:
+                </p>
+                <pre>[document-origin, * ]</pre>
+                <p>
+                    is added to the database of remembered grants.
+                </p>
+                <p>
+                    If <code>domain</code> is supplied and not empty then it is
+                    treated in the same way as the domain parameter to cookies and
+                    allows setting for subdomains. The <code>domain</code> argument
+                    can be set to fully-qualified right-hand segment of the document
+                    host name, up to one level below TLD.
+                </p>
+                <p>
+                    For example, <em>www.foo.bar.example.com</em> can set the domain
+                    parameter as as <code>"bar.example.com"</code> or
+                    <code>"example.com"</code>, but not to
+                    <code>"something.else.example.com"</code> or <code>"com"</code>.
+                </p>
+                <p>
+                    If the document-origin would not be able to set a cookie on the
+                    <code>domain</code> following the cookie domain rules [<cite><a href="#bib-RFC6265" class="bibref">RFC6265</a></cite>]
+                    (e.g. <code>domain</code> is not a right-hand match or is a TLD)
+                    then the duplet <em title="MUST NOT" class="rfc2119">MUST NOT</em> be entered into the database and the returned Promise is rejected with DOMException
+                    SYNTAX_ERR <em title="SHOULD" class="rfc2119">SHOULD</em> be thrown.
+                </p>
+                <p>
+                    If permission is stored for an explicit list, then the set of
+                    duplets (one per target):
+                </p>
+                <pre>[*.domain, target]</pre>
+                <p>
+                    is added to the database of remembered grants.
+                </p>
+                <p>
+                    If permission is stored for a site-wide exception, then the
+                    duplet:
+                </p>
+                <pre>[*.domain, * ]</pre>
+                <p>
+                    is added to the database of remembered grants.
+                </p>
+                <p>
+                    A particular response to the API — like a DNT response header
+                    field — is only valid once the returned Promise is resolved; a user might later choose
+                    to edit stored exceptions and revoke some or all of them.
+                </p>
+                <p>
+                    If <code>expires</code> is supplied and not null or empty the
+                    remembered grant will be cancelled (i.e. processed as if the
+                    relevant Cancel API had been called) no later than the specified
+                    date and time. After this the database of remembered grants will
+                    no longer contain any duplets for which the first part is the
+                    current document origin; i.e., no duplets
+                    <code>[document-origin, target]</code> for any target.
+                </p>
+                <p>
+                    If <code>maxAge</code> is supplied and not null, empty or negative
+                    the remembered grant will be cancelled (i.e. processed as if the
+                    relevant Cancel API had been called) no later than the specified
+                    number of seconds following the grant.
+                </p>
+                <p>
+                    If both <code>maxAge</code> and <code>expires</code> are supplied,
+                    <code>maxAge</code> has precedence. If neither <code>maxAge</code>
+                    or <code>expires</code> are supplied, the user agent <em title="MAY" class="rfc2119">MAY</em> retain
+                    the remembered grant until it is cancelled.
+                </p>
+            </section>
 
-    <section property="bibo:hasPart" resource="#exceptions-javascript-api-cancel" typeof="bibo:Chapter" id="exceptions-javascript-api-cancel">
-        <h4 resource="#h-exceptions-javascript-api-cancel" id="h-exceptions-javascript-api-cancel"><span property="xhv:role" resource="xhv:heading"><span class="secno">7.4.2 </span>API to Cancel a Site-specific Exception</span></h4>
+            <section property="bibo:hasPart" resource="#exceptions-javascript-api-cancel" typeof="bibo:Chapter" id="exceptions-javascript-api-cancel">
+                <h4 resource="#h-exceptions-javascript-api-cancel" id="h-exceptions-javascript-api-cancel"><span property="xhv:role" resource="xhv:heading"><span class="secno">7.4.2 </span>API to Cancel a Site-specific Exception</span></h4>
 
-        <pre class="idl"><span class="idlInterface" id="idl-def-Navigator-2">partial interface <span class="idlInterfaceID">Navigator</span> {
+                <pre class="idl"><span class="idlInterface" id="idl-def-Navigator-2">partial interface <span class="idlInterfaceID">Navigator</span> {
 <span class="idlMethod">    <span class="idlMethType">Promise&lt;void&gt;</span> <span class="idlMethName"><a href="#widl-Navigator-removeSiteSpecificTrackingException-promise-RemoveExceptionPropertyBag-properties">removeSiteSpecificTrackingException</a></span> (<span class="idlParam"><span class="idlParamType"><a class="idlType" href="#idl-def-RemoveExceptionPropertyBag"><code>RemoveExceptionPropertyBag</code></a></span> <span class="idlParamName">properties</span></span>);</span>
 };</span></pre><section property="bibo:hasPart" resource="" typeof="bibo:Chapter">
-            <dl class="methods">
-                <dt id="widl-Navigator-removeSiteSpecificTrackingException-promise-RemoveExceptionPropertyBag-properties"><code>removeSiteSpecificTrackingException</code></dt>
-                <dd>
-                    <p>
-                        If domain is not supplied or is null or empty then this
-                        ensures that the database of remembered grants no longer
-                        contains any duplets for which the first part is the current
-                        document origin; i.e., no duplets
-                        <code>[document-origin, target]</code> for any target.
-                    </p>
-                    <p>
-                        If domain is supplied and is not empty then this ensures that
-                        the database of remembered grants no longer contains any
-                        duplets for which the first part is the domain wildcard; i.e.,
-                        no duplets <code>[*.domain, target]</code> for any target.
-                    </p>
-                    <p>
-                        A Promise resolving to <code>void</code> is returned. When the Promise has been resolved, it is
-                        assured that there are no site-specific or site-wide
-                        exceptions for the given top-level origin.
-                    </p>
-                    <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">properties</td><td class="prmType"><code><a class="idlType" href="#idl-def-RemoveExceptionPropertyBag"><code>RemoveExceptionPropertyBag</code></a></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>Promise</code> resolving to <code>void</code></div>
-                </dd>
-            </dl>
-        </section>
-        <pre class="idl"><span class="idlDictionary" id="idl-def-RemoveExceptionPropertyBag">dictionary <span class="idlDictionaryID">RemoveExceptionPropertyBag</span> {
+                    <dl class="methods">
+                        <dt id="widl-Navigator-removeSiteSpecificTrackingException-promise-RemoveExceptionPropertyBag-properties"><code>removeSiteSpecificTrackingException</code></dt>
+                        <dd>
+                            <p>
+                                If domain is not supplied or is null or empty then this
+                                ensures that the database of remembered grants no longer
+                                contains any duplets for which the first part is the current
+                                document origin; i.e., no duplets
+                                <code>[document-origin, target]</code> for any target.
+                            </p>
+                            <p>
+                                If domain is supplied and is not empty then this ensures that
+                                the database of remembered grants no longer contains any
+                                duplets for which the first part is the domain wildcard; i.e.,
+                                no duplets <code>[*.domain, target]</code> for any target.
+                            </p>
+                            <p>
+                                A Promise resolving to <code>void</code> is returned. When the Promise has been resolved, it is
+                                assured that there are no site-specific or site-wide
+                                exceptions for the given top-level origin.
+                            </p>
+                            <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">properties</td><td class="prmType"><code><a class="idlType" href="#idl-def-RemoveExceptionPropertyBag"><code>RemoveExceptionPropertyBag</code></a></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>Promise</code> resolving to <code>void</code></div>
+                        </dd>
+                    </dl>
+                </section>
+                <pre class="idl"><span class="idlDictionary" id="idl-def-RemoveExceptionPropertyBag">dictionary <span class="idlDictionaryID">RemoveExceptionPropertyBag</span> {
 <span class="idlMember">             <span class="idlMemberType">DOMString?</span> <span class="idlMemberName"><a href="#widl-RemoveExceptionPropertyBag-domain">domain</a></span>;</span>
 };</span></pre><section property="bibo:hasPart" resource="" typeof="bibo:Chapter">
-            <dl class="dictionary-members">
-                <dt id="widl-RemoveExceptionPropertyBag-domain"><code>domain</code> of type <span class="idlMemberType">DOMString</span>, nullable</dt>
-                <dd>
-                    a cookie-domain as defined in [<cite><a href="#bib-RFC6265" class="bibref">RFC6265</a></cite>],
-                    to which the exception applies.
-                </dd>
-            </dl>
-        </section>
-        <p>
-            When this method returns, the database of grants no longer
-            contains the indicated grant(s); if some kind of processing error
-            occurred then an appropriate exception will be thrown.
-        </p>
-        <p>
-            If there are no matching duplets in the database of remembered
-            grants when the method is called then this operation does nothing
-            (and does not throw an exception).
-        </p>
-    </section>
+                    <dl class="dictionary-members">
+                        <dt id="widl-RemoveExceptionPropertyBag-domain"><code>domain</code> of type <span class="idlMemberType">DOMString</span>, nullable</dt>
+                        <dd>
+                            a cookie-domain as defined in [<cite><a href="#bib-RFC6265" class="bibref">RFC6265</a></cite>],
+                            to which the exception applies.
+                        </dd>
+                    </dl>
+                </section>
+                <p>
+                    When the returned Promise is resolved, the database of grants no longer
+                    contains the indicated grant(s); if some kind of processing error
+                    occurred then an appropriate exception will be thrown.
+                </p>
+                <p>
+                    If there are no matching duplets in the database of remembered
+                    grants when the method is called then this operation does nothing
+                    (and does not throw an exception).
+                </p>
+            </section>
 
-    <section property="bibo:hasPart" resource="#exceptions-javascript-api-confirm" typeof="bibo:Chapter" id="exceptions-javascript-api-confirm">
-        <h4 resource="#h-exceptions-javascript-api-confirm" id="h-exceptions-javascript-api-confirm"><span property="xhv:role" resource="xhv:heading"><span class="secno">7.4.3 </span>API to Confirm a Site-specific Exception</span></h4>
+            <section property="bibo:hasPart" resource="#exceptions-javascript-api-confirm" typeof="bibo:Chapter" id="exceptions-javascript-api-confirm">
+                <h4 resource="#h-exceptions-javascript-api-confirm" id="h-exceptions-javascript-api-confirm"><span property="xhv:role" resource="xhv:heading"><span class="secno">7.4.3 </span>API to Confirm a Site-specific Exception</span></h4>
 
-        <pre class="idl"><span class="idlInterface" id="idl-def-Navigator-3">partial interface <span class="idlInterfaceID">Navigator</span> {
+                <pre class="idl"><span class="idlInterface" id="idl-def-Navigator-3">partial interface <span class="idlInterfaceID">Navigator</span> {
 <span class="idlMethod">    <span class="idlMethType">Promise&lt;boolean&gt;</span> <span class="idlMethName"><a href="#widl-Navigator-confirmSiteSpecificTrackingException-boolean-ConfirmSiteSpecificExceptionPropertyBag-properties">confirmSiteSpecificTrackingException</a></span> (<span class="idlParam"><span class="idlParamType"><a class="idlType" href="#idl-def-ConfirmSiteSpecificExceptionPropertyBag"><code>ConfirmSiteSpecificExceptionPropertyBag</code></a></span> <span class="idlParamName">properties</span></span>);</span>
 };</span></pre><section property="bibo:hasPart" resource="" typeof="bibo:Chapter">
-            <dl class="methods">
-                <dt id="widl-Navigator-confirmSiteSpecificTrackingException-boolean-ConfirmSiteSpecificExceptionPropertyBag-properties"><code>confirmSiteSpecificTrackingException</code></dt>
-                <dd>
-                    Called by a page to confirm a site-specific tracking exception.
-                    <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">properties</td><td class="prmType"><code><a class="idlType" href="#idl-def-ConfirmSiteSpecificExceptionPropertyBag"><code>ConfirmSiteSpecificExceptionPropertyBag</code></a></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>Promise</code> resolving to <code>boolean</code></div>
-                </dd>
-            </dl>
-        </section>
-        <pre class="idl"><span class="idlDictionary" id="idl-def-ConfirmExceptionPropertyBag">dictionary <span class="idlDictionaryID">ConfirmExceptionPropertyBag</span> {
+                    <dl class="methods">
+                        <dt id="widl-Navigator-confirmSiteSpecificTrackingException-boolean-ConfirmSiteSpecificExceptionPropertyBag-properties"><code>confirmSiteSpecificTrackingException</code></dt>
+                        <dd>
+                            Called by a page to confirm a site-specific tracking exception.
+                            <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">properties</td><td class="prmType"><code><a class="idlType" href="#idl-def-ConfirmSiteSpecificExceptionPropertyBag"><code>ConfirmSiteSpecificExceptionPropertyBag</code></a></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>Promise</code> resolving to <code>boolean</code></div>
+                        </dd>
+                    </dl>
+                </section>
+                <pre class="idl"><span class="idlDictionary" id="idl-def-ConfirmExceptionPropertyBag">dictionary <span class="idlDictionaryID">ConfirmExceptionPropertyBag</span> {
 <span class="idlMember">             <span class="idlMemberType">DOMString?</span> <span class="idlMemberName"><a href="#widl-ConfirmExceptionPropertyBag-domain">domain</a></span>;</span>
 };</span></pre><section property="bibo:hasPart" resource="" typeof="bibo:Chapter">
-            <dl class="dictionary-members">
-                <dt id="widl-ConfirmExceptionPropertyBag-domain"><code>domain</code> of type <span class="idlMemberType">DOMString</span>, nullable</dt>
-                <dd>
-                    a cookie-domain as defined in [<cite><a href="#bib-RFC6265" class="bibref">RFC6265</a></cite>],
-                    to which the exception applies.
-                </dd>
-            </dl>
-        </section>
-        <pre class="idl"><span class="idlDictionary" id="idl-def-ConfirmSiteSpecificExceptionPropertyBag">dictionary <span class="idlDictionaryID">ConfirmSiteSpecificExceptionPropertyBag</span> : <span class="idlSuperclass"><a class="idlType" href="#idl-def-ConfirmExceptionPropertyBag"><code>ConfirmExceptionPropertyBag</code></a></span> {
+                    <dl class="dictionary-members">
+                        <dt id="widl-ConfirmExceptionPropertyBag-domain"><code>domain</code> of type <span class="idlMemberType">DOMString</span>, nullable</dt>
+                        <dd>
+                            a cookie-domain as defined in [<cite><a href="#bib-RFC6265" class="bibref">RFC6265</a></cite>],
+                            to which the exception applies.
+                        </dd>
+                    </dl>
+                </section>
+                <pre class="idl"><span class="idlDictionary" id="idl-def-ConfirmSiteSpecificExceptionPropertyBag">dictionary <span class="idlDictionaryID">ConfirmSiteSpecificExceptionPropertyBag</span> : <span class="idlSuperclass"><a class="idlType" href="#idl-def-ConfirmExceptionPropertyBag"><code>ConfirmExceptionPropertyBag</code></a></span> {
 <span class="idlMember">             <span class="idlMemberType">sequence&lt;DOMString&gt;</span> <span class="idlMemberName"><a href="#widl-ConfirmSiteSpecificExceptionPropertyBag-arrayOfDomainStrings">arrayOfDomainStrings</a></span>;</span>
 };</span></pre><section property="bibo:hasPart" resource="" typeof="bibo:Chapter"><dl class="dictionary-members"><dt id="widl-ConfirmSiteSpecificExceptionPropertyBag-arrayOfDomainStrings"><code>arrayOfDomainStrings</code> of type <span class="idlMemberType">sequence&lt;DOMString&gt;</span>,         </dt><dd>A JavaScript array of strings.</dd></dl></section>
-        <p>
-            If the call does not include the
-            <code>arrayOfDomainStrings</code>, then this call is to confirm a
-            site-wide exception. Otherwise each string in
-            <code>arrayOfDomainStrings</code> specifies a
-            <strong>target</strong>.
-        </p>
-        <p>
-            If the list <code>arrayOfDomainStrings</code> is supplied, and the
-            user agent stores only site-wide exceptions, then the user agent
-            <em title="MUST" class="rfc2119">MUST</em> match by confirming a site-wide exception.
-        </p>
-        <p>
-            If the <code>domain</code> argument is not supplied or is null or
-            empty then the execution of this API uses the 'implicit'
-            parameter, when the API is called, the
-            <strong>document origin</strong>. This forms the first part of the
-            duplet in the logical model.
-        </p>
-        <p>
-            If the user agent stores explicit lists, and the call includes
-            one, the database is checked for the existence of all the duplets
-            (one per target):
-        </p>
-        <pre>[document-origin, target]</pre>
-        <p>
-            If the user agent stores only site-wide exceptions or the call did
-            not include an explicit list, the database is checked for the
-            single duplet:
-        </p>
-        <pre>[document-origin, * ]</pre>
-        <p>
-            If the user agent stores explicit lists, the call includes
-            one, and the <code>domain</code> argument is provided and is not
-            empty, then the database is checked for the existence of all the
-            duplets (one per target):
-        </p>
-        <pre>[*.domain, target]</pre>
-        <p>
-            If the user agent stores only site-wide exceptions or the call did
-            not include an explicit list, and the <code>domain</code> argument
-            is provided and is not empty then the database is checked for the
-            single duplet:
-        </p>
-        <pre>[*.domain, * ]</pre>
-        <p>
-            The returned Promise resolves to a <code>boolean</code> which has the following possible values:
-        </p>
-        <ul>
-            <li><code>true</code> all the duplets exist in the database;</li>
-            <li>
-                <code>false</code> one or more of the duplets does not exist
-                in the database.
-            </li>
-        </ul>
-    </section>
-    </section>
+                <p>
+                    If the call does not include the
+                    <code>arrayOfDomainStrings</code>, then this call is to confirm a
+                    site-wide exception. Otherwise each string in
+                    <code>arrayOfDomainStrings</code> specifies a
+                    <strong>target</strong>.
+                </p>
+                <p>
+                    If the list <code>arrayOfDomainStrings</code> is supplied, and the
+                    user agent stores only site-wide exceptions, then the user agent
+                    <em title="MUST" class="rfc2119">MUST</em> match by confirming a site-wide exception.
+                </p>
+                <p>
+                    If the <code>domain</code> argument is not supplied or is null or
+                    empty then the execution of this API uses the 'implicit'
+                    parameter, when the API is called, the
+                    <strong>document origin</strong>. This forms the first part of the
+                    duplet in the logical model.
+                </p>
+                <p>
+                    If the user agent stores explicit lists, and the call includes
+                    one, the database is checked for the existence of all the duplets
+                    (one per target):
+                </p>
+                <pre>[document-origin, target]</pre>
+                <p>
+                    If the user agent stores only site-wide exceptions or the call did
+                    not include an explicit list, the database is checked for the
+                    single duplet:
+                </p>
+                <pre>[document-origin, * ]</pre>
+                <p>
+                    If the user agent stores explicit lists, the call includes
+                    one, and the <code>domain</code> argument is provided and is not
+                    empty, then the database is checked for the existence of all the
+                    duplets (one per target):
+                </p>
+                <pre>[*.domain, target]</pre>
+                <p>
+                    If the user agent stores only site-wide exceptions or the call did
+                    not include an explicit list, and the <code>domain</code> argument
+                    is provided and is not empty then the database is checked for the
+                    single duplet:
+                </p>
+                <pre>[*.domain, * ]</pre>
+                <p>
+                    The returned Promise resolves to a <code>boolean</code> which has the following possible values:
+                </p>
+                <ul>
+                    <li><code>true</code> all the duplets exist in the database;</li>
+                    <li>
+                        <code>false</code> one or more of the duplets does not exist
+                        in the database.
+                    </li>
+                </ul>
+            </section>
+        </section>
 
-    <section property="bibo:hasPart" resource="#exceptions-ww-javascript-api" typeof="bibo:Chapter" id="exceptions-ww-javascript-api">
-        <h3 resource="#h-exceptions-ww-javascript-api" id="h-exceptions-ww-javascript-api"><span property="xhv:role" resource="xhv:heading"><span class="secno">7.5 </span>Web-wide Exceptions</span></h3>
+        <section property="bibo:hasPart" resource="#exceptions-ww-javascript-api" typeof="bibo:Chapter" id="exceptions-ww-javascript-api">
+            <h3 resource="#h-exceptions-ww-javascript-api" id="h-exceptions-ww-javascript-api"><span property="xhv:role" resource="xhv:heading"><span class="secno">7.5 </span>Web-wide Exceptions</span></h3>
 
-        <section property="bibo:hasPart" resource="#exceptions-javascript-api-ww-rqst" typeof="bibo:Chapter" id="exceptions-javascript-api-ww-rqst">
-            <h4 resource="#h-exceptions-javascript-api-ww-rqst" id="h-exceptions-javascript-api-ww-rqst"><span property="xhv:role" resource="xhv:heading"><span class="secno">7.5.1 </span>API to Request a Web-wide Exception</span></h4>
+            <section property="bibo:hasPart" resource="#exceptions-javascript-api-ww-rqst" typeof="bibo:Chapter" id="exceptions-javascript-api-ww-rqst">
+                <h4 resource="#h-exceptions-javascript-api-ww-rqst" id="h-exceptions-javascript-api-ww-rqst"><span property="xhv:role" resource="xhv:heading"><span class="secno">7.5.1 </span>API to Request a Web-wide Exception</span></h4>
 
-            <pre class="idl"><span class="idlInterface" id="idl-def-Navigator-4">partial interface <span class="idlInterfaceID">Navigator</span> {
+                <pre class="idl"><span class="idlInterface" id="idl-def-Navigator-4">partial interface <span class="idlInterfaceID">Navigator</span> {
 <span class="idlMethod">    <span class="idlMethType">Promise&lt;void&gt;</span> <span class="idlMethName"><a href="#widl-Navigator-storeWebWideTrackingException-promise-StoreExceptionPropertyBag-properties">storeWebWideTrackingException</a></span> (<span class="idlParam"><span class="idlParamType"><a class="idlType" href="#idl-def-StoreExceptionPropertyBag"><code>StoreExceptionPropertyBag</code></a></span> <span class="idlParamName">properties</span></span>);</span>
 };</span></pre><section property="bibo:hasPart" resource="" typeof="bibo:Chapter">
-                <dl class="methods">
-                    <dt id="widl-Navigator-storeWebWideTrackingException-promise-StoreExceptionPropertyBag-properties"><code>storeWebWideTrackingException</code></dt>
-                    <dd>
-                        The single duplet
-                        <code>[ * , document-origin]</code> or
-                        <code>[ * , *.domain]</code> (based on if <code>domain</code>
-                        is provided and is not null and not empty)
-                        is added to the database of remembered grants.
-                        The properties of the <code>StoreExceptionPropertyBag</code>
-                        dictionary are as described
-                        <a href="#exceptions-javascript-api">above</a> in the
-                        request for site-specific exceptions.
-                        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">properties</td><td class="prmType"><code><a class="idlType" href="#idl-def-StoreExceptionPropertyBag"><code>StoreExceptionPropertyBag</code></a></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>Promise</code> resolving to <code>void</code></div>
-                    </dd>
-                </dl>
+                    <dl class="methods">
+                        <dt id="widl-Navigator-storeWebWideTrackingException-promise-StoreExceptionPropertyBag-properties"><code>storeWebWideTrackingException</code></dt>
+                        <dd>
+                            The single duplet
+                            <code>[ * , document-origin]</code> or
+                            <code>[ * , *.domain]</code> (based on if <code>domain</code>
+                            is provided and is not null and not empty)
+                            is added to the database of remembered grants.
+                            The properties of the <code>StoreExceptionPropertyBag</code>
+                            dictionary are as described
+                            <a href="#exceptions-javascript-api">above</a> in the
+                            request for site-specific exceptions.
+                            <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">properties</td><td class="prmType"><code><a class="idlType" href="#idl-def-StoreExceptionPropertyBag"><code>StoreExceptionPropertyBag</code></a></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>Promise</code> resolving to <code>void</code></div>
+                        </dd>
+                    </dl>
+                </section>
+                <p>
+                    This API requests the addition of a web-wide grant for a specific
+                    site to the database.
+                </p>
             </section>
-            <p>
-                This API requests the addition of a web-wide grant for a specific
-                site to the database.
-            </p>
-        </section>
 
-        <section property="bibo:hasPart" resource="#exceptions-javascript-api-ww-cancel" typeof="bibo:Chapter" id="exceptions-javascript-api-ww-cancel">
-            <h4 resource="#h-exceptions-javascript-api-ww-cancel" id="h-exceptions-javascript-api-ww-cancel"><span property="xhv:role" resource="xhv:heading"><span class="secno">7.5.2 </span>API to Cancel a Web-wide Exception</span></h4>
+            <section property="bibo:hasPart" resource="#exceptions-javascript-api-ww-cancel" typeof="bibo:Chapter" id="exceptions-javascript-api-ww-cancel">
+                <h4 resource="#h-exceptions-javascript-api-ww-cancel" id="h-exceptions-javascript-api-ww-cancel"><span property="xhv:role" resource="xhv:heading"><span class="secno">7.5.2 </span>API to Cancel a Web-wide Exception</span></h4>
 
-            <pre class="idl"><span class="idlInterface" id="idl-def-Navigator-5">partial interface <span class="idlInterfaceID">Navigator</span> {
+                <pre class="idl"><span class="idlInterface" id="idl-def-Navigator-5">partial interface <span class="idlInterfaceID">Navigator</span> {
 <span class="idlMethod">    <span class="idlMethType">Promise&lt;void&gt;</span> <span class="idlMethName"><a href="#widl-Navigator-removeWebWideTrackingException-promise-RemoveExceptionPropertyBag-properties">removeWebWideTrackingException</a></span> (<span class="idlParam"><span class="idlParamType"><a class="idlType" href="#idl-def-RemoveExceptionPropertyBag"><code>RemoveExceptionPropertyBag</code></a></span> <span class="idlParamName">properties</span></span>);</span>
 };</span></pre><section property="bibo:hasPart" resource="" typeof="bibo:Chapter">
-                <dl class="methods">
-                    <dt id="widl-Navigator-removeWebWideTrackingException-promise-RemoveExceptionPropertyBag-properties"><code>removeWebWideTrackingException</code></dt>
-                    <dd>
-                        Ensures that the database of remembered grants no longer
-                        contains the duplet <code>[ * , document-origin]</code>
-                        or <code>[ * , *.domain]</code> (based on if <code>domain</code>
-                        is provided and is not null and not empty).
-                        A Promise resolving to <code>void</code> is returned. When the Promise has been resolved, the
-                        indicated pair is assured not to be in the database. The same
-                        matching process defined for determining which header field to
-                        send is also used to detect which entry (if any) to remove from
-                        the database.
-                        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">properties</td><td class="prmType"><code><a class="idlType" href="#idl-def-RemoveExceptionPropertyBag"><code>RemoveExceptionPropertyBag</code></a></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>Promise</code> resolving to <code>void</code></div>
-                    </dd>
-                </dl>
+                    <dl class="methods">
+                        <dt id="widl-Navigator-removeWebWideTrackingException-promise-RemoveExceptionPropertyBag-properties"><code>removeWebWideTrackingException</code></dt>
+                        <dd>
+                            Ensures that the database of remembered grants no longer
+                            contains the duplet <code>[ * , document-origin]</code>
+                            or <code>[ * , *.domain]</code> (based on if <code>domain</code>
+                            is provided and is not null and not empty).
+                            A Promise resolving to <code>void</code> is returned. When the Promise has been resolved, the
+                            indicated pair is assured not to be in the database. The same
+                            matching process defined for determining which header field to
+                            send is also used to detect which entry (if any) to remove from
+                            the database.
+                            <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">properties</td><td class="prmType"><code><a class="idlType" href="#idl-def-RemoveExceptionPropertyBag"><code>RemoveExceptionPropertyBag</code></a></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>Promise</code> resolving to <code>void</code></div>
+                        </dd>
+                    </dl>
+                </section>
             </section>
-        </section>
 
-        <section property="bibo:hasPart" resource="#exceptions-javascript-api-ww-confirm" typeof="bibo:Chapter" id="exceptions-javascript-api-ww-confirm">
-            <h4 resource="#h-exceptions-javascript-api-ww-confirm" id="h-exceptions-javascript-api-ww-confirm"><span property="xhv:role" resource="xhv:heading"><span class="secno">7.5.3 </span>API to Confirm a Web-wide Exception</span></h4>
+            <section property="bibo:hasPart" resource="#exceptions-javascript-api-ww-confirm" typeof="bibo:Chapter" id="exceptions-javascript-api-ww-confirm">
+                <h4 resource="#h-exceptions-javascript-api-ww-confirm" id="h-exceptions-javascript-api-ww-confirm"><span property="xhv:role" resource="xhv:heading"><span class="secno">7.5.3 </span>API to Confirm a Web-wide Exception</span></h4>
 
-            <pre class="idl"><span class="idlInterface" id="idl-def-Navigator-6">partial interface <span class="idlInterfaceID">Navigator</span> {
+                <pre class="idl"><span class="idlInterface" id="idl-def-Navigator-6">partial interface <span class="idlInterfaceID">Navigator</span> {
 <span class="idlMethod">    <span class="idlMethType">Promise&lt;boolean&gt;</span> <span class="idlMethName"><a href="#widl-Navigator-confirmWebWideTrackingException-boolean-ConfirmExceptionPropertyBag-properties">confirmWebWideTrackingException</a></span> (<span class="idlParam"><span class="idlParamType"><a class="idlType" href="#idl-def-ConfirmExceptionPropertyBag"><code>ConfirmExceptionPropertyBag</code></a></span> <span class="idlParamName">properties</span></span>);</span>
 };</span></pre><section property="bibo:hasPart" resource="" typeof="bibo:Chapter">
-                <dl class="methods">
-                    <dt id="widl-Navigator-confirmWebWideTrackingException-boolean-ConfirmExceptionPropertyBag-properties"><code>confirmWebWideTrackingException</code></dt>
-                    <dd>
-                        Confirms that there exists in the database a web-wide exception
-                        for a specific site.
-                        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">properties</td><td class="prmType"><code><a class="idlType" href="#idl-def-ConfirmExceptionPropertyBag"><code>ConfirmExceptionPropertyBag</code></a></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>boolean</code></div>
-                    </dd>
-                </dl>
+                    <dl class="methods">
+                        <dt id="widl-Navigator-confirmWebWideTrackingException-boolean-ConfirmExceptionPropertyBag-properties"><code>confirmWebWideTrackingException</code></dt>
+                        <dd>
+                            Confirms that there exists in the database a web-wide exception
+                            for a specific site.
+                            <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">properties</td><td class="prmType"><code><a class="idlType" href="#idl-def-ConfirmExceptionPropertyBag"><code>ConfirmExceptionPropertyBag</code></a></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>boolean</code></div>
+                        </dd>
+                    </dl>
+                </section>
+                <p>
+                    The returned Promise resolves to a boolean indicating whether the duplet
+                    <code>[ * , document-origin]</code> or <code>[ * , *.domain]</code>
+                    (based on if <code>domain</code> is provided and is not null and
+                    not empty) exists in the database.
+                </p>
+                <ul>
+                    <li>
+                        <code>true</code> indicates that the web-wide exception
+                        exists;
+                    </li>
+                    <li>
+                        <code>false</code> indicates that the web-wide exception
+                        does not exist.
+                    </li>
+                </ul>
             </section>
-            <p>
-                The returned Promise resolves to a boolean indicating whether the duplet
-                <code>[ * , document-origin]</code> or <code>[ * , *.domain]</code>
-                (based on if <code>domain</code> is provided and is not null and
-                not empty) exists in the database.
-            </p>
-            <ul>
-                <li>
-                    <code>true</code> indicates that the web-wide exception
-                    exists;
-                </li>
-                <li>
-                    <code>false</code> indicates that the web-wide exception
-                    does not exist.
-                </li>
-            </ul>
         </section>
-    </section>
 
-
+        </section>
 
 </body>
 </html>
