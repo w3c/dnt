@@ -611,17 +611,23 @@ DNT: 1
       <h3>JavaScript Property to Detect Preference</h3>
 
       <p>
-        The <code>doNotTrack</code> property enables a client-side script
-        with read access to the Navigator object to determine what
+        The <code><dfn>Navigator.doNotTrack</dfn></code> property enables
+        a client-side script with read access to the
+        <code><dfn data-cite="!HTML5#navigator">Navigator</dfn></code> object
+        [[!HTML5]] to determine what
         <a>DNT</a> header field value would be sent in requests to the
         document-origin, taking into account the user's general preference
-        (if any) and any user-granted exceptions applicable to that
+        (if any) and the current user-granted exceptions applicable to that
         origin server.
       </p>
-      <dl class="idl" title='partial interface Navigator'>
-        <dt>readonly attribute DOMString? doNotTrack</dt>
-        <dd>Returns the same string value that would be sent in a
-          <a>DNT-field-value</a>
+      <pre class="idl">
+        partial interface Navigator {
+            readonly attribute DOMString? doNotTrack;
+        };
+      </pre>
+      <p>
+          The value of <a>Navigator.doNotTrack</a> is the string value that
+          would be sent in a <a>DNT-field-value</a>
           (<a href="#dnt-header-field" class="sectionRef"></a>) to a
           <strong>target</strong> that is the document-origin of the
           <code>window</code>, in the browser context of the current
@@ -629,8 +635,8 @@ DNT: 1
           The value is <code>null</code> if no DNT header field would be
           sent (e.g., because a tracking preference is <a>not enabled</a>);
           otherwise, the value is a string beginning with "0" or "1",
-          possibly followed by DNT-extension characters.</dd>
-      </dl>
+          possibly followed by DNT-extension characters.
+      </p>
     </section>
 
     <section id='other-protocols'>
