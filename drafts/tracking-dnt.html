@@ -391,7 +391,7 @@
       A user agent MAY offer a third alternative choice: <code><dfn>DNT:0</dfn></code>.
     </p>
     <p>
-      If the user's choice is <code>DNT:1</code> or <code>DNT:0</code>, the
+      If the user's choice is <a>DNT:1</a> or <a>DNT:0</a>, the
       tracking preference is <dfn>enabled</dfn>; otherwise, the
       tracking preference is <dfn>not enabled</dfn>.
     </p>
@@ -423,7 +423,7 @@
       preference expression in a request forwarded through that intermediary
       unless the intermediary has been specifically installed or configured
       to do so by the user making the request. For example, an Internet
-      Service Provider MUST NOT inject <code><a>DNT:1</a></code> on behalf
+      Service Provider MUST NOT inject <a>DNT:1</a> on behalf
       of all users who have not expressed a preference.
     </p>
     <p>
@@ -526,7 +526,7 @@
       <h3>DNT Header Field for HTTP Requests</h3>
 
       <p>
-        The <dfn>DNT</dfn> header field is a mechanism for expressing the
+        The <code><dfn>DNT</dfn></code> header field is a mechanism for expressing the
         user's tracking preference in an HTTP request ([[!RFC7230]]).
         At most one DNT header field can be present in a valid request.
       </p>
@@ -542,14 +542,14 @@
         A user agent MUST generate a <a>DNT</a> header field with a
         field-value that begins with the numeric character "1" if the user's
         tracking preference is <a>enabled</a>, their preference is for
-        <code><a>DNT:1</a></code>, and no exception has been granted for the
+        <a>DNT:1</a>, and no exception has been granted for the
         request target (see <a href="#exceptions" class="sectionRef"></a>).
       </p>
       <p>
         A user agent MUST generate a <a>DNT</a> header field with a
         field-value that begins with the numeric character "0" if the user's
         tracking preference is <a>enabled</a> and their preference is for
-        <code><a>DNT:0</a></code>, or if an exception has been granted for
+        <a>DNT:0</a>, or if an exception has been granted for
         the request target.
       </p>
       <p>
@@ -705,7 +705,7 @@ DNT: 1
       <section id='TSV-!'>
         <h4>Under Construction (!)</h4>
         <p>
-          A tracking status value of <dfn>!</dfn> means that the origin
+          A tracking status value of <code><dfn>!</dfn></code> means that the origin
           server is currently testing its communication of tracking status.
           The <code>!</code> value has been provided to ease testing and
           deployment on production systems during the initial periods of
@@ -720,7 +720,7 @@ DNT: 1
       <section id='TSV-?'>
         <h4>Dynamic (?)</h4>
         <p>
-          A tracking status value of <dfn>?</dfn> means the origin server
+          A tracking status value of <code><dfn>?</dfn></code> means the origin server
           needs more information to determine tracking status, usually
           because the <a>designated resource</a> dynamically adjusts
           behavior based on information in a request.
@@ -731,7 +731,7 @@ DNT: 1
           responses to requests on the designated resource.
           If <code>?</code> is present in the <a>Tk</a> header field,
           more information will be provided in a request-specific
-          tracking status resource referred to by the <code><a>status-id</a></code>.
+          tracking status resource referred to by the <a>status-id</a>.
           An origin server MUST NOT send <code>?</code> as the
           tracking status value in the representation of a
           request-specific tracking status resource.
@@ -741,13 +741,13 @@ DNT: 1
       <section id='TSV-G'>
         <h4>Gateway (G)</h4>
         <p>
-          A tracking status value of <dfn>G</dfn> means the server
+          A tracking status value of <code><dfn>G</dfn></code> means the server
           is acting as a gateway to an exchange involving multiple parties.
           This might occur if a response to the <a>designated resource</a>
           involves an automated selection process, such as dynamic bidding,
           where the party that is selected determines how the request data
           will be treated with respect to an expressed tracking preference.
-          Similar to the <code>?</code> value, the <code>G</code> TSV
+          Similar to the <a>?</a> value, the <code>G</code> TSV
           indicates that the actual tracking status is dynamic and will be
           provided in the response message's <a>Tk</a> header field,
           presumably using information forwarded from the selected party.
@@ -773,10 +773,10 @@ DNT: 1
             parties to whom it provides request data such that only the
             selected party is allowed to retain tracking data from a
             request with an expressed tracking preference of
-            <code><a>DNT:1</a></code>; and,</li>
+            <a>DNT:1</a>; and,</li>
           <li>the gateway MUST send a <a>Tk</a> header field in
             responses to requests on the designated resource and include
-            within that field's value a <code><a>status-id</a></code>
+            within that field's value a <a>status-id</a>
             specific to the selected party, such that information about
             the selected party can be obtained via the request-specific
             tracking status resource (see
@@ -785,7 +785,7 @@ DNT: 1
         <p>
           With respect to tracking performed by the gateway itself, the
           <code>G</code> response can be considered equivalent
-          to the <code><a>T</a></code> (tracking) response defined below.
+          to the <a>T</a> (tracking) response defined below.
           The other information within the site-wide tracking status
           representation indicates how the gateway intends to comply
           with an expressed tracking preference, aside from the potential
@@ -796,7 +796,7 @@ DNT: 1
       <section id='TSV-N'>
         <h4>Not Tracking (N)</h4>
         <p>
-          A tracking status value of <dfn>N</dfn> means the origin server
+          A tracking status value of <code><dfn>N</dfn></code> means the origin server
           claims that data collected via the <a>designated resource</a> is
           not used for tracking and will not be combined with other data in
           a form that would enable tracking.
@@ -806,7 +806,7 @@ DNT: 1
       <section id='TSV-T'>
         <h4>Tracking (T)</h4>
         <p>
-          A tracking status value of <dfn>T</dfn> means the origin server
+          A tracking status value of <code><dfn>T</dfn></code> means the origin server
           might perform or enable tracking using data collected via the
           <a>designated resource</a>. Information provided in the tracking
           status representation might indicate whether such tracking is
@@ -818,14 +818,14 @@ DNT: 1
       <section id='TSV-C'>
         <h4>Consent (C)</h4>
         <p>
-          A tracking status value of <dfn>C</dfn> means that the origin
+          A tracking status value of <code><dfn>C</dfn></code> means that the origin
           server believes it has received prior consent for tracking this
           user, user agent, or device, perhaps via some mechanism not
           defined by this specification, and that prior consent overrides
           the tracking preference expressed by this protocol.
           An origin server that sends the <code>C</code> tracking status
           value for a <a>designated resource</a> MUST provide a reference
-          for controlling consent within the <code><a>config</a></code>
+          for controlling consent within the <a>config</a>
           property of its corresponding tracking status representation
           (<a href="#status-representation" class="sectionRef"></a>).
         </p>
@@ -834,20 +834,20 @@ DNT: 1
       <section id='TSV-P'>
         <h4>Potential Consent (P)</h4>
         <p>
-          A tracking status value of <dfn>P</dfn> means that the origin
+          A tracking status value of <code><dfn>P</dfn></code> means that the origin
           server does not know, in real-time, whether it has received prior
           consent for tracking this user, user agent, or device, but
-          promises not to use or share any <code><a>DNT:1</a></code> data
+          promises not to use or share any <a>DNT:1</a> data
           until such consent has been determined, and further promises to
           delete or <a href="#dfn-permanently-de-identified">permanently de-identify</a>
-          within forty-eight hours any <code><a>DNT:1</a></code> data
+          within forty-eight hours any <a>DNT:1</a> data
           received for which such consent has not been received.
         </p>
         <p>
           Since this status value does not itself indicate whether a
           specific request is tracked, an origin server that sends a
           <code>P</code> tracking status value MUST provide a
-          <code><a>config</a></code> property in the corresponding tracking
+          <a>config</a> property in the corresponding tracking
           status representation that links to a resource for obtaining
           consent status.
         </p>
@@ -859,14 +859,14 @@ DNT: 1
           by first party sites if they can determine which of their users
           have consented. The data cannot be used for the sake of
           personalization. If consent can be determined at the time of a
-          request, the <code><a>C</a></code> tracking status is preferred.
+          request, the <a>C</a> tracking status is preferred.
         </p>
       </section>
 
       <section id='TSV-D'>
         <h4>Disregarding (D)</h4>
         <p>
-          A tracking status value of <dfn>D</dfn> means that the origin
+          A tracking status value of <code><dfn>D</dfn></code> means that the origin
           server is unable or unwilling to respect a tracking preference
           received from the requesting user agent.  An origin server that
           sends the <code>D</code> tracking status value MUST detail within
@@ -895,7 +895,7 @@ DNT: 1
       <section id='TSV-U'>
         <h4>Updated (U)</h4>
         <p>
-          A tracking status value of <dfn>U</dfn> means that the request
+          A tracking status value of <code><dfn>U</dfn></code> means that the request
           resulted in a potential change to the tracking status applicable
           to this user, user agent, or device. A user agent that relies on a
           cached tracking status SHOULD update the cache entry with the
@@ -917,7 +917,7 @@ DNT: 1
         <h4>Definition</h4>
 
         <p>
-          The <dfn>Tk</dfn> response header field is a means for indicating
+          The <code><dfn>Tk</dfn></code> response header field is a means for indicating
           the tracking status that applied to the corresponding request.
           An origin server is REQUIRED to send a <code>Tk</code> header
           field if its site-wide tracking status value is <a>?</a>
@@ -951,7 +951,7 @@ DNT: 1
           fields, data, etc.), the origin server can provide an additional
           subtree of well-known resources corresponding to each of those
           distinct tracking statuses. The <code>status-id</code>
-          portion of the <a>Tk</a> field-value indicates which specific
+          portion of the <code>Tk</code> field-value indicates which specific
           tracking status resource applies to the current request.
           The <code>status-id</code> is case-sensitive.
         </p>
@@ -980,7 +980,7 @@ DNT: 1
         </p>
         <p>
           If a Tk field-value has a tracking status value of
-          <code><a>?</a></code> (dynamic), the origin server MUST
+          <a>?</a> (dynamic), the origin server MUST
           send a <code>status-id</code> in the field-value.
         </p>
       </section>
@@ -992,7 +992,7 @@ DNT: 1
           the scope of this specification, that have the effect of asking
           for and obtaining prior consent for tracking, or for modifying
           prior indications of consent.  For example, the tracking status
-          resource's status object defines a <code><a>config</a></code>
+          resource's status object defines a <a>config</a>
           property that can refer to such a mechanism. Although such
           out-of-band mechanisms are not defined by this specification,
           their presence might influence the tracking status object's
@@ -1006,7 +1006,7 @@ DNT: 1
           tracking status for that server.  This indication of an
           interactive status change is accomplished by sending a
           <a>Tk</a> header field in the response with a tracking status
-          value of <code><a>U</a></code> (updated).
+          value of <a>U</a> (updated).
         </p>
         <pre class="example">Tk: U</pre>
       </section>
@@ -1055,7 +1055,7 @@ DNT: 1
           subtree of well-known resources corresponding to each of those
           distinct tracking statuses.  The <a>Tk</a> response header field
           (<a href="#response-header-field" class="sectionRef"></a>) can
-          include a <code><a>status-id</a></code> to indicate which specific
+          include a <a>status-id</a> to indicate which specific
           tracking status resource applies to the current request.
         </p>
         <p>
@@ -1064,7 +1064,7 @@ DNT: 1
         </p>
         <pre>/.well-known/dnt/{+status-id}</pre>
         <p>
-          where the value of <code>status-id</code> is a string of URI-safe
+          where the value of <a>status-id</a> is a string of URI-safe
           characters provided by a <a>Tk</a> field-value in response to a
           prior request.  For example, a prior response containing
         </p>
@@ -1166,8 +1166,8 @@ DNT: 1
       <p>
         For each tracking status resource, an origin server MUST provide a
         valid representation using the
-        <code>application/tracking-status+json</code> media type.
-        This media type consists of a <code><a>status object</a></code>
+        <code><dfn>application/tracking-status+json</dfn></code> media type.
+        This media type consists of a <a>status object</a>
         serialized as JSON [[!RFC7159]]. More information about the
         <code>application/tracking-status+json</code> media type can be
         found in <a href="#registrations" class="sectionRef"></a>.
@@ -1177,7 +1177,7 @@ DNT: 1
         <h4>Status Object</h4>
         <p>
           A tracking status representation consists of a single
-          <code><dfn>status object</dfn></code> containing properties that
+          <dfn>status object</dfn> containing properties that
           describe the tracking status applicable to the
           <a>designated resource</a>.  Most of the properties are optional
           and can be extended over time, as illustrated by the following
@@ -1222,7 +1222,7 @@ object {
       <section id='rep.tracking'>
         <h4>Tracking Property</h4>
         <p>
-          A <code><a>status object</a></code> MUST have a property named
+          A <a>status object</a> MUST have a property named
           <code>tracking</code> with a string value containing
           the tracking status value
           (<a href="#tracking-status-value" class="sectionRef"></a>)
@@ -1262,7 +1262,7 @@ object {
           Multiple qualifiers indicate that multiple explanations or forms
           of tracking might apply for the designated resource.
           The meaning of each qualifier is presumed to be defined by one
-          or more of the regimes listed in <code><a>compliance</a></code>.
+          or more of the regimes listed in <a>compliance</a>.
         </p>
       </section>
 
@@ -1354,7 +1354,7 @@ object {
           in the machine-readable tracking status representation.
           If no <code>policy</code> property is provided, this
           information might be obtained via the links provided in
-          <code><a>controller</a></code>.
+          <a>controller</a>.
         </p>
       </section>
 
@@ -1367,7 +1367,7 @@ object {
           personal data collected via the designated resource (and possibly
           other resources).
           If the tracking status value indicates prior consent
-          (<code><a>C</a></code>), the origin server MUST send a
+          (<a>C</a>), the origin server MUST send a
           <code>config</code> property referencing a resource that
           describes how such consent is established and how to revoke that
           consent.
@@ -1385,7 +1385,7 @@ object {
         <p>
           If no <code>config</code> property is provided, this
           information might be obtained via the links provided in
-          <code><a>controller</a></code> or <code><a>policy</a></code>.
+          <a>controller</a> or <a>policy</a>.
         </p>
       </section>
 
@@ -1393,7 +1393,7 @@ object {
         <h4>Extensions</h4>
         <p>
           An origin server MAY send additional properties in the
-          <code><a>status object</a></code> to support future enhancements
+          <a>status object</a> to support future enhancements
           to this protocol. A recipient MUST ignore extension properties
           that it does not recognize.
         </p>
@@ -1404,7 +1404,7 @@ object {
       <h3>Status Code for Tracking Required</h3>
 
       <p>
-        If an origin server receives a request with <code><a>DNT:1</a></code>,
+        If an origin server receives a request with <a>DNT:1</a>,
         does not have out-of-band consent for tracking this user, and
         wishes to deny access to the requested resource until the user
         provides some form of user-granted exception or consent for tracking,
@@ -1460,13 +1460,13 @@ object {
           <a>designated resource</a> by first making a retrieval request for
           the site-wide tracking status representation, as described above,
           and then parsing the representation as JSON to extract the
-          <code><a>status object</a></code>.
+          <a>status object</a>.
           If the retrieval is unsuccessful or parsing results in a syntax
           error, the user agent ought to consider the site to be
           non-conformant with this protocol.
         </p>
         <p>
-          The <code><a>status object</a></code> is supposed to have a
+          The <a>status object</a> is supposed to have a
           property named <code>tracking</code> containing the tracking
           status value. The meaning of each tracking status value is defined
           in <a href="#tracking-status-value" class="sectionRef"></a>.
@@ -1673,7 +1673,7 @@ object {
           <li>While the user is browsing a given site (top-level origin),
             and a DNT header field is to be sent to a target domain, if the
             duplet [top-level origin, target domain] matches any duplet in the
-            database, then a <code><a>DNT:0</a></code> preference is sent,
+            database, then a <a>DNT:0</a> preference is sent,
             otherwise the user’s general preference is sent (if any).</li>
         </ul>
         <p>
@@ -2232,7 +2232,7 @@ object {
         existence of <code>storeSiteSpecificTrackingException</code> before
         calling the method. If an exception is granted and the user agent
         stores that preference, a user agent might send the
-        <code><a>DNT:0</a></code> tracking preference even if it has not
+        <a>DNT:0</a> tracking preference even if it has not
         enabled preferences to be sent for other requests. Persisted
         preferences MAY affect which preference is transmitted if a user
         later chooses to express a tracking preference.
@@ -2374,7 +2374,7 @@ object {
     <h2>Registrations</h2>
 
     <p>
-      The Internet media type <dfn>application/tracking-status+json</dfn> is
+      The Internet media type <a>application/tracking-status+json</a> is
       used for tracking status representations
       (<a href="#status-representation" class="sectionRef"></a>).
     </p>
