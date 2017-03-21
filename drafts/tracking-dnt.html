@@ -1737,7 +1737,7 @@ object {
         <pre class="idl overlarge">
         partial interface Navigator {
             Promise&lt;void&gt; storeSiteSpecificTrackingException (
-                            StoreSiteSpecificExceptionPropertyBag properties
+                            StoreExceptionPropertyBag properties
                           );
         };
         
@@ -1833,8 +1833,9 @@ object {
           If the document-origin would not be able to set a cookie on the
           <code>domain</code> following the cookie domain rules [[!RFC6265]]
           (e.g. <code>domain</code> is not a right-hand match or is a TLD)
-          then the duplet MUST NOT be entered into the database and the returned <code>Promise</code>
-          rejected with a <code>DOMException</code> SYNTAX_ERR
+          then the duplet MUST NOT be entered into the database and the
+          returned <code>Promise</code>
+          rejected with a <code>DOMException</code> SYNTAX_ERR.
         </p>
         <p>
           If permission is stored for an explicit list, then the set of
@@ -1882,37 +1883,54 @@ object {
 
       <section id="exceptions-javascript-api-cancel">
         <h4>API to Cancel a Site-specific Exception</h4>
-        
-        <dl class="idl" title='partial interface Navigator'>
-          <dt>Promise&lt;void&gt; removeSiteSpecificTrackingException( RemoveExceptionPropertyBag properties )</dt>
-          <dd>
-            <p>
-              If domain is not supplied or is null or empty then this
-              ensures that the database of remembered grants no longer
-              contains any duplets for which the first part is the current
-              document origin; i.e., no duplets
-              <code>[document-origin, target]</code> for any target.
-            </p>
-            <p>
-              If domain is supplied and is not empty then this ensures that
-              the database of remembered grants no longer contains any
-              duplets for which the first part is the domain wildcard; i.e.,
-              no duplets <code>[*.domain, target]</code> for any target.
-            </p>
-            <p>
-                A <code>Promise</code> resolving to <code>void</code> is returned.
-                When the <code>Promise</code> has been resolved, it is assumed
-                that there are no site-specific or site-wide exceptions for the given top-level origin.
-            </p>
-          </dd>
-        </dl>
-        <dl class="idl" title="dictionary RemoveExceptionPropertyBag">
-          <dt>DOMString? domain</dt>
+
+        <p>
+          <code><dfn>Navigator.removeSiteSpecificTrackingException</dfn></code>
+          is called by a page to cancel a site-specific tracking exception.
+          A <code><dfn>RemoveExceptionPropertyBag</dfn></code> dictionary
+          contains information to identify the exception.
+        </p>
+        <pre class="idl overlarge">
+        partial interface Navigator {
+          Promise&lt;void&gt; removeSiteSpecificTrackingException (
+            RemoveExceptionPropertyBag properties
+          );
+        };
+
+        dictionary RemoveExceptionPropertyBag {
+          DOMString? domain;
+        };
+        </pre>
+        <p>
+          <a>Navigator.removeSiteSpecificTrackingException</a> passes a
+          <a>RemoveExceptionPropertyBag</a> that can contain the following
+          property:
+        </p>
+        <dl data-dfn-for="RemoveExceptionPropertyBag">
+          <dt><code><dfn>domain</dfn></code></dt>
           <dd>a cookie-domain as defined in [[!RFC6265]],
               to which the exception applies.</dd>
         </dl>
         <p>
-            When the returned <code>Promise</code> is resolved, the database of grants no longer
+          If domain is not supplied or is null or empty then this
+          ensures that the database of remembered grants no longer
+          contains any duplets for which the first part is the current
+          document origin; i.e., no duplets
+          <code>[document-origin, target]</code> for any target.
+        </p>
+        <p>
+          If domain is supplied and is not empty then this ensures that
+          the database of remembered grants no longer contains any
+          duplets for which the first part is the domain wildcard; i.e.,
+          no duplets <code>[*.domain, target]</code> for any target.
+        </p>
+        <p>
+          A <code>Promise</code> resolving to <code>void</code> is returned.
+          When the <code>Promise</code> has been resolved, it is assumed
+          that there are no site-specific or site-wide exceptions for the given top-level origin.
+        </p>
+        <p>
+          When the returned <code>Promise</code> is resolved, the database of grants no longer
           contains the indicated grant(s); if some kind of processing error
           occurred then an appropriate exception will be thrown.
         </p>
@@ -1926,19 +1944,34 @@ object {
       <section id="exceptions-javascript-api-confirm">
         <h4>API to Confirm a Site-specific Exception</h4>
 
-        <dl class="idl" title='partial interface Navigator'>
-          <dt>Promise&lt;boolean&gt; confirmSiteSpecificTrackingException( ConfirmSiteSpecificExceptionPropertyBag properties )</dt>
-          <dd>
-            Called by a page to confirm a site-specific tracking exception.
-          </dd>
-        </dl>
-        <dl class="idl" title="dictionary ConfirmExceptionPropertyBag">
-          <dt>DOMString? domain</dt>
+        <p>
+          <code><dfn>Navigator.confirmSiteSpecificTrackingException</dfn></code>
+          is called by a page to confirm a site-specific tracking exception.
+          A <code><dfn>ConfirmExceptionPropertyBag</dfn></code> dictionary
+          contains information to identify the exception.
+        </p>
+        <pre class="idl overlarge">
+        partial interface Navigator {
+          Promise&lt;boolean&gt; confirmSiteSpecificTrackingException (
+            ConfirmExceptionPropertyBag properties
+          );
+        };
+
+        dictionary ConfirmExceptionPropertyBag {
+          DOMString? domain;
+          sequence&lt;DOMString&gt; arrayOfDomainStrings;
+        };
+        </pre>
+        <p>
+          <a>Navigator.confirmSiteSpecificTrackingException</a> passes a
+          <a>ConfirmExceptionPropertyBag</a> that can contain the following
+          properties:
+        </p>
+        <dl data-dfn-for="ConfirmExceptionPropertyBag">
+          <dt><code><dfn>domain</dfn></code></dt>
           <dd>a cookie-domain as defined in [[!RFC6265]],
               to which the exception applies.</dd>
-        </dl>
-        <dl class="idl" title="dictionary ConfirmSiteSpecificExceptionPropertyBag : ConfirmExceptionPropertyBag">
-          <dt>sequence&lt;DOMString&gt; arrayOfDomainStrings</dt>
+          <dt><code><dfn>arrayOfDomainStrings</dfn></code></dt>
           <dd>A JavaScript array of strings.</dd>
         </dl>
         <p>
@@ -1987,12 +2020,13 @@ object {
         </p>
         <pre>[*.domain, * ]</pre>
         <p>
-            The returned <code>Promise</code> resolves to a <code>boolean</code> which has the following possible values:
+          The returned <code>Promise</code> resolves to a <code>boolean</code>
+          which has the following possible values:
         </p>
         <ul>
           <li><code>true</code> all the duplets exist in the database;</li>
           <li><code>false</code> one or more of the duplets does not exist
-          in the database.</li>
+              in the database.</li>
         </ul>
       </section>
     </section>
@@ -2003,58 +2037,91 @@ object {
       <section id="exceptions-javascript-api-ww-rqst">
         <h4>API to Request a Web-wide Exception</h4>
 
-        <dl class="idl" title='partial interface Navigator'>
-          <dt>Promise&lt;void&gt; storeWebWideTrackingException( StoreExceptionPropertyBag properties )</dt>
-          <dd>
-            The single duplet
-            <code>[ * , document-origin]</code> or
-            <code>[ * , *.domain]</code> (based on if <code>domain</code>
-            is provided and is not null and not empty)
-            is added to the database of remembered grants.
-            The properties of the <code>StoreExceptionPropertyBag</code>
-            dictionary are as described
-            <a href="#exceptions-javascript-api">above</a> in the
-            request for site-specific exceptions.
-          </dd>
-        </dl>
         <p>
-          This API requests the addition of a web-wide grant for a specific
-          site to the database.
+          <code><dfn>Navigator.storeWebWideTrackingException</dfn></code>
+          is called by a page to request the addition of a web-wide grant for a
+          specific site to the database.
+        </p>
+        <pre class="idl overlarge">
+        partial interface Navigator {
+            Promise&lt;void&gt; storeWebWideTrackingException (
+                            StoreExceptionPropertyBag properties
+                          );
+        };
+        </pre>
+        <p>
+          <a>Navigator.storeWebWideTrackingException</a> passes a
+          <a>StoreExceptionPropertyBag</a>, as described in
+          <a href="#exceptions-javascript-api-rqst" class="sectionRef"></a>.
+        </p>
+        <p>
+          The single duplet
+          <code>[ * , document-origin]</code> or
+          <code>[ * , *.domain]</code> (based on if <code>domain</code>
+          is provided and is not null and not empty)
+          is added to the database of remembered grants.
         </p>
       </section>
 
       <section id="exceptions-javascript-api-ww-cancel">
         <h4>API to Cancel a Web-wide Exception</h4>
 
-          <dl class="idl" title='partial interface Navigator'>
-              <dt>Promise&lt;void&gt; removeWebWideTrackingException( RemoveExceptionPropertyBag properties )</dt>
-              <dd>
-                  Ensures that the database of remembered grants no longer
-                  contains the duplet <code>[ * , document-origin]</code>
-                  or <code>[ * , *.domain]</code> (based on if <code>domain</code>
-                  is provided and is not null and not empty).
-                  A <code>Promise</code> resolving to <code>void</code> is returned.
-                  When the <code>Promise</code> is resolved, the
-                  indicated pair is assured not to be in the database. The same
-                  matching process defined for determining which header field to
-                  send is also used to detect which entry (if any) to remove from
-                  the database.
-              </dd>
-          </dl>
+        <p>
+          <code><dfn>Navigator.removeWebWideTrackingException</dfn></code>
+          is called by a page to request the removal of a web-wide grant for a
+          specific site from the database.
+        </p>
+        <pre class="idl overlarge">
+        partial interface Navigator {
+            Promise&lt;void&gt; removeWebWideTrackingException (
+                            RemoveExceptionPropertyBag properties
+                          );
+        };
+        </pre>
+        <p>
+          <a>Navigator.removeWebWideTrackingException</a> passes a
+          <a>RemoveExceptionPropertyBag</a>, as described in
+          <a href="#exceptions-javascript-api-cancel" class="sectionRef"></a>.
+        </p>
+        <p>
+          Ensures that the database of remembered grants no longer
+          contains the duplet <code>[ * , document-origin]</code>
+          or <code>[ * , *.domain]</code> (based on if <code>domain</code>
+          is provided and is not null and not empty).
+        </p>
+        <p>
+          A <code>Promise</code> resolving to <code>void</code> is returned.
+          When the <code>Promise</code> is resolved, the
+          indicated pair is assured not to be in the database. The same
+          matching process defined for determining which header field to
+          send is also used to detect which entry (if any) to remove from
+          the database.
+        </p>
       </section>
 
       <section id="exceptions-javascript-api-ww-confirm">
         <h4>API to Confirm a Web-wide Exception</h4>
 
-        <dl class="idl" title='partial interface Navigator'>
-          <dt>Promise&lt;boolean&gt; confirmWebWideTrackingException( ConfirmExceptionPropertyBag properties )</dt>
-          <dd>
-            Confirms that there exists in the database a web-wide exception
-            for a specific site.
-          </dd>
-        </dl>
         <p>
-            The returned <code>Promise</code> resolves to a <code>boolean</code> indicating whether the duplet
+          <code><dfn>Navigator.confirmWebWideTrackingException</dfn></code>
+          is called by a page to confirm that there exists in the database a
+          web-wide exception for a specific site.
+        </p>
+        <pre class="idl overlarge">
+        partial interface Navigator {
+          Promise&lt;boolean&gt; confirmWebWideTrackingException (
+            ConfirmSiteSpecificExceptionPropertyBag properties
+          );
+        };
+        </pre>
+        <p>
+          <a>Navigator.confirmWebWideTrackingException</a> passes a
+          <a>ConfirmExceptionPropertyBag</a>, as described in
+          <a href="#exceptions-javascript-api-confirm" class="sectionRef"></a>.
+        </p>
+        <p>
+          The returned <code>Promise</code> resolves to a <code>boolean</code>
+          indicating whether the duplet
           <code>[ * , document-origin]</code> or <code>[ * , *.domain]</code>
           (based on if <code>domain</code> is provided and is not null and
           not empty) exists in the database.
