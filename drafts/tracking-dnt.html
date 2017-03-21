@@ -1725,153 +1725,160 @@ object {
     <section id="exceptions-javascript-api">
       <h3>Site-specific Exceptions</h3>
       
-        <section id="exceptions-javascript-api-rqst">
-            <h4>API to Request a Site-specific Exception</h4>
+      <section id="exceptions-javascript-api-rqst">
+        <h4>API to Request a Site-specific Exception</h4>
 
-            <dl class="idl" title='partial interface Navigator'>
-              <dt>Promise&lt;void&gt; storeSiteSpecificTrackingException( StoreSiteSpecificExceptionPropertyBag properties )</dt>
-                <dd>
-                    Called by a page to store a site-specific tracking exception.
-                </dd>
-            </dl>
-            <dl class="idl" title="dictionary StoreExceptionPropertyBag">
-                <dt>DOMString? domain</dt>
-                <dd>
-                    a cookie-domain as defined in [[!RFC6265]],
-                    to which the exception applies.
-                </dd>
-                <dt>DOMString? siteName</dt>
-                <dd>A user-readable string for the name of the top-level origin.</dd>
-                <dt>DOMString? explanationString</dt>
-                <dd>A short explanation of the request.</dd>
-                <dt>DOMString? detailURI</dt>
-                <dd>
-                    A location at which further information about this request
-                    can be found.
-                </dd>
-                <dt>DOMString? expires</dt>
-                <dd>
-                    A date and time, encoded as described for the cookie
-                    <code>Expires</code> attribute described in [[RFC6265]],
-                    indicating the maximum lifetime of the remembered grant.
-                </dd>
-                <dt>long? maxAge</dt>
-                <dd>
-                    A positive number of seconds indicating the maximum lifetime
-                    of the remembered grant.
-                </dd>
-            </dl>
-            <dl class="idl" title="dictionary StoreSiteSpecificExceptionPropertyBag : StoreExceptionPropertyBag">
-                <dt>sequence&lt;DOMString&gt; arrayOfDomainStrings</dt>
-                <dd>A JavaScript array of strings.</dd>
-            </dl>
-            <p>
-                The <code>storeSiteSpecificTrackingException</code> method takes
-                a dictionary argument of type <a>StoreSiteSpecificExceptionPropertyBag</a>
-                that allows optional information to be provided.
-            </p>
-            <p>
-                If the request does not include the
-                <code>arrayOfDomainStrings</code>, then this request is for a
-                site-wide exception. Otherwise each string in
-                <code>arrayOfDomainStrings</code> specifies a
-                <strong>target</strong>. When called,
-                <code>storeSiteSpecificTrackingException</code> MUST return
-                immediately with a <code>Promise</code> resolving to a <code>void</code>,
-                or rejected with a <code>DOMException</code> SYNTAX_ERR.
-            </p>
-            <p>
-                If the list <code>arrayOfDomainStrings</code> is supplied, the
-                user agent MAY choose to store a site-wide exception. If it does
-                so it MUST indicate this in the return value.
-            </p>
-            <p>
-                If <code>domain</code> is not specified or is null or empty then
-                the execution of this API and the use of the resulting permission
-                (if granted) use the 'implicit' parameter, when the API is called,
-                the <strong>document origin</strong>. This forms the first part of
-                the duplet in the logical model, and hence in operation will be
-                compared with the <strong>top-level origin</strong>.
-            </p>
-            <p>
-                If permission is stored for an explicit list, then the set of
-                duplets (one per target):
-            </p>
-            <pre>[document-origin, target]</pre>
-            <p>
-                is added to the database of remembered grants.
-            </p>
-            <p>
-                If permission is stored for a site-wide exception, then the
-                duplet:
-            </p>
-            <pre>[document-origin, * ]</pre>
-            <p>
-                is added to the database of remembered grants.
-            </p>
-            <p>
-                If <code>domain</code> is supplied and not empty then it is
-                treated in the same way as the domain parameter to cookies and
-                allows setting for subdomains. The <code>domain</code> argument
-                can be set to fully-qualified right-hand segment of the document
-                host name, up to one level below TLD.
-            </p>
-            <p>
-                For example, <em>www.foo.bar.example.com</em> can set the domain
-                parameter as as <code>"bar.example.com"</code> or
-                <code>"example.com"</code>, but not to
-                <code>"something.else.example.com"</code> or <code>"com"</code>.
-            </p>
-            <p>
-                If the document-origin would not be able to set a cookie on the
-                <code>domain</code> following the cookie domain rules [[!RFC6265]]
-                (e.g. <code>domain</code> is not a right-hand match or is a TLD)
-                then the duplet MUST NOT be entered into the database and the returned <code>Promise</code>
-                rejected with a <code>DOMException</code> SYNTAX_ERR
-            </p>
-            <p>
-                If permission is stored for an explicit list, then the set of
-                duplets (one per target):
-            </p>
-            <pre>[*.domain, target]</pre>
-            <p>
-                is added to the database of remembered grants.
-            </p>
-            <p>
-                If permission is stored for a site-wide exception, then the
-                duplet:
-            </p>
-            <pre>[*.domain, * ]</pre>
-            <p>
-                is added to the database of remembered grants.
-            </p>
-            <p>
-                A particular response to the API &mdash; like a DNT response header
-                field &mdash; is only valid immediately; a user might later choose
-                to edit stored exceptions and revoke some or all of them.
-            </p>
-            <p>
-                If <code>expires</code> is supplied and not null or empty the
-                remembered grant will be cancelled (i.e. processed as if the
-                relevant Cancel API had been called) no later than the specified
-                date and time. After this the database of remembered grants will
-                no longer contain any duplets for which the first part is the
-                current document origin; i.e., no duplets
-                <code>[document-origin, target]</code> for any target.
-            </p>
-            <p>
-                If <code>maxAge</code> is supplied and not null, empty or negative
-                the remembered grant will be cancelled (i.e. processed as if the
-                relevant Cancel API had been called) no later than the specified
-                number of seconds following the grant.
-            </p>
-            <p>
-                If both <code>maxAge</code> and <code>expires</code> are supplied,
-                <code>maxAge</code> has precedence. If neither <code>maxAge</code>
-                or <code>expires</code> are supplied, the user agent MAY retain
-                the remembered grant until it is cancelled.
-            </p>
-        </section>
+        <p>
+          <code><dfn>Navigator.storeSiteSpecificTrackingException</dfn></code>
+          is called by a page to store a site-specific tracking exception.
+          A <code><dfn>StoreExceptionPropertyBag</dfn></code> dictionary
+          contains the information to be stored for that exception.
+        </p>
+        <pre class="idl overlarge">
+        partial interface Navigator {
+            Promise&lt;void&gt; storeSiteSpecificTrackingException (
+                            StoreSiteSpecificExceptionPropertyBag properties
+                          );
+        };
+        
+        dictionary StoreExceptionPropertyBag {
+           DOMString? domain;
+           DOMString? siteName;
+           DOMString? explanationString;
+           DOMString? detailURI;
+           DOMString? expires;
+           long?      maxAge;
+           sequence&lt;DOMString&gt;? arrayOfDomainStrings;
+        };
+        </pre>
+        <p>
+          <a>Navigator.storeSiteSpecificTrackingException</a> passes a
+          <a>StoreExceptionPropertyBag</a> that can contain the following
+          properties:
+        </p>
+        <dl data-dfn-for="StoreExceptionPropertyBag">
+          <dt><code><dfn>domain</dfn></code></dt>
+          <dd>a cookie-domain as defined in [[!RFC6265]],
+              to which the exception applies.</dd>
+          <dt><code><dfn>siteName</dfn></code></dt>
+          <dd>A user-readable string for the name of the top-level origin.</dd>
+          <dt><code><dfn>explanationString</dfn></code></dt>
+          <dd>A short explanation of the request.</dd>
+          <dt><code><dfn>detailURI</dfn></code></dt>
+          <dd>A location at which further information about this request
+              can be found.</dd>
+          <dt><code><dfn>expires</dfn></code></dt>
+          <dd>A date and time, encoded as described for the cookie
+              <code>Expires</code> attribute described in [[RFC6265]],
+              indicating the maximum lifetime of the remembered grant.</dd>
+          <dt><code><dfn>maxAge</dfn></code></dt>
+          <dd>A positive number of seconds indicating the maximum lifetime
+              of the remembered grant.</dd>
+          <dt><code><dfn>arrayOfDomainStrings</dfn></code></dt>
+          <dd>A JavaScript array of strings.</dd>
+        </dl>
+        <p>
+          If the request does not include the
+          <code>arrayOfDomainStrings</code>, then this request is for a
+          site-wide exception. Otherwise each string in
+          <code>arrayOfDomainStrings</code> specifies a
+          <strong>target</strong>. When called,
+          <code>storeSiteSpecificTrackingException</code> MUST return
+          immediately with a <code>Promise</code> resolving to a <code>void</code>,
+          or rejected with a <code>DOMException</code> SYNTAX_ERR.
+        </p>
+        <p>
+          If the list <code>arrayOfDomainStrings</code> is supplied, the
+          user agent MAY choose to store a site-wide exception. If it does
+          so it MUST indicate this in the return value.
+        </p>
+        <p>
+          If <code>domain</code> is not specified or is null or empty then
+          the execution of this API and the use of the resulting permission
+          (if granted) use the 'implicit' parameter, when the API is called,
+          the <strong>document origin</strong>. This forms the first part of
+          the duplet in the logical model, and hence in operation will be
+          compared with the <strong>top-level origin</strong>.
+        </p>
+        <p>
+          If permission is stored for an explicit list, then the set of
+          duplets (one per target):
+        </p>
+        <pre>[document-origin, target]</pre>
+        <p>
+          is added to the database of remembered grants.
+        </p>
+        <p>
+          If permission is stored for a site-wide exception, then the
+          duplet:
+        </p>
+        <pre>[document-origin, * ]</pre>
+        <p>
+          is added to the database of remembered grants.
+        </p>
+        <p>
+          If <code>domain</code> is supplied and not empty then it is
+          treated in the same way as the domain parameter to cookies and
+          allows setting for subdomains. The <code>domain</code> argument
+          can be set to fully-qualified right-hand segment of the document
+          host name, up to one level below TLD.
+        </p>
+        <p>
+          For example, <em>www.foo.bar.example.com</em> can set the domain
+          parameter as as <code>"bar.example.com"</code> or
+          <code>"example.com"</code>, but not to
+          <code>"something.else.example.com"</code> or <code>"com"</code>.
+        </p>
+        <p>
+          If the document-origin would not be able to set a cookie on the
+          <code>domain</code> following the cookie domain rules [[!RFC6265]]
+          (e.g. <code>domain</code> is not a right-hand match or is a TLD)
+          then the duplet MUST NOT be entered into the database and the returned <code>Promise</code>
+          rejected with a <code>DOMException</code> SYNTAX_ERR
+        </p>
+        <p>
+          If permission is stored for an explicit list, then the set of
+          duplets (one per target):
+        </p>
+        <pre>[*.domain, target]</pre>
+        <p>
+          is added to the database of remembered grants.
+        </p>
+        <p>
+          If permission is stored for a site-wide exception, then the
+          duplet:
+        </p>
+        <pre>[*.domain, * ]</pre>
+        <p>
+          is added to the database of remembered grants.
+        </p>
+        <p>
+          A particular response to the API &mdash; like a DNT response header
+          field &mdash; is only valid immediately; a user might later choose
+          to edit stored exceptions and revoke some or all of them.
+        </p>
+        <p>
+          If <code>expires</code> is supplied and not null or empty the
+          remembered grant will be cancelled (i.e. processed as if the
+          relevant Cancel API had been called) no later than the specified
+          date and time. After this the database of remembered grants will
+          no longer contain any duplets for which the first part is the
+          current document origin; i.e., no duplets
+          <code>[document-origin, target]</code> for any target.
+        </p>
+        <p>
+          If <code>maxAge</code> is supplied and not null, empty or negative
+          the remembered grant will be cancelled (i.e. processed as if the
+          relevant Cancel API had been called) no later than the specified
+          number of seconds following the grant.
+        </p>
+        <p>
+          If both <code>maxAge</code> and <code>expires</code> are supplied,
+          <code>maxAge</code> has precedence. If neither <code>maxAge</code>
+          or <code>expires</code> are supplied, the user agent MAY retain
+          the remembered grant until it is cancelled.
+        </p>
+      </section>
 
       <section id="exceptions-javascript-api-cancel">
         <h4>API to Cancel a Site-specific Exception</h4>
@@ -2242,6 +2249,22 @@ object {
         mitigate fingerprinting risk.
       </p>
     </section>
+  </section>
+
+  <section id='security'>
+    <h2>Security Considerations</h2>
+
+    <p>
+      TBD.
+    </p>
+  </section>
+
+  <section id='privacy'>
+    <h2>Privacy Considerations</h2>
+
+    <p>
+      This entire specification is addressing privacy considerations.
+    </p>
   </section>
 
   <section id="acks" class='appendix'>
