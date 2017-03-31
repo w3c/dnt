@@ -61,10 +61,10 @@
 
         </p>
         <p>
-            The information to be given to the user must thus be
+            The information given to the user must therefore:
             <ul>
                 <li>
-                    given before the data is collected or processed;
+                    be given before the data is collected or processed;
                 </li>
                 <li>
                     clearly identify the responsible Data Controller or Controllers,
@@ -81,7 +81,7 @@
             </ul>
             In addition Data Controllers have a responsibility to ensure that personal data is "processed in a manner that ensures appropriate security of the personal data, including protection against unauthorised or unlawful processing" (GDPR A.1(f))
             and "in a manner that ensures appropriate security and confidentiality of the personal data, including for preventing unauthorised access to or use of personal data and the equipment used for the processing" (GDPR Recital 39).
-            This is directly applicable to the risk of delivery of malware onto user agents, especially when this results from the deliberate insertion of subresource elements within website content.
+            This is directly applicable to the risk of delivery of malware onto user agents, especially when this results from deliberate insertion of subresource elements within website content.
 
         </p>
         <p>
@@ -117,7 +117,7 @@
                 which is hard when all that is available is an unstructured HTML page.
                 Furthermore, the GDPR requires that more detailed information about the Data Controller is provided,
                 for example the contact details of the relevant Data Protection Officer.
-                For these reasons it would be better to provide an object property in the TSR that can as a minimum supply a company's legal name,
+                For these reasons it would be better to provide an object property in the TSR that can, at a minimum, supply a company's legal name,
                 but that can also be extended with further fields, and these supplementary fields should be offered as non-normative examples. The TSR is again the most appropriate place to define these because,
                 in situations where the GDPR applies, other legal bases than consent may be available.
             </li>
@@ -134,12 +134,12 @@
             </li>
             <li>
                 <strong>Support for Out-Of-Band Consent</strong>
-                The existing "config" property can be any arbitrary web page,
-                which will diminish the possibilities to support User Control is situations where the Consent API is not supported.
+                The existing <code><em>config</em></code> property can be any arbitrary web page,
+                which will diminish the possibilities to support User Control in situations where the Consent API is not supported.
                 Some companies now support the self-regulatory Opt-out program by implementing
-                a resource that signals when a user opts-out or revocation of their implied opt-in, causing the deletion of any unique user identifier.
+                a resource that signals when a user opts-out or revokes their implied opt-in, causing the deletion of any unique user identifier.
                 There is no standardised way for a user agent or user to determine the Url of this resource, so defining a suitable property in the TSR
-                would improve functionality and possibilities for future innovation. There would of course be no point in supplying this information to a non-existent Consent API.
+                would improve functionality and possibilities for future innovation. There would of course be no way to supply this information if the Consent API is not supported.
 
             </li>
         </ul>
@@ -155,7 +155,7 @@
         <p>
             The proposed ePrivacy Regulation will apply to user agent providers ("software providers permitting electronic communications"),
             where Article 10 requires them to help protect data stored there. In order to accurately recognise this data,
-            and to minimise the need for arbitrary domain blocking and otherwise withdrawal of functionality,
+            and to minimise the need for arbitrary domain blocking or other withdrawal of functionality,
             the TSR can be a useful conduit for web application declarations about data use.
         </p>
 
@@ -240,7 +240,7 @@ object {
                         A URI for a human readable page describing the Data Controller. Equivalent to the existing "controller" property.
                     </li>
                     <li>
-                        <code><embed>DPO</embed></code>
+                        <code><em>DPO</em></code>
                         An object containing fields that identify the Data Protection Officer, the person who deals with Data Protection or Privacy issues for the controller
                         <ul>
                             <li>
@@ -276,8 +276,8 @@ object {
             <p>
                 A category of "P" indicates that the party owning the domain can receive personal data and has contracted with the origin server as a Data Processor.
                 If the party owning the domain is known not to receive personal data from the interaction the code is "N".
-                "S" indicates that the domain is managed by the site owner (i.e. one of the entities indicated by the "controllerDescription" array).
-                Each embedded domain should contain a TSR with a "otherParties" property declaring its own expected embedded resources.
+                "S" indicates that the domain is managed by the site owner (i.e. one of the entities indicated by the <code><em>controllerDescription</em></code> array).
+                Each embedded domain should contain a TSR with an <code><em>otherParties</em></code> property declaring its own expected embedded resources.
                 This information can be used by browsers, browser extensions or script libraries to help protect user privacy by blocking, inhibiting or managing the actions
                 of resources that are not so declared by the embedding site. 
             </p>
@@ -296,10 +296,10 @@ object {
                 can make intelligent decisions regarding content blocking or storage removal when enforcing a user's privacy preferences.
             </p>
             <p>
-                The object contains a long integer <code><em>overall_retention</em></code> a positive number of seconds indicating the maximum lifetime of all the declared data.
+                The object contains a long integer <code><em>overall_retention</em></code> a positive number of seconds indicating the maximum lifetime of all the declared data,
                 and an array of objects describing individual storage items controlled by the origin server.
                 Each of these contains a <code><em>selector</em></code> string used to match the name or name-value pair of a particular item ,
-                a string <code><embed>type</embed></code> representing the class of storage used where "C" is an HTTP cookie, "L" is local HTML5 storage, "I" is indexedDB,
+                a string <code><em>type</em></code> representing the class of storage used where "C" is an HTTP cookie, "L" is local HTML5 storage, "I" is indexedDB,
                 "E" is information stored in the browser cache such as "If-Then-Else/Etag" values, and "O" is any other form of storage.
                 The <code><em>selector</em></code> string MAY contains a <code>=</code> character to demarcate between Regex match strings for the name and value of a name-value pair.
                 The purposes for each item is encoded in the <code><em>purpose</em></code> array of objects.
