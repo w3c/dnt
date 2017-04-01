@@ -406,7 +406,7 @@ object {
             <h4>deleteDataUri</h4>
             <p>
                 An origin server MAY send a property named <code><em>deleteDataUri</em></code> indicating the URI (relative to the origin domain) of a resource
-                that will delete all data held for this origin in the user agent.
+                that will, in response to a PUSH, PUT or DELETE request, delete all data held for this origin in the user agent.
                 In many cases this would be the resource advertiser exchanges use for the self-regulatory Opt-out iframe.
 
             </p>
