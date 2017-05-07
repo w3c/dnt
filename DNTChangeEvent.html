@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>The "doNotTrack" event</title>
+    <meta charset='utf-8'>
+    <script src='https://www.w3.org/Tools/respec/respec-w3c-common'
+            async class='remove'></script>
+    <script class='remove'>
+      var respecConfig = {
+          specStatus: "unofficial",
+          copyrightStart: 2017,
+          shortName: "DNT Bugs",
+          editors: [
+      {
+          name: "Mike O'Neill",
+          url: "https://uk.linkedin.com/in/mikeoneill1",
+          company: "Baycloud Systems",
+          companyURL: "https://baycloud.com/"
+      }
+          ],
+          wg:           "W3C Tracking Protection Working Group",
+          wgURI:        "http://www.w3.org/2011/tracking-protection/",
+          wgPublicList: "Bugs",
+          wgPatentURI: "http://www.w3.org/2004/01/pp-impl/49311/status"
+      };
+    </script>
+</head>
+<body>
+    <section id='abstract'>
+        <p>
+            This is a proposal for new Event indicating changes to the <code>navigator.doNotTrack</code> property.
+        </p>
+    </section>
+
+    <section id='sotd'>
+        <p>
+
+        </p>
+    </section>
+
+    <section id="scope-and-goals">
+    </section>
+
+    <section>
+        <h2>Introduction</h2>
+        <p>
+            The lifetime of client script will be at least as long a web page exists within a user agent, and much longer if it is associated with a shared web or service worker.
+        </p>
+        <p>
+            Whenever the script tiggers an HTTP request for a resource on the document origin, such as by the execution of an <code>XmlHttpRequest</code> API call or the creation of an <code>Image</code> object,
+            the value of the DNT request header included will be determined by the user agent, "taking into account the user's general preference (if any) and any user-granted exceptions applicable to that origin server". This DNT header value is available to the script via the <code>navigator.doNotTrack</code> property.
+        </p>
+        <p>
+            Client script is always event based, either triggered when a browsing context is loaded, a DOM element is clicked, a timer duration has elapsed, or for many other reasons.
+            Some may be caused by actions in other execution contexts within the user agent.
+            Without an event indicating a change in the calculated value of the DNT header the script must be triggered by other events,
+            e.g. a <strong>timing</strong> event. This can result is an arbitary delay being introduced into the script execution, and processing inefficiency.
+        </p>
+        <p>
+            This proposal is for an event indicating a change in the DNT header, as a result of:
+            <ol>
+                <li>
+                    a call to <code>storeSiteSpecificTrackingException</code> in the same or a parent browsing context.
+                </li>
+                <li>
+                    a call to <code>storeWebWideTrackingException</code>.
+                </li>
+                <li>
+                    a call to <code>removeSiteSpecificTrackingException</code> in the same or a parent browsing context.
+                </li>
+                <li>
+                    a call to <code>removeWebWideTrackingException</code>.
+                </li>
+                <li>
+                    the user revokes a <strong>User Granted Exception</strong> using a mechanism provided by the user agent.
+                </li>
+                <li>
+                    a <strong>User Granted Exception</strong> expires when its associated <code>maxAge</code> or <code>expires</code> duration elapses.
+                </li>
+            </ol>
+        </p>
+        <p>
+            In addition the existance of a DNT change event provides an execution context in which the value of <code>navigator.doNotTrack</code> can be guarenteed,
+            allowing client script (i.e. a "polyfill" library) to emulate the functionality of the <code>User Granted Exception</code> mechanism when it is not nataively supported in the user agent.
+        </p>
+    </section>
+<section>
+    <h3>
+        The <code>doNotTrack</code> event
+    </h3>
+    <p>The <code title="event-dnt">doNotTrack</code> event is fired on a <code>Document</code>'s
+        <code>Window</code> object when the DNT header field to be sent in requests to the document origin is changed. It will be triggered whenever the value of <code>navigator.doNotTrack</code>
+    is changed, for any reason, whether this is the result of Exception API calls in the current or other browsing contexts, or the result of revocation by the user or automatically after an associated duration expires.
+    </p>
+
+    <p>When a user agent is to <dfn id="send-a-dnt-notification">send a doNotTrack change notification</dfn> for a <code>Document</code>, the
+    user agent must <span>queue a task</span> to <span title="concept-event-fire">fire</span> a <span title="concept-events-trusted">trusted</span> event with the name <code><a href="#DNTEventName">doNotTrack</a></code>, which
+    does not bubble and is not cancelable, and which uses the <code><a href="#dntevent">DNTEvent</a></code> interface, at
+    the <code>Document</code> object's <code>Window</code> object.
+    </p>
+
+    <p>The <span>task source</span> for these tasks is the <span>Tracking Protection task
+        source</span>.</p>
+
+
+    <h4 id="the-dntevent-interface">The <code><a href="#dntevent">DoNotTrackChangeEvent</a></code> interface</h4>
+
+    <pre class="idl">[Constructor(DOMString type, optional <a href="#dnteventinit">DoNotTrackChangeInit</a> eventInitDict)]
+interface <dfn id="dntevent">DoNotTrackChangeEvent</dfn> : <span>Event</span> {
+  readonly attribute DOMString? <a href="#dom-dntevent-doNotTrack" title="dom-dntevent-doNotTrack">doNotTrack</a>;
+};
+
+dictionary <dfn id="dnteventinit">DNTEventInit</dfn> : <span>EventInit</span> {
+  DOMString? doNotTrack;
+};</pre>
+
+    <p>The <dfn id="dntevent-doNotTrack" title="dntevent-doNotTrack"><code>doNotTrack</code></dfn> attribute must return the value it
+        was initialized to. When the object is created, this attribute must be initialized to null. It
+        represents the same string value that would be sent in a <a data-link-type="dfn" class="internalDFN" href="#dfn-dnt-field-value"><code>DNT-field-value</code></a> 
+        (<a href="#dnt-header-field" class="sectionRef sec-ref">section <span class="secno">5.2</span> <span class="sec-title">DNT Header Field for HTTP Requests</span></a>) to a
+        <strong>target</strong> that is the document-origin of the <code>window</code>, in the browser context of the current <strong>top-level origin</strong>. It will always be identical
+        to the value returned from reading <code>navigator.doNotTrack</code> within the Event callback function.
+    </p>
+   
+
+</section>
+
+</body>
+</html>
