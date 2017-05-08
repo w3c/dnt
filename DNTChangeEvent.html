@@ -92,7 +92,9 @@
         <code>Window</code> object when the DNT header field to be sent in requests to the document origin is changed. It will be triggered whenever the value of <code>navigator.doNotTrack</code>
     is changed, for any reason, whether this is the result of Exception API calls in the current or other browsing contexts, or the result of revocation by the user or automatically after an associated duration expires.
     </p>
-
+    <p>
+        A <code>doNotTrack</code> event will always be fired at least once, and as soon as possible after a browsing context has been loaded.
+    </p>
     <p>When a user agent is to <dfn id="send-a-dnt-notification">send a doNotTrack change notification</dfn> for a <code>Document</code>, the
     user agent must <span>queue a task</span> to <span title="concept-event-fire">fire</span> a <span title="concept-events-trusted">trusted</span> event with the name <code><a href="#DNTEventName">doNotTrack</a></code>, which
     does not bubble and is not cancelable, and which uses the <code><a href="#dntevent">DNTEvent</a></code> interface, at
