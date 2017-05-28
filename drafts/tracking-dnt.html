@@ -1754,7 +1754,7 @@ object {
         </p>
         <pre class="idl overlarge">
         partial interface Navigator {
-            Promise&lt;void&gt; storeSiteSpecificTrackingException (
+            Promise&lt;TrackingExceptionResult&gt; storeSiteSpecificTrackingException (
                             StoreExceptionPropertyBag properties
                           );
         };
@@ -1768,6 +1768,12 @@ object {
            long?      maxAge;
            sequence&lt;DOMString&gt; arrayOfDomainStrings;
         };
+        
+        interface TrackingExceptionResult {
+          boolean exists;
+          boolean siteWide;
+        };
+        
         </pre>
         <p>
           <a>Navigator.storeSiteSpecificTrackingException</a> passes a
@@ -1796,19 +1802,23 @@ object {
           <dd>A JavaScript array of strings.</dd>
         </dl>
         <p>
+          Calling <code>storeSiteSpecificTrackingException</code> returns a <code>Promise</code> 
+          which either resolves to a <code>TrackingExceptionResult</code> object, or is rejected with 
+          a <code>DOMException</code> SYNTAX_ERR. The <code>Promise</code> resolves 
+          immediately the Tracking Exception request has been processed, with the returned <code>siteWide</code>
+          set <code>true</code> if the Exception is site-wide.
+        </p>
+        <p>
           If the request does not include the
           <code>arrayOfDomainStrings</code>, then this request is for a
           site-wide exception. Otherwise each string in
           <code>arrayOfDomainStrings</code> specifies a
-          <strong>target</strong>. When called,
-          <code>storeSiteSpecificTrackingException</code> MUST return
-          immediately with a <code>Promise</code> resolving to a <code>void</code>,
-          or rejected with a <code>DOMException</code> SYNTAX_ERR.
+          <strong>target</strong>.
         </p>
         <p>
           If the list <code>arrayOfDomainStrings</code> is supplied, the
           user agent MAY choose to store a site-wide exception. If it does
-          so it MUST indicate this in the return value.
+          so it MUST indicate this by setting the <code>siteWide</code> property to <code>true</code>.
         </p>
         <p>
           If <code>domain</code> is not specified or is null or empty then
@@ -1970,7 +1980,7 @@ object {
         </p>
         <pre class="idl overlarge">
         partial interface Navigator {
-          Promise&lt;boolean&gt; confirmSiteSpecificTrackingException (
+          Promise&lt;TrackingExceptionResult&gt; confirmSiteSpecificTrackingException (
             ConfirmExceptionPropertyBag properties
           );
         };
@@ -2038,8 +2048,9 @@ object {
         </p>
         <pre>[*.domain, * ]</pre>
         <p>
-          The returned <code>Promise</code> resolves to a <code>boolean</code>
-          which has the following possible values:
+          The returned <code>Promise</code> resolves to a <code>TrackingExceptionResult</code>
+          object whose <code>boolean</code> property <code>exists</code>
+          has the following possible values:
         </p>
         <ul>
           <li><code>true</code> all the duplets exist in the database;</li>
@@ -2127,7 +2138,7 @@ object {
         </p>
         <pre class="idl overlarge">
         partial interface Navigator {
-          Promise&lt;boolean&gt; confirmWebWideTrackingException (
+          Promise&lt;TrackingExceptionResult&gt; confirmWebWideTrackingException (
             ConfirmSiteSpecificExceptionPropertyBag properties
           );
         };
@@ -2138,8 +2149,8 @@ object {
           <a href="#exceptions-javascript-api-confirm" class="sectionRef"></a>.
         </p>
         <p>
-          The returned <code>Promise</code> resolves to a <code>boolean</code>
-          indicating whether the duplet
+          The returned <code>Promise</code> resolves to a <code>TrackingExceptionResult</code>
+          object with a <code>boolean</code> property <code>exists</code> indicating whether the duplet
           <code>[ * , document-origin]</code> or <code>[ * , *.domain]</code>
           (based on if <code>domain</code> is provided and is not null and
           not empty) exists in the database.
