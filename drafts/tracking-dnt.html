@@ -2332,18 +2332,6 @@ object {
         </ul>
     </section>
 
-    <section id="exceptions-fingerprinting">
-      <h3>Fingerprinting</h3>
-
-      <p>
-        By storing a client-side configurable state and providing
-        functionality to learn about it later, this API might facilitate
-        user fingerprinting and tracking. User agent developers ought to
-        consider the possibility of fingerprinting during implementation and
-        might consider rate-limiting requests or using other heuristics to
-        mitigate fingerprinting risk.
-      </p>
-    </section>
   </section>
 
   <section id='security'>
@@ -2357,10 +2345,20 @@ object {
   <section id='privacy'>
     <h2>Privacy Considerations</h2>
 
-    <p>
-      This entire specification is addressing privacy considerations.
-    </p>
+    <section id='privacy.fingerprinting'>
+      <h3>Fingerprinting</h3>
+
+      <p>
+        User-granted exceptions to Do Not Track come with a privacy 
+		risk. By storing a client-side configurable state and providing
+        functionality to learn about it later, this API might facilitate
+        user fingerprinting and tracking. User agent developers ought to
+        consider the possibility of fingerprinting during implementation and
+        might consider rate-limiting requests or using other heuristics to
+        mitigate fingerprinting risk.
+      </p>
   </section>
+</section>
 
   <section id="acks" class='appendix'>
     <h2>Acknowledgements</h2>
