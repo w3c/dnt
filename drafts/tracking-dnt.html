@@ -1751,6 +1751,7 @@ object {
           is called by a page to store a site-specific tracking exception.
           A <code><dfn>StoreExceptionPropertyBag</dfn></code> dictionary
           contains the information to be stored for that exception.
+	  It returns a <code>Promise</code> resolving to a <code><dfn>StoreExceptionResult</dfn></code> result object.
         </p>
         <pre class="idl overlarge">
         partial interface Navigator {
@@ -1769,7 +1770,7 @@ object {
            sequence&lt;DOMString&gt; arrayOfDomainStrings;
         };
         
-        dictionary StoreExceptionResult {
+        interface StoreExceptionResult {
           boolean siteWide;
         };
         </pre>
@@ -1975,6 +1976,8 @@ object {
           is called by a page to confirm a site-specific tracking exception.
           A <code><dfn>ConfirmExceptionPropertyBag</dfn></code> dictionary
           contains information to identify the exception.
+          It returns a <code>Promise</code> resolving to a <code><dfn>ConfirmExceptionResult</dfn></code>
+	  result object.
         </p>
         <pre class="idl overlarge">
         partial interface Navigator {
@@ -1987,7 +1990,7 @@ object {
           DOMString? domain;
           sequence&lt;DOMString&gt; arrayOfDomainStrings;
         };
-        dictionary ConfirmExceptionResult {
+        interface ConfirmExceptionResult {
           boolean exists;
         };	
         </pre>
