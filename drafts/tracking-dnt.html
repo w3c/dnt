@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
   <title>Tracking Preference Expression (DNT)</title>
@@ -1751,10 +1751,11 @@ object {
           is called by a page to store a site-specific tracking exception.
           A <code><dfn>StoreExceptionPropertyBag</dfn></code> dictionary
           contains the information to be stored for that exception.
+	  It returns a <code>Promise</code> resolving to a <code><dfn>StoreExceptionResult</dfn></code> result object.
         </p>
         <pre class="idl overlarge">
         partial interface Navigator {
-            Promise&lt;TrackingExceptionResult&gt; storeSiteSpecificTrackingException ( 
+            Promise&lt;StoreExceptionResult&gt; storeSiteSpecificTrackingException ( 
             StoreExceptionPropertyBag properties
             );
         };
@@ -1769,8 +1770,7 @@ object {
            sequence&lt;DOMString&gt; arrayOfDomainStrings;
         };
         
-        interface TrackingExceptionResult {
-          boolean exists;
+        dictionary StoreExceptionResult {
           boolean siteWide;
         };
         </pre>
@@ -1802,10 +1802,10 @@ object {
         </dl>
         <p>
           Calling <code>storeSiteSpecificTrackingException</code> returns a <code>Promise</code> 
-          which either resolves to a <code>TrackingExceptionResult</code> object, or is rejected with 
-          a <code>DOMException</code> SYNTAX_ERR. The <code>Promise</code> resolves 
-          immediately the Tracking Exception request has been processed, with the returned <code>siteWide</code>
-          set <code>true</code> if the Exception is site-wide.
+          which either resolves to a <code>StoreExceptionResult</code> object, or is rejected with 
+          a <code>DOMException</code> SYNTAX_ERR result. The <code>Promise</code> resolves 
+          immediately the Tracking Exception request has been processed, with the property <code>siteWide</code>
+          in the result object set <code>true</code> if the Exception is site-wide.
         </p>
         <p>
           If the request does not include the
@@ -1976,10 +1976,12 @@ object {
           is called by a page to confirm a site-specific tracking exception.
           A <code><dfn>ConfirmExceptionPropertyBag</dfn></code> dictionary
           contains information to identify the exception.
+          It returns a <code>Promise</code> resolving to a <code><dfn>ConfirmExceptionResult</dfn></code>
+	  result object.
         </p>
         <pre class="idl overlarge">
         partial interface Navigator {
-          Promise&lt;TrackingExceptionResult&gt; confirmSiteSpecificTrackingException (
+          Promise&lt;ConfirmExceptionResult&gt; confirmSiteSpecificTrackingException (
             ConfirmExceptionPropertyBag properties
           );
         };
@@ -1988,6 +1990,10 @@ object {
           DOMString? domain;
           sequence&lt;DOMString&gt; arrayOfDomainStrings;
         };
+	
+        dictionary ConfirmExceptionResult {
+          boolean exists;
+        };	
         </pre>
         <p>
           <a>Navigator.confirmSiteSpecificTrackingException</a> passes a
@@ -2047,7 +2053,7 @@ object {
         </p>
         <pre>[*.domain, * ]</pre>
         <p>
-          The returned <code>Promise</code> resolves to a <code>TrackingExceptionResult</code>
+          The returned <code>Promise</code> resolves to a <code>ConfirmExceptionResult</code>
           object whose <code>boolean</code> property <code>exists</code>
           has the following possible values:
         </p>
@@ -2137,10 +2143,13 @@ object {
         </p>
         <pre class="idl overlarge">
         partial interface Navigator {
-          Promise&lt;TrackingExceptionResult&gt; confirmWebWideTrackingException (
+          Promise&lt;ConfirmExceptionResult&gt; confirmWebWideTrackingException (
             ConfirmSiteSpecificExceptionPropertyBag properties
           );
         };
+        dictionary ConfirmExceptionResult {
+          boolean exists;
+        };	
         </pre>
         <p>
           <a>Navigator.confirmWebWideTrackingException</a> passes a
