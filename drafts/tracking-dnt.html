@@ -1358,6 +1358,80 @@ object {
           information might be obtained via the links provided in
           <a>controller</a>.
         </p>
+	    <p>The <code>policy</code> property may contain a URI. We provide examples here.</p>
+
+    <p>
+        As a very simple example, you might host http://www.example1.com/dnt.html containing an in-house description of your Do Not Track practices:
+    </p>
+    <blockquote>
+        <p>
+            Example1 does not collect or share personal information and does not have any third party content on our website. Consequently, nothing changes on our website if you turn on Do Not Track. This description is in accordance with California AB 370, a law that provides Do Not Track transparency. For more information, please see our <a href=“http://www.example1.com/privacypolicy.html”>privacy policy</a>.
+        </p>       
+    </blockquote>
+    <p>
+        Example1 would also send a Tk response header field of N to indicate they are not tracking, as described in section 6.2.5.
+    </p>
+    <p>
+        As another possibility, the policy property may simply contain a URI for a Do Not Track practice defined by a trade association or other group, for example, https://www.eff.org/dnt-policy. This would duplicative since such URIs are better handled through the compliance property, as described in section 6.5.3.
+    </p>
+    <p>
+        Compliance policies are typically more comprehensive than lend themselves to easy reading by a user trying to make a Do Not Track decision. Rather, you might provide your own short description of what changes specifically for your website for DNT users, plus a link to the longer compliance policy. You might set the policy property to your own http://www.example2.com/dnt.html containing something like this:       
+    </p>
+    <blockquote>
+        <p>
+            Example2 collects and shares information in accordance with our <a href=“http://www.example2.com/privacypolicy.html”>privacy policy</a>, and we ordinarily compile a profile of your interests based on the articles you read on our site. If you have Do Not Track enabled, we follow the <a href="https://www.eff.org/dnt-policy”>Electric Frontier Foundation’s Do Not Track policy</a>, and we will delete your interest profile. 
+            We show ads to our visitors. Our advertisers follow the <a href="http://digitaladvertisingalliance.org/principles”>DAA Self-Regulatory Principles</a>. We ask our Do Not Track users to consent to tracking by these advertisers to best support our website. If Do Not Track users will not grant permission for third-party tracking, we show ads from advertisers also following the EFF Do Not Track Policy. 
+        </p>        
+    </blockquote>
+
+    <p>
+        Example2 could have a variety of Tk header responses. Here are a few possibilities. Note well that while DNT:1 and DNT:0 are handled the same way, if there is no DNT setting at all then users in the US continue to be tracked while users in the EU do not, as described in section 5.1.
+    </p>
+    <table class="simple">
+        <tbody><tr><th>DNT setting + </th>
+            <th>user location = </th>            
+            <th>Tk header response</th>
+            <th>Notes</th>
+        </tr>
+
+        <tr><td>1</td>
+            <td>United States</td>
+            <td>N</td>
+            <td>Example2 would follow the EFF policy, and indicate they are not tracking (see 6.2.5)</td>
+        </tr>
+        <tr><td>1</td>
+            <td>European Union</td>
+            <td>N</td>
+            <td>Example2 would follow the EFF policy, and indicate they are not tracking (see 6.2.5)</td>
+        </tr>
+
+        <tr><td>0</td>
+            <td>United States</td>
+            <td>T</td>
+            <td>Example2 would follow their standard privacy policy, show adds from their normal DAA-member advertisers, and confirm they are tracking users (see 6.2.6).</td>
+        </tr>
+        <tr><td>0</td>
+            <td>European Union</td>
+            <td>T</td>
+            <td>Example2 would follow their standard privacy policy, show adds from their normal DAA-member advertisers, and confirm they are tracking users (see 6.2.6).</td>
+        </tr>
+
+        <tr><td>unset</td>
+            <td>United States</td>
+            <td>T</td>
+            <td>Example2 would follow their standard privacy policy, show adds from their normal DAA-member advertisers, and confirm they are tracking users (see 6.2.6). This is identical to a US user sending DNT:0.</td>
+        </tr>
+        <tr><td>unset</td>
+            <td>European Union</td>
+            <td>N</td>
+            <td>Example2 would follow the EFF policy, and indicate they are not tracking (see 6.2.5). This is identical to an EU user sending DNT:1.</td>
+        </tr>
+
+        </tbody></table>
+ 
+    <p>
+        Finally, user agents may choose to display information contained in the policy property directly to users, as might other parties asking users to consent to being tracked (“opt back in.”) For this reason it helps to kept the text to a pithy description of exactly what a given site does differently when receiving a DNT:1 signal.
+    </p>      
       </section>
 
       <section id='rep.config'>
