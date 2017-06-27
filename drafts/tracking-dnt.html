@@ -1195,7 +1195,8 @@ object {
     string config?;                  // href
 }*;
 </pre>
-        <p>
+
+	<p>
           The following example representation demonstrates a status object
           with all of the properties defined by this specification.
         </p>
@@ -1391,12 +1392,14 @@ object {
 
       <section id='rep.extension'>
         <h4>Extensions</h4>
-        <p>
-          An origin server MAY send additional properties in the
-          <a>status object</a> to support future enhancements
-          to this protocol. A recipient MUST ignore extension properties
-          that it does not recognize.
+        <p> An origin server MAY send additional properties in the <a>status object</a> or define additional tracking status values to support future enhancements to this protocol. 
+        <p> We require that extensions introduced SHOULD be defined and described by a document referenced by a URL in the compliance array property. A recipient MUST ignore extension properties that it does not recognize.
         </p>
+
+        <p class="note">
+One goal of this extensibility is to enable variations by policy and the evolution of best practices for the emerging EU regulations.
+	</p>
+
       </section>
     </section>
 
