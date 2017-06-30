@@ -29,6 +29,21 @@
       issueBase:   "https://github.com/w3c/dnt/issues",
       githubAPI:   "https://api.github.com/repos/w3c/dnt",
       processVersion: 2017,
+      otherLinks: [{
+                  key: 'Repository and Participation',
+                  data: [
+                      {
+                          value: 'Mailing list archive',
+                          href: 'https://lists.w3.org/Archives/Public/public-tracking/'
+                      }, {
+                          value: 'Commit history',
+                          href: 'https://github.com/w3c/dnt/commits'
+                      }, {
+                          value: 'File a bug/issue',
+                          href: 'https://github.com/w3c/dnt/issues'
+                      }
+                   ]
+                }],
       localBiblio: {
         "TCS": {
           "authors": ["Nick Doty","Heather West","Justin Brookman","Sean Harvey","Erica Newland"],
@@ -64,13 +79,14 @@
   <section id='abstract'>
     <p>
       This specification defines the <a>DNT</a> request header field as an
-      HTTP mechanism for expressing the user's preference regarding tracking,
+      HTTP mechanism for expressing a user's preference regarding tracking,
       an HTML DOM property to make that expression readable by scripts, and
-      APIs that allow scripts to register site-specific exceptions granted by
+      APIs that allow scripts to register exceptions granted by
       the user. It also defines mechanisms for sites to communicate whether
-      and how they honor a received preference through use of the <q>Tk</q>
-      response header field and well-known resources that provide a
-      machine-readable tracking status.
+      and how they honor a received preference, including
+      well-known resources for retrieving preflight tracking status,
+      a media type for representing tracking status information, and the
+      <q>Tk</q> response header field for confirming tracking status.
     </p>
   </section>
 
@@ -79,29 +95,15 @@
       This document is an editors' straw man reflecting a snapshot of live
       discussions within the
       <a href="https://www.w3.org/2011/tracking-protection/">Tracking
-      Protection Working Group</a>.  It does not yet capture all of our work
-      and does not constitute working group consensus.
-      Text in option boxes (highlighted with light blue background color)
-      present options that the group is currently considering, particularly
-      where consensus is known to be lacking, and should be read as a set of
-      proposals rather than as limitations on the potential outcome.
-      An
-      <a href="https://www.w3.org/2011/tracking-protection/track/issues/">issue tracking system</a>
-      is available for recording
-      <a href="https://www.w3.org/2011/tracking-protection/track/issues/raised">raised</a>,
-      <a href="https://www.w3.org/2011/tracking-protection/track/issues/open">open</a>,
-      <a href="https://www.w3.org/2011/tracking-protection/track/issues/pendingreview">pending review</a>,
-      <a href="https://www.w3.org/2011/tracking-protection/track/issues/closed">closed</a>, and
-      <a href="https://www.w3.org/2011/tracking-protection/track/issues/postponed">postponed</a>
-      issues regarding this document.
+      Protection Working Group</a>.  It does not necessarily constitute
+      working group consensus.
+      This draft has been prepared using the
+      <a href="https://github.com/w3c/dnt/">DNT github repository</a> and its
+      associated <a href="https://github.com/w3c/dnt/issues">issues list</a>.
+      However, see the previous
+      <a href="https://www.w3.org/2011/tracking-protection/track/issues/">issue
+      tracking system</a> for working group decisions prior to 2017.
     </p>
-    <p>
-      The following feature is at risk and might be cut from the specification
-      during the CR period if there are no (correct) implementations:
-    </p>
-    <ul>
-      <li><a href="#dnt-extensions">DNT-extension</a></li>
-    </ul>
   </section>
 
   <section>
