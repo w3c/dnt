@@ -533,8 +533,8 @@
         At most one DNT header field can be present in a valid request.
       </p>
 <pre class="abnf">
-<dfn>DNT-field-name</dfn>  = "DNT"
-<dfn>DNT-field-value</dfn> = ( "0" / "1" ) *DNT-extension
+DNT-field-name  = "DNT"
+DNT-field-value = ( "0" / "1" ) *DNT-extension
 </pre>
       <p>
         A user agent MUST NOT generate a <a>DNT</a> header field if the
@@ -580,7 +580,7 @@ DNT: 1
           (<a href="#status-representation" class="sectionRef"></a>).
         </p>
 <pre class="abnf">
-<dfn>DNT-extension</dfn>   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
+DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
                 ; excludes CTL, SP, DQUOTE, comma, backslash
 </pre>
         <p>
@@ -962,8 +962,8 @@ TSV-extension = %x23-25  ; #$%
           made to the tracking status and indicated by <a>U</a> (updated).
         </p>
 <pre class="abnf">
-<dfn>Tk-field-name</dfn>   =  "Tk"
-<dfn>Tk-field-value</dfn>  =  TSV [ ";" status-id ]
+Tk-field-name   =  "Tk"
+Tk-field-value  =  TSV [ ";" status-id ]
 </pre>
         <p>
           The Tk field-value begins with a tracking status value
@@ -987,14 +987,14 @@ TSV-extension = %x23-25  ; #$%
           some aspect of the request (e.g., method, target URI, header
           fields, data, etc.), the origin server can provide an additional
           subtree of well-known resources corresponding to each of those
-          distinct tracking statuses. The <code>status-id</code>
+          distinct tracking statuses. The <code><dfn>status-id</dfn></code>
           portion of the <code>Tk</code> field-value indicates which specific
           tracking status resource applies to the current request.
           The <code>status-id</code> is case-sensitive.
         </p>
 <pre class="abnf">
-<dfn>status-id</dfn>       =  1*id-char
-<dfn>id-char</dfn>         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
+status-id       =  1*id-char
+id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
 </pre>
         <p>
           For example, a response containing
