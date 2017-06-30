@@ -680,9 +680,9 @@ DNT: 1
       <section id='TSV-defn'>
         <h4>Definition</h4>
         <p>
-          A <dfn>tracking status value</dfn> (TSV) is a single character
-          response to the user's tracking preference with regard to data
-          collected via the <dfn>designated resource</dfn>.
+          A <dfn>tracking status value</dfn> (<dfn>TSV</dfn>) is a single
+          character response to the user's tracking preference with regard to
+          data collected via the <dfn>designated resource</dfn>.
           For a site-wide tracking status resource, the designated resource
           is any resource on the same origin server.
           For a <a>Tk</a> response header field, the target resource of the
@@ -695,7 +695,7 @@ DNT: 1
           by the following ABNF.
         </p>
 <pre class="abnf">
-<dfn>TSV</dfn>    = %x21   ; "!" — under construction
+TSV    = %x21   ; "!" — under construction
        / %x3F   ; "?" — dynamic
        / %x47   ; "G" — gateway to multiple parties
        / %x4E   ; "N" — not tracking
@@ -704,6 +704,7 @@ DNT: 1
        / %x50   ; "P" — tracking only if consented
        / %x44   ; "D" — disregarding DNT
        / %x55   ; "U" — updated
+       / TSV-extension
 </pre>
       </section>
 
@@ -912,6 +913,37 @@ DNT: 1
           value anywhere other than a <a>Tk</a> header field that is in
           response to a state-changing request.
         </p>
+      </section>
+
+      <section id='TSV.extension'>
+        <h4>Extensions to the Tracking Status Value</h4>
+        <p>
+          Extensibility of the <a>TSV</a> set ensures that this protocol will
+          continue to be usable as regional laws and regulatory environments
+          evolve over time and compliance specifications are developed
+          accordingly.
+        </p>
+        <p>
+          An origin server MAY send a <dfn>TSV-extension</dfn> character as a
+          <a>TSV</a> if that extension has been defined by a future version
+          of this specification or a compliance regime identified within the
+          <a>compliance</a> property. Aside from storage or presentation of a
+          server's response, a recipient MUST treat a TSV-extension value that
+          it does not recognize as if the value was <a>P</a> (tracking only
+          if consented).
+        </p>
+<pre class="abnf">
+TSV-extension = %x23-25  ; #$%
+              / %x2A-3B  ; *+,-./0-9:;
+              / %x40-42  ; @AB
+              / %x45-46  ; EF
+              / %x48-4D  ; HIJKLM
+              / %x4F     ; O
+              / %x51-53  ; QRS
+              / %x56-5A  ; VWXYZ
+              / %x5F     ; _
+              / %x61-7A  ; a-z
+</pre>
       </section>
     </section>
 
@@ -1185,8 +1217,8 @@ DNT: 1
           <dfn>status object</dfn> containing properties that
           describe the tracking status applicable to the
           <a>designated resource</a>.  Most of the properties are optional
-          and can be extended over time, as illustrated by the following
-          Orderly schema [[Orderly]]:
+          and can be <a href="#rep.extension">extended over time</a>,
+          as illustrated by the following Orderly schema [[Orderly]]:
         </p>
 <pre class="orderly">
 object {
@@ -1253,8 +1285,17 @@ object {
           the origin server claims to comply for the designated resource.
           Communicating such a claim of compliance is presumed to improve
           transparency, which might influence a user's decisions or
-          configurations regarding allowed tracking, but does not have any
-          direct impact on this protocol.
+          configurations regarding allowed tracking.
+        </p>
+        <p>
+          If an origin server sends a <a>TSV-extension</a> or an
+          <a href="#rep.extension">extension property in the status object</a>
+          that is not defined by successors of this specification, the
+          origin server MUST send a <code>compliance</code> property that
+          contains a reference to the definitive specification of that
+          extension. If more than one reference in the <code>compliance</code>
+          array defines the same extension value, the origin server SHOULD
+          list the array of references in order by intended precedence.
         </p>
       </section>
 
@@ -1409,15 +1450,22 @@ object {
       </section>
 
       <section id='rep.extension'>
-        <h4>Extensions</h4>
-        <p> An origin server MAY send additional properties in the <a>status object</a> or define additional tracking status values to support future enhancements to this protocol.
-        <p> We require that extensions introduced SHOULD be defined and described by a document referenced by a URL in the compliance array property. A recipient MUST ignore extension properties that it does not recognize.
+        <h4>Extensions to the Status Object</h4>
+        <p>
+          Extensibility of the status object ensures that this protocol will
+          continue to be usable as regional laws and regulatory environments
+          evolve over time and compliance specifications are developed
+          accordingly.
         </p>
-
-        <p class="note">
-One goal of this extensibility is to enable variations by policy and the evolution of best practices for the emerging EU regulations.
-</p>
-
+        <p>
+          An origin server MAY send additional properties in the <a>status
+          object</a> if those extensions have been defined by a future
+          version of this specification or a compliance regime
+          identified within the <a>compliance</a> property.
+          Aside from storage or presentation of a server's response,
+          a recipient MUST ignore extension properties that it does
+          not recognize.
+        </p>
       </section>
     </section>
 
@@ -1716,11 +1764,12 @@ One goal of this extensibility is to enable variations by policy and the evoluti
           To be valid the response to a retrieval request on the site-wide tracking
           resource "<code>/.well-known/dnt/</code>" relative to the service URI, must have a
           <code>application/tracking-status+json</code> media type,
-          be valid JSON, and include at least the <code>tracking</code>, <code>controller</code>, <code>compliance</code>
-          and <code>policy</code> properties.
+          be valid JSON, and include at least the
+          <code><a href="#rep.tracking">tracking</a></code>, <a>controller</a>,
+          <a>compliance</a> and <a>policy</a> properties.
         </p>
         <p>
-          A user agent MAY also refuse to grant a Site-Speciifc Tracking Exception for a named
+          A user agent MAY also refuse to grant a Site-Specific Tracking Exception for a named
           <strong>target</strong> domain (see <strong>Processing Model</strong> below) which does not have a valid Tracking
           Status Resource at its well-known location.
         </p>
