@@ -568,7 +568,7 @@ DNT: 1
 </pre>
 
       <section id='dnt-extensions'>
-        <h4>DNT Extensions</h4>
+        <h4>Extensions to the DNT Field Value</h4>
 
         <p>
           The remainder of the DNT field-value, after the initial character,
@@ -599,12 +599,15 @@ DNT: 1
           anything beyond the first character.
         </p>
         <p class="note">
-          The DNT-extension feature is considered <em>at-risk</em>.
-          Since no extensions have been defined, implementors that don't
-          read specifications are likely to assume that DNT only has the
+          This DNT-extension feature is at-risk because no known
+          extensions have been defined; implementors that do not read this
+          specification are likely to assume that DNT only has the
           fixed values of "0" or "1". Furthermore, the potential benefits
           of this mechanism are unclear given that extension information
-          could be supplied using separate request header fields.
+          could be supplied using separate request header fields and
+          inappropriate extensions to the "1" value might cause the user's
+          requests to be more easily
+          <a href="#privacy.fingerprinting">fingerprinted</a>.
         </p>
       </section>
     </section>
