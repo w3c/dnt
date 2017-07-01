@@ -322,17 +322,6 @@
         combination with other retained or available information.
       </p>
     </section>
-
-    <section id='terminology.preferences'>
-      <h3>Preferences</h3>
-
-      <p>
-        A <dfn>user-granted exception</dfn> is a specific tracking
-        preference, overriding a user's general tracking preference, that
-        has been obtained and recorded using the mechanisms defined in
-        <a href="#exceptions" class="sectionRef"></a>.
-      </p>
-    </section>
   </section>
 
   <section id='notational'>
@@ -494,10 +483,10 @@
             <th>meaning</th>
         </tr>
         <tr><td>1</td>
-            <td>This user prefers not to be tracked on the target site.</td>
+            <td>This user prefers not to be tracked on this request.</td>
         </tr>
         <tr><td>0</td>
-            <td>This user prefers to allow tracking on the target site.</td>
+            <td>This user prefers to allow tracking on this request.</td>
         </tr>
       </table>
       <p>
@@ -530,32 +519,32 @@
       <p>
         The <code><dfn>DNT</dfn></code> header field is a mechanism for expressing the
         user's tracking preference in an HTTP request ([[!RFC7230]]).
-        At most one DNT header field can be present in a valid request.
+        At most one <code>DNT</code> header field can be present in a valid request.
       </p>
 <pre class="abnf">
 DNT-field-name  = "DNT"
 DNT-field-value = ( "0" / "1" ) *DNT-extension
 </pre>
       <p>
-        A user agent MUST NOT generate a <a>DNT</a> header field if the
+        A user agent MUST NOT generate a <code>DNT</code> header field if the
         user's tracking preference is <a>not enabled</a>.
       </p>
       <p>
-        A user agent MUST generate a <a>DNT</a> header field with a
+        A user agent MUST generate a <code>DNT</code> header field with a
         field-value that begins with the numeric character "1" if the user's
         tracking preference is <a>enabled</a>, their preference is for
         <a>DNT:1</a>, and no exception has been granted for the
-        request target (see <a href="#exceptions" class="sectionRef"></a>).
+        target resource (see <a href="#exceptions" class="sectionRef"></a>).
       </p>
       <p>
-        A user agent MUST generate a <a>DNT</a> header field with a
+        A user agent MUST generate a <code>DNT</code> header field with a
         field-value that begins with the numeric character "0" if the user's
         tracking preference is <a>enabled</a> and their preference is for
         <a>DNT:0</a>, or if an exception has been granted for
-        the request target.
+        the target resource.
       </p>
       <p>
-        A proxy MUST NOT generate a <a>DNT</a> header field unless it has
+        A proxy MUST NOT generate a <code>DNT</code> header field unless it has
         been specifically installed or configured to do so by the user
         making the request and adheres to the above requirements as if it
         were a user agent.
@@ -571,7 +560,7 @@ DNT: 1
         <h4>Extensions to the DNT Field Value</h4>
 
         <p>
-          The remainder of the DNT field-value, after the initial character,
+          The remainder of the <a>DNT</a> field-value, after the initial character,
           is reserved for future extensions. DNT extensions can only be
           transmitted when a tracking preference is <a>enabled</a>.
           The extension syntax is restricted to visible ASCII characters that
@@ -594,7 +583,7 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
         </p>
         <p>
           User agents that do not implement DNT extensions MUST NOT send
-          DNT-extension characters in the DNT field-value.
+          DNT-extension characters in the <a>DNT</a> field-value.
           Servers that do not implement DNT extensions SHOULD ignore
           anything beyond the first character.
         </p>
@@ -632,9 +621,9 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
       </pre>
       <p>
           The value of <a>Navigator.doNotTrack</a> is the string value that
-          would be sent in a <a>DNT-field-value</a>
+          would be sent in a <a>DNT</a> field-value
           (<a href="#dnt-header-field" class="sectionRef"></a>) to a
-          <strong>target</strong> that is the document-origin of the
+          <a>target resource</a> that is the document-origin of the
           <code>window</code>, in the browser context of the current
           <strong>top-level origin</strong>.
           The value is <code>null</code> if no DNT header field would be
@@ -685,7 +674,7 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
           data collected via the <dfn>designated resource</dfn>.
           For a site-wide tracking status resource, the designated resource
           is any resource on the same origin server.
-          For a <a>Tk</a> response header field, the target resource of the
+          For a <a>Tk</a> response header field, the <a>target resource</a> of the
           corresponding request is the designated resource, and remains so
           for any subsequent request-specific tracking status resource
           referred to by the Tk field value.
@@ -984,7 +973,7 @@ Tk-field-value  =  TSV [ ";" status-id ]
         <p>
           If an origin server has multiple, request-specific tracking
           policies, such that the tracking status might differ depending on
-          some aspect of the request (e.g., method, target URI, header
+          some aspect of the request (e.g., method, <a>target resource</a>, header
           fields, data, etc.), the origin server can provide an additional
           subtree of well-known resources corresponding to each of those
           distinct tracking statuses. The <code><dfn>status-id</dfn></code>
@@ -1070,7 +1059,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
           a successful response containing a machine-readable representation
           of the site-wide tracking status, as defined below, or a sequence
           of redirects that leads to such a representation. Failure to
-          provide access to such a representation implies that the target
+          provide access to such a representation implies that the
           origin server does not implement this protocol.
           The representation can be cached, as described
           in <a href="#status-caching" class="sectionRef"></a>.
@@ -1087,7 +1076,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
         <p>
           If an origin server has multiple, request-specific tracking
           policies, such that the tracking status might differ depending on
-          some aspect of the request (e.g., method, target URI, header
+          some aspect of the request (e.g., method, target resource, header
           fields, data, etc.), the origin server can provide an additional
           subtree of well-known resources corresponding to each of those
           distinct tracking statuses.  The <a>Tk</a> response header field
@@ -1148,7 +1137,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
         <h4>Caching</h4>
         <p>
           If the tracking status is applicable to all users, regardless of
-          the received <a>DNT-field-value</a> or other data received via the
+          the received <a>DNT</a> field-value and other data received via the
           request, then the origin server SHOULD mark the response as
           cacheable [[!RFC7234]] and assign a time-to-live (expiration or
           max-use) that is sufficient to enable shared caching but not
@@ -1167,7 +1156,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
         </p>
         <p>
           If the tracking status is only applicable to users that have
-          the same <a>DNT-field-value</a>, the origin server MUST send a
+          the same <a>DNT</a> field-value, the origin server MUST send a
           Vary header field that includes "DNT" in its field-value or a
           Cache-Control header field containing one of the following
           directives: "private", "no-cache", "no-store", or "max-age=0".
@@ -1679,23 +1668,31 @@ object {
   <section id='exceptions' >
     <h2>User-Granted Exceptions</h2>
 
-    <section id="exceptions-overview" class="informative">
-      <h3>Overview</h3>
+    <section id="exceptions-overview">
+      <h3>Definitions</h3>
 
       <p>
-        User-granted exceptions to Do Not Track, including site-specific
-        exceptions, are agreed between the site and the user, and stored by
-        the user agent. A resource ought to rely on the DNT header field it
-        receives to determine the user's preference for tracking with
-        respect to that particular request. An API is provided so that sites
-        can request and check the status of exceptions for tracking.
+        A <dfn>user-granted exception</dfn> is the record of a decision by
+        the user to grant consent for tracking (<a>DNT:0</a>) on future
+        requests to a set of target resources. A user-granted exception is
+        <dfn>site-specific</dfn> if it is limited to requests that are
+        embedded in, or referred by, a specific site; otherwise, it is a
+        <dfn>web-wide</dfn> exception.
       </p>
-      <p class="note">We envisage that the exceptions might also be usable as
-        a consent mechanism.
+      <p>
+        A client-side database can be used for persistent storage of
+        user-granted exceptions, such that permission to send <a>DNT:0</a>
+        can be obtained by a site and stored via a JavaScript API.
+        A user agent is expected to query such a database for an
+        applicable exception at the time of a request in order to determine
+        what value to send as the user's tracking preference. This provides
+        more transparency and control by the user over their own consent
+        decisions, as opposed to current usage of cookies to manage consent,
+        while providing better persistence of those exceptions for sites.
       </p>
     </section>
 
-    <section id="exceptions-principles" class="informative">
+    <section id="exceptions-principles">
       <h3>Motivating Principles and Use Cases</h3>
 
       <p>
@@ -1744,57 +1741,51 @@ object {
       <section>
         <h4>User Interaction</h4>
         <p>
-          The call to store an exception MUST reflect the user's intention
-          to grant an exception at the time of that call. This intention
-          MUST be determined by the site prior to each call to store an
-          exception, at the time of the call. (This allows a user to
-          change their mind and delete a stored exception, which might result
-          in the site explaining and asking for the exception again.)
-          It is the sole responsibility of the site making the call to
-          determine that a call to record an exception reflects the user's
-          informed consent at the time of that call.
+          A site MUST ensure that a call to store an exception reflects the
+          user's intention to grant an exception at the time of that call.
+          This allows a user to change their mind and delete a stored
+          exception, even if that might result in the site explaining and
+          asking for the exception again. It is the sole responsibility of
+          the site to determine that a call to record an exception reflects
+          the user's informed consent at the time of that call.
         </p>
         <p>
-          A Tracking Exception MUST only be requested when the document origin
-          requesting it has a valid Tracking Status Resource at the well-known
-          location, from which information about the domain’s controlling
-          entity(s) and their privacy policy can be ascertained.
+          A site's script MUST NOT make a call to store an exception unless
+          the effective script origin (as the designated resource) has a
+          <a>site-wide tracking status resource</a> with a valid
+          <a href="#status-representation">tracking status representation</a>.
+          This allows a user agent to obtain information about the calling
+          site’s controller and policies related to tracking.
         </p>
         <p>
-          To be valid the response to a retrieval request on the site-wide tracking
-          resource "<code>/.well-known/dnt/</code>" relative to the service URI, must have a
-          <code>application/tracking-status+json</code> media type,
-          be valid JSON, and include at least the
-          <code><a href="#rep.tracking">tracking</a></code>, <a>controller</a>,
-          <a>compliance</a> and <a>policy</a> properties.
-        </p>
-        <p>
-          A user agent MAY also refuse to grant a Site-Specific Tracking Exception for a named
-          <strong>target</strong> domain (see <strong>Processing Model</strong> below) which does not have a valid Tracking
-          Status Resource at its well-known location.
+          A user agent MAY refuse to grant an exception for a
+          <a>target resource</a> that does not have a corresponding tracking
+          status resource with a valid tracking status representation, since
+          that would imply the target resource does not conform to this
+          protocol.
         </p>
         <p>
           A site MAY ask for an exception, and have it stored, even when the
-          user's general preference is not <a>enabled</a>. (This permits
-          recording a permission to allow tracking in jurisdictions where
-          such permission cannot be assumed – see
-          <a href="#exceptions-no-js" class="sectionRef"></a>.)
+          user's general preference is <a>not enabled</a>. This permits the
+          sending of <a>DNT</a> only for target resources for which an
+          expressed preference is desired (see
+          <a href="#exceptions-when-not-enabled" class="sectionRef"></a>).
         </p>
         <p>
-          The user agent MAY provide interfaces to the user:
+          The user agent MAY provide interfaces to the user to:
         </p>
         <ul>
-          <li>To indicate that a call to store an exception has just been
+          <li>indicate that a call to store an exception has just been
             made;</li>
-          <li>To allow the user to confirm a user-granted exception prior
+          <li>allow the user to confirm a user-granted exception prior
             to storage;</li>
-          <li>To indicate that one or more exceptions exist for the
+          <li>indicate that one or more exceptions exist for the
             current top-level origin;</li>
-          <li>To indicate that one or more exceptions exist for sites
+          <li>indicate that one or more exceptions exist for sites
             incorporated into the current page;</li>
-          <li>To allow the user to see and possibly revoke stored
+          <li>allow the user to see and possibly revoke stored
             exceptions;</li>
-          <li>Other aspects of the exception mechanism, as desired.</li>
+          <li>maintain other aspects of the exception mechanism, as desired.</li>
         </ul>
         <p>
           There is no required user interface for the user agent;
@@ -1802,11 +1793,9 @@ object {
           user-granted exceptions.
         </p>
         <p>
-          If the user revokes the consent by deleting the exception, the
-          site MUST respect that revocation (though it MAY ask again for
-          the exception). The site MUST NOT use this exception mechanism if it
-          will deem consent to exist even after the exception has been
-          revoked.
+          If the user revokes a consent by deleting the exception, the
+          site MUST respect that revocation, though it MAY ask again for
+          a new exception.
         </p>
       </section>
 
@@ -1816,26 +1805,25 @@ object {
           This section describes the effect of the APIs in terms of a
           logical processing model; this model describes the behavior, but
           is not to be read as mandating any specific implementation.
+          The model's description relies on the following defined terms:
         </p>
+        <ul>
+          <li>A <dfn>top-level origin</dfn> is the
+              <a class="externalDFN" href="">top-level browsing context</a>,
+              as defined by [[!HTML5]];</li>
+          <li>A <strong>target</strong> site is the host subcomponent of the
+              authority part in an "http" or "https" URI, as defined by
+              [[!RFC7230]] and [[!RFC3986]]; and,</li>
+          <li>The <strong>document origin</strong> of a script is the
+              <strong>effective script origin</strong>, as defined by
+              [[!HTML5]].</li>
+        </ul>
         <p>
           This API considers exceptions which are double-keyed to two
           domains: the <strong>site</strong>, and the
           <strong>target</strong>. A user might &#8212; for instance &#8212;
           want AnalytiCo to be allowed to track them on Example News, but
-          not on Example Medical. To simplify language used in this API
-          specification, we define three terms:
-        </p>
-        <ul>
-          <li>A <strong>top-level origin</strong> is the <strong>top-level
-            browsing context</strong>, as defined by [[!HTML5]];</li>
-          <li>A <strong>target</strong> site is the host subcomponent of the
-            authority part in an "http" or "https" URI, as defined by
-            [[!RFC7230]] and [[!RFC3986]]; and,</li>
-          <li>The <strong>document origin</strong> of a script is the
-            <strong>effective script origin</strong>, as defined by
-            [[!HTML5]].</li>
-        </ul>
-        <p>
+          not on Example Medical.        <p>
            For instance, if the document at
            <code>http://web.exnews.com/news/story/2098373.html</code>
            references the resources
@@ -2422,19 +2410,18 @@ object {
         exception do not have the ability to invoke an interactive JavaScript
         presence on a page (for example, those that provide only images or
         "tracking pixels"). They cannot request an exception under these
-        circumstances, both because a script is needed, and because they would
-        be required to explain to the user the need for and consequences of
-        granting an exception, and get the user's consent. In general, this
-        process of informing, getting consent, and calling the API is not
-        expected within page elements where such trackers are invoked.
+        circumstances because a script is needed to make the API call and
+        it requires interaction to ensure the user is informed and to receive
+        an indication of their consent. In general, this process of informing,
+        getting consent, and calling the API is not expected within page
+        elements where such trackers are invoked.
       </p>
       <p>
-        To obtain an exception, a document (page, frame, etc.) that loads
-        the Javascript is needed. The user might visit the site that desires
-        an exception directly, the first party site could load a frame of
-        the site desiring the exception, or that frame might be part of some
-        other page containing a number of frames, which allows aggregation
-        of requests for exceptions.
+        To obtain an exception, a document (page, frame, etc.) that loads the
+        JavaScript is needed. The user might visit the site that desires an
+        exception directly, or the first party might provide a separate page
+        that could load script-enabled frames in which each third party
+        could ask for an exception (allowing for aggregation of requests).
       </p>
       <p>
         In all these ways, the site is contributing to informing the user and
@@ -2454,22 +2441,15 @@ object {
       </p>
       <p>
         User agents MAY instantiate
-        <code>navigator.storeSiteSpecificTrackingException</code> even when
-        <code>window.doNotTrack</code> is null. Scripts SHOULD test for the
+        <code>Navigator.storeSiteSpecificTrackingException</code> even when
+        <code>Navigator.doNotTrack</code> is null. Scripts SHOULD test for the
         existence of <code>storeSiteSpecificTrackingException</code> before
         calling the method. If an exception is granted and the user agent
         stores that preference, a user agent might send the
         <a>DNT:0</a> tracking preference even if it has not
         enabled preferences to be sent for other requests. Persisted
-        preferences MAY affect which preference is transmitted if a user
-        later chooses to express a tracking preference.
-      </p>
-      <p class="note">
-        Users might not configure their agents to have simple values for
-        DNT, but use different browsing modes or other contextual
-        information to decide on a DNT value. What algorithm a user agent
-        employs to determine DNT values (or the lack thereof) is out of the
-        scope of this specification.
+        exceptions MAY affect which preference is transmitted if a user
+        later chooses to configure a general tracking preference.
       </p>
     </section>
 
