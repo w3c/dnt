@@ -511,6 +511,23 @@
         to inform or adjust their behavior when no explicit preference is
         expressed via this protocol.
       </p>
+      <p class="note">
+        This specification defines a protocol for communicating the user's
+        tracking preference, not a protocol that prevents tracking on its own.
+        It might be tempting to assume that <q>design for privacy</q> would
+        justify calling for <a>DNT:1</a> to be preconfigured as the default
+        for all user agents. However, that would violate the field's semantics,
+        make its presence in a request meaningless, and add eight extra bytes
+        to every HTTP request (with no effect).<br />
+        <br />
+        The DNT signal alone does nothing to enhance a user's privacy.
+        It is only when recipients believe that the signal has been
+        deliberately and knowingly configured, and not defined as a default,
+        that they will consider it to be the user's preference.
+        Furthermore, when no signal is sent, recipients remain subject to
+        whatever regulatory, legal, or other regional requirements regarding
+        tracking exist in the absence of consent.
+      </p>
     </section>
 
     <section id='dnt-header-field'>
