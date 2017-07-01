@@ -81,7 +81,7 @@
       This specification defines the <a>DNT</a> request header field as an
       HTTP mechanism for expressing a user's preference regarding tracking,
       an HTML DOM property to make that expression readable by scripts, and
-      APIs that allow scripts to register exceptions granted by
+      APIs that allow scripts to register permissions granted by
       the user. It also defines mechanisms for sites to communicate whether
       and how they honor a received preference, including
       well-known resources for retrieving preflight tracking status,
@@ -150,9 +150,9 @@
       on some forms of tracking and unwilling or unable to turn that off.
       In other cases, a server might perform only limited forms of tracking
       that would be acceptable to most users. Therefore, servers need
-      mechanisms for communicating their own tracking behavior, requesting an
-      exception to a user's general preference, and storing such a
-      <a>user-granted exception</a> after the user has made an informed choice.
+      mechanisms for communicating their own tracking behavior, requesting
+      consent, and storing <a>user-granted permission</a> once the user has
+      made an informed choice.
     </p>
     <p>
       This specification extends Hypertext Transfer Protocol (HTTP) semantics
@@ -164,7 +164,7 @@
       <a>Tk</a> response header field are defined for communicating the
       server's tracking behavior. In addition, JavaScript APIs are defined for
       enabling scripts to determine DNT status and register a user-granted
-      exception.
+      permission.
     </p>
     <p>
       This specification does not define requirements on what a recipient
@@ -370,7 +370,7 @@
       Key to that notion of expression is that the signal sent MUST reflect
       the user's preference, not the choice of some vendor, institution,
       site, or network-imposed mechanism outside the user's control;
-      this applies equally to both the general preference and exceptions.
+      this applies equally to both the general preference and permissions.
       The basic principle is that a tracking preference expression is only
       transmitted when it reflects a deliberate choice by the user. In the
       absence of user choice, there is no tracking preference expressed.
@@ -550,14 +550,14 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
         A user agent MUST generate a <code>DNT</code> header field with a
         field-value that begins with the numeric character "1" if the user's
         tracking preference is <a>enabled</a>, their preference is for
-        <a>DNT:1</a>, and no exception has been granted for the
-        target resource (see <a href="#exceptions" class="sectionRef"></a>).
+        <a>DNT:1</a>, and no permission has been granted for the
+        target resource (see <a href="#permissions" class="sectionRef"></a>).
       </p>
       <p>
         A user agent MUST generate a <code>DNT</code> header field with a
         field-value that begins with the numeric character "0" if the user's
         tracking preference is <a>enabled</a> and their preference is for
-        <a>DNT:0</a>, or if an exception has been granted for
+        <a>DNT:0</a>, or if a permission has been granted for
         the target resource.
       </p>
       <p>
@@ -628,7 +628,7 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
         [[!HTML5]] to determine what
         <a>DNT</a> header field value would be sent in requests to the
         document-origin, taking into account the user's general preference
-        (if any) and the current user-granted exceptions applicable to that
+        (if any) and the current user-granted permissions applicable to that
         origin server.
       </p>
       <pre class="idl">
@@ -1482,10 +1482,10 @@ object {
         If an origin server receives a request with <a>DNT:1</a>,
         does not have out-of-band consent for tracking this user, and
         wishes to deny access to the requested resource until the user
-        provides some form of user-granted exception or consent for tracking,
+        provides some form of user-granted permission or consent for tracking,
         then the origin server SHOULD send a 409 (Conflict) response with a
         message payload that describes why the request has been refused and
-        how one might supply the required consent or exception to avoid this
+        how one might supply the required consent or permission to avoid this
         conflict [[!RFC7231]].
       </p>
       <p>
@@ -1562,39 +1562,39 @@ object {
     </section>
   </section>
 
-  <section id='exceptions' >
-    <h2>User-Granted Exceptions</h2>
+  <section id='permissions' >
+    <h2>User-Granted Permissions</h2>
 
-    <section id="exceptions-overview">
+    <section id="permission-definitions">
       <h3>Definitions</h3>
 
       <p>
-        A <dfn>user-granted exception</dfn> is the record of a decision by
+        A <dfn>user-granted permission</dfn> is the record of a decision by
         the user to grant consent for tracking (<a>DNT:0</a>) on future
-        requests to a set of target resources. A user-granted exception is
+        requests to a set of target resources. A user-granted permission is
         <dfn>site-specific</dfn> if it is limited to requests that are
         embedded in, or referred by, a specific site; otherwise, it is a
-        <dfn>web-wide</dfn> exception.
+        <dfn>web-wide</dfn> permission.
       </p>
       <p>
         A client-side database can be used for persistent storage of
-        user-granted exceptions, such that permission to send <a>DNT:0</a>
+        user-granted permissions, such that permission to send <a>DNT:0</a>
         can be obtained by a site and stored via a JavaScript API.
         A user agent is expected to query such a database for an
-        applicable exception at the time of a request in order to determine
+        applicable permission at the time of a request in order to determine
         what value to send as the user's tracking preference. This provides
         more transparency and control by the user over their own consent
         decisions, as opposed to current usage of cookies to manage consent,
-        while providing better persistence of those exceptions for sites.
+        while providing better persistence of those permissions for sites.
       </p>
     </section>
 
-    <section id="exceptions-principles">
+    <section id="permission-principles">
       <h3>Motivating Principles and Use Cases</h3>
 
       <p>
         The following principles guide the design of user-agent-managed
-        exceptions.
+        permissions.
       </p>
       <ul>
         <li>Content providers might wish to prompt visitors to their
@@ -1602,11 +1602,11 @@ object {
           advertising or similar purposes when they arrive with the Do Not
           Track setting enabled.</li>
         <li>Privacy-conscious users might wish to view or edit all the
-          exceptions they've granted in a single, consistent user interface,
+          permissions they've granted in a single, consistent user interface,
           rather than managing preferences in a different way on every
           content provider or tracker's privacy page.</li>
-        <li>Granting an exception in one context (e.g., while browsing a news
-          site) does not imply that exception is applicable to other contexts
+        <li>Granting a permission in one context (e.g., while browsing a news
+          site) does not imply that permission is applicable to other contexts
           (e.g., browsing an unrelated medical site).</li>
         <li>Tracking providers ought to be able to avoid second-guessing a
           user's expressed tracking preference.</li>
@@ -1614,40 +1614,40 @@ object {
           between a first-party publisher and its third parties.</li>
       </ul>
       <p>
-        When asking for a site-specific exception, the top-level origin
+        When asking for a site-specific permission, the top-level origin
         making the request might make some implicit or explicit claims as
         to the actions and behavior of its third parties; for this reason,
-        it might want to establish exceptions for only those for which it is
+        it might want to establish permissions for only those for which it is
         sure that those claims are true. (Consider a site that has some
         trusted advertisers and analytics providers, along with some mashed-up
         content from less-trusted sites). For this reason, there is support
-        both for explicitly named sites, as well as support for granting an
-        exception to all third-parties on a given site (site-wide exception,
+        both for explicitly named sites, as well as support for granting a
+        permission to all third-parties on a given site (site-wide permission,
         using the conceptual wild-card "*").
       </p>
       <p>
         There are some cases in which a user might desire a site to be allowed
         to track them on any top-level origin. An API is provided so that
-        a site might obtain such a web-wide exception from the user.
+        a site might obtain such a web-wide permission from the user.
       </p>
     </section>
 
-    <section id='exception-model'>
-      <h3>Exception Model</h3>
+    <section id='permission-model'>
+      <h3>Permission Model</h3>
 
       <section>
         <h4>User Interaction</h4>
         <p>
-          A site MUST ensure that a call to store an exception reflects the
-          user's intention to grant an exception at the time of that call.
+          A site MUST ensure that a call to store a permission reflects the
+          user's intention to grant a permission at the time of that call.
           This allows a user to change their mind and delete a stored
-          exception, even if that might result in the site explaining and
-          asking for the exception again. It is the sole responsibility of
-          the site to determine that a call to record an exception reflects
+          permission, even if that might result in the site explaining and
+          asking for the permission again. It is the sole responsibility of
+          the site to determine that a call to record a permission reflects
           the user's informed consent at the time of that call.
         </p>
         <p>
-          A site's script MUST NOT make a call to store an exception unless
+          A site's script MUST NOT make a call to store a permission unless
           the effective script origin (as the designated resource) has a
           <a>site-wide tracking status resource</a> with a valid
           <a href="#status-representation">tracking status representation</a>.
@@ -1655,48 +1655,48 @@ object {
           site’s controller and policies related to tracking.
         </p>
         <p>
-          A user agent MAY refuse to grant an exception for a
+          A user agent MAY refuse to grant a permission for a
           <a>target resource</a> that does not have a corresponding tracking
           status resource with a valid tracking status representation, since
           that would imply the target resource does not conform to this
           protocol.
         </p>
         <p>
-          A site MAY ask for an exception, and have it stored, even when the
+          A site MAY ask for a permission, and have it stored, even when the
           user's general preference is <a>not enabled</a>. This permits the
           sending of <a>DNT</a> only for target resources for which an
           expressed preference is desired (see
-          <a href="#exceptions-when-not-enabled" class="sectionRef"></a>).
+          <a href="#permission-when-not-enabled" class="sectionRef"></a>).
         </p>
         <p>
           The user agent MAY provide interfaces to the user to:
         </p>
         <ul>
-          <li>indicate that a call to store an exception has just been
+          <li>indicate that a call to store a permission has just been
             made;</li>
-          <li>allow the user to confirm a user-granted exception prior
+          <li>allow the user to confirm a user-granted permission prior
             to storage;</li>
-          <li>indicate that one or more exceptions exist for the
+          <li>indicate that one or more permissions exist for the
             current top-level origin;</li>
-          <li>indicate that one or more exceptions exist for sites
+          <li>indicate that one or more permissions exist for sites
             incorporated into the current page;</li>
           <li>allow the user to see and possibly revoke stored
-            exceptions;</li>
-          <li>maintain other aspects of the exception mechanism, as desired.</li>
+            permissions;</li>
+          <li>maintain other aspects of the permission mechanism, as desired.</li>
         </ul>
         <p>
           There is no required user interface for the user agent;
           a user agent MAY choose to provide no user interface regarding
-          user-granted exceptions.
+          user-granted permissions.
         </p>
         <p>
-          If the user revokes a consent by deleting the exception, the
+          If the user revokes a consent by deleting a permission, the
           site MUST respect that revocation, though it MAY ask again for
-          a new exception.
+          a new permission.
         </p>
       </section>
 
-      <section>
+      <section id='permission-processing'>
         <h4>Processing Model</h4>
         <p>
           This section describes the effect of the APIs in terms of a
@@ -1716,7 +1716,7 @@ object {
               [[!HTML5]].</li>
         </ul>
         <p>
-          This API considers exceptions which are double-keyed to two
+          This API considers permissions which are double-keyed to two
           domains: the <strong>site</strong>, and the
           <strong>target</strong>. A user might &#8212; for instance &#8212;
           want AnalytiCo to be allowed to track them on Example News, but
@@ -1757,7 +1757,7 @@ object {
         </p>
         <p>
           The calls cause the following steps to occur (subject to user
-          confirmation of the exception, if the user agent asks for it):
+          confirmation of the permission, if the user agent asks for it):
         </p>
         <ul>
           <li>The user agent adds to its local database one or more site-pair
@@ -1802,40 +1802,40 @@ object {
         <p>
           When an explicit list of domains is provided through the API,
           their names might mean little to the user. The user might, for
-          example, be told that there is a stored exception for a specific
+          example, be told that there is a stored permission for a specific
           set of sites on such-and-such top-level origin, rather than
           listing them by name; or the user agent might decide to store a
-          site-wide exception, effectively ignoring any list of domain names.
+          site-wide permission, effectively ignoring any list of domain names.
         </p>
         <p>
           Conversely, if a wild-card is used, the user might be told that
-          there is a stored exception for all third-parties that are embedded
+          there is a stored permission for all third-parties that are embedded
           by the indicated top-level origin.
         </p>
       </section>
     </section>
 
-    <section id="exceptions-javascript-api">
-      <h3>Site-specific Exceptions</h3>
+    <section id="permission-javascript-api">
+      <h3>Site-specific Permission</h3>
 
-      <section id="exceptions-javascript-api-rqst">
-        <h4>API to Request a Site-specific Exception</h4>
+      <section id="permission-javascript-api-rqst">
+        <h4>API to Request a Site-specific Permission</h4>
 
         <p>
-          <code><dfn>Navigator.storeSiteSpecificTrackingException</dfn></code>
-          is called by a page to store a site-specific tracking exception.
-          A <code><dfn>StoreExceptionPropertyBag</dfn></code> dictionary
-          contains the information to be stored for that exception.
-  It returns a <code>Promise</code> resolving to a <code><dfn>StoreExceptionResult</dfn></code> result object.
+          <code><dfn>Navigator.storeSiteSpecificTrackingPermission</dfn></code>
+          is called by a page to store a site-specific tracking permission.
+          A <code><dfn>StorePermissionPropertyBag</dfn></code> dictionary
+          contains the information to be stored for that permission.
+  It returns a <code>Promise</code> resolving to a <code><dfn>StorePermissionResult</dfn></code> result object.
         </p>
         <pre class="idl overlarge">
         partial interface Navigator {
-            Promise&lt;StoreExceptionResult&gt; storeSiteSpecificTrackingException (
-            StoreExceptionPropertyBag properties
+            Promise&lt;StorePermissionResult&gt; storeSiteSpecificTrackingPermission (
+            StorePermissionPropertyBag properties
             );
         };
 
-        dictionary StoreExceptionPropertyBag {
+        dictionary StorePermissionPropertyBag {
            DOMString? domain;
            DOMString? siteName;
            DOMString? explanationString;
@@ -1845,19 +1845,19 @@ object {
            sequence&lt;DOMString&gt; arrayOfDomainStrings;
         };
 
-        dictionary StoreExceptionResult {
+        dictionary StorePermissionResult {
           boolean siteWide;
         };
         </pre>
         <p>
-          <a>Navigator.storeSiteSpecificTrackingException</a> passes a
-          <a>StoreExceptionPropertyBag</a> that can contain the following
+          <a>Navigator.storeSiteSpecificTrackingPermission</a> passes a
+          <a>StorePermissionPropertyBag</a> that can contain the following
           properties:
         </p>
-        <dl data-dfn-for="StoreExceptionPropertyBag">
+        <dl data-dfn-for="StorePermissionPropertyBag">
           <dt><code><dfn>domain</dfn></code></dt>
           <dd>a cookie-domain as defined in [[!RFC6265]],
-              to which the exception applies.</dd>
+              to which the permission applies.</dd>
           <dt><code><dfn>siteName</dfn></code></dt>
           <dd>A user-readable string for the name of the top-level origin.</dd>
           <dt><code><dfn>explanationString</dfn></code></dt>
@@ -1876,22 +1876,22 @@ object {
           <dd>A JavaScript array of strings.</dd>
         </dl>
         <p>
-          Calling <code>storeSiteSpecificTrackingException</code> returns a <code>Promise</code>
-          which either resolves to a <code>StoreExceptionResult</code> object, or is rejected with
+          Calling <code>storeSiteSpecificTrackingPermission</code> returns a <code>Promise</code>
+          which either resolves to a <code>StorePermissionResult</code> object, or is rejected with
           a <code>DOMException</code> SYNTAX_ERR result. The <code>Promise</code> resolves
-          immediately the Tracking Exception request has been processed, with the property <code>siteWide</code>
-          in the result object set <code>true</code> if the Exception is site-wide.
+          immediately the Tracking Permission request has been processed, with the property <code>siteWide</code>
+          in the result object set <code>true</code> if the Permission is site-wide.
         </p>
         <p>
           If the request does not include the
           <code>arrayOfDomainStrings</code>, then this request is for a
-          site-wide exception. Otherwise each string in
+          site-wide permission. Otherwise each string in
           <code>arrayOfDomainStrings</code> specifies a
           <strong>target</strong>.
         </p>
         <p>
           If the list <code>arrayOfDomainStrings</code> is supplied, the
-          user agent MAY choose to store a site-wide exception. If it does
+          user agent MAY choose to store a site-wide permission. If it does
           so it MUST indicate this by setting the <code>siteWide</code> property to <code>true</code>.
         </p>
         <p>
@@ -1911,7 +1911,7 @@ object {
           is added to the database of remembered grants.
         </p>
         <p>
-          If permission is stored for a site-wide exception, then the
+          If permission is stored for a site-wide permission, then the
           duplet:
         </p>
         <pre>[document-origin, * ]</pre>
@@ -1948,7 +1948,7 @@ object {
           is added to the database of remembered grants.
         </p>
         <p>
-          If permission is stored for a site-wide exception, then the
+          If permission is stored for a site-wide permission, then the
           duplet:
         </p>
         <pre>[*.domain, * ]</pre>
@@ -1958,7 +1958,7 @@ object {
         <p>
           A particular response to the API &mdash; like a DNT response header
           field &mdash; is only valid immediately; a user might later choose
-          to edit stored exceptions and revoke some or all of them.
+          to edit stored permissions and revoke some or all of them.
         </p>
         <p>
           If <code>expires</code> is supplied and not null or empty the
@@ -1983,35 +1983,35 @@ object {
         </p>
       </section>
 
-      <section id="exceptions-javascript-api-cancel">
-        <h4>API to Cancel a Site-specific Exception</h4>
+      <section id="permission-javascript-api-cancel">
+        <h4>API to Cancel a Site-specific Permission</h4>
 
         <p>
-          <code><dfn>Navigator.removeSiteSpecificTrackingException</dfn></code>
-          is called by a page to cancel a site-specific tracking exception.
-          A <code><dfn>RemoveExceptionPropertyBag</dfn></code> dictionary
-          contains information to identify the exception.
+          <code><dfn>Navigator.removeSiteSpecificTrackingPermission</dfn></code>
+          is called by a page to cancel a site-specific tracking permission.
+          A <code><dfn>RemovePermissionPropertyBag</dfn></code> dictionary
+          contains information to identify the permission.
         </p>
         <pre class="idl overlarge">
         partial interface Navigator {
-          Promise&lt;void&gt; removeSiteSpecificTrackingException (
-            RemoveExceptionPropertyBag properties
+          Promise&lt;void&gt; removeSiteSpecificTrackingPermission (
+            RemovePermissionPropertyBag properties
           );
         };
 
-        dictionary RemoveExceptionPropertyBag {
+        dictionary RemovePermissionPropertyBag {
           DOMString? domain;
         };
         </pre>
         <p>
-          <a>Navigator.removeSiteSpecificTrackingException</a> passes a
-          <a>RemoveExceptionPropertyBag</a> that can contain the following
+          <a>Navigator.removeSiteSpecificTrackingPermission</a> passes a
+          <a>RemovePermissionPropertyBag</a> that can contain the following
           property:
         </p>
-        <dl data-dfn-for="RemoveExceptionPropertyBag">
+        <dl data-dfn-for="RemovePermissionPropertyBag">
           <dt><code><dfn>domain</dfn></code></dt>
           <dd>a cookie-domain as defined in [[!RFC6265]],
-              to which the exception applies.</dd>
+              to which the permission applies.</dd>
         </dl>
         <p>
           If domain is not supplied or is null or empty then this
@@ -2029,7 +2029,7 @@ object {
         <p>
           A <code>Promise</code> resolving to <code>void</code> is returned.
           When the <code>Promise</code> has been resolved, it is assumed
-          that there are no site-specific or site-wide exceptions for the given top-level origin.
+          that there are no site-specific or site-wide permissions for the given top-level origin.
         </p>
         <p>
           When the returned <code>Promise</code> is resolved, the database of grants no longer
@@ -2043,56 +2043,56 @@ object {
         </p>
       </section>
 
-      <section id="exceptions-javascript-api-confirm">
-        <h4>API to Confirm a Site-specific Exception</h4>
+      <section id="permission-javascript-api-confirm">
+        <h4>API to Confirm a Site-specific Permission</h4>
 
         <p>
-          <code><dfn>Navigator.confirmSiteSpecificTrackingException</dfn></code>
-          is called by a page to confirm a site-specific tracking exception.
-          A <code><dfn>ConfirmExceptionPropertyBag</dfn></code> dictionary
-          contains information to identify the exception.
-          It returns a <code>Promise</code> resolving to a <code><dfn>ConfirmExceptionResult</dfn></code>
+          <code><dfn>Navigator.confirmSiteSpecificTrackingPermission</dfn></code>
+          is called by a page to confirm a site-specific permission.
+          A <code><dfn>ConfirmPermissionPropertyBag</dfn></code> dictionary
+          contains information to identify the permission.
+          It returns a <code>Promise</code> resolving to a <code><dfn>ConfirmPermissionResult</dfn></code>
   result object.
         </p>
         <pre class="idl overlarge">
         partial interface Navigator {
-          Promise&lt;ConfirmExceptionResult&gt; confirmSiteSpecificTrackingException (
-            ConfirmExceptionPropertyBag properties
+          Promise&lt;ConfirmPermissionResult&gt; confirmSiteSpecificTrackingPermission (
+            ConfirmPermissionPropertyBag properties
           );
         };
 
-        dictionary ConfirmExceptionPropertyBag {
+        dictionary ConfirmPermissionPropertyBag {
           DOMString? domain;
           sequence&lt;DOMString&gt; arrayOfDomainStrings;
         };
 
-        dictionary ConfirmExceptionResult {
+        dictionary ConfirmPermissionResult {
           boolean exists;
         };
         </pre>
         <p>
-          <a>Navigator.confirmSiteSpecificTrackingException</a> passes a
-          <a>ConfirmExceptionPropertyBag</a> that can contain the following
+          <a>Navigator.confirmSiteSpecificTrackingPermission</a> passes a
+          <a>ConfirmPermissionPropertyBag</a> that can contain the following
           properties:
         </p>
-        <dl data-dfn-for="ConfirmExceptionPropertyBag">
+        <dl data-dfn-for="ConfirmPermissionPropertyBag">
           <dt><code><dfn>domain</dfn></code></dt>
           <dd>a cookie-domain as defined in [[!RFC6265]],
-              to which the exception applies.</dd>
+              to which the permission applies.</dd>
           <dt><code><dfn>arrayOfDomainStrings</dfn></code></dt>
           <dd>A JavaScript array of strings.</dd>
         </dl>
         <p>
           If the call does not include the
           <code>arrayOfDomainStrings</code>, then this call is to confirm a
-          site-wide exception. Otherwise each string in
+          site-wide permission. Otherwise each string in
           <code>arrayOfDomainStrings</code> specifies a
           <strong>target</strong>.
         </p>
         <p>
           If the list <code>arrayOfDomainStrings</code> is supplied, and the
-          user agent stores only site-wide exceptions, then the user agent
-          MUST match by confirming a site-wide exception.
+          user agent stores only site-wide permissions, then the user agent
+          MUST match by confirming a site-wide permission.
         </p>
         <p>
           If the <code>domain</code> argument is not supplied or is null or
@@ -2108,7 +2108,7 @@ object {
         </p>
         <pre>[document-origin, target]</pre>
         <p>
-          If the user agent stores only site-wide exceptions or the call did
+          If the user agent stores only site-wide permissions or the call did
           not include an explicit list, the database is checked for the
           single duplet:
         </p>
@@ -2121,14 +2121,14 @@ object {
         </p>
         <pre>[*.domain, target]</pre>
         <p>
-          If the user agent stores only site-wide exceptions or the call did
+          If the user agent stores only site-wide permissions or the call did
           not include an explicit list, and the <code>domain</code> argument
           is provided and is not empty then the database is checked for the
           single duplet:
         </p>
         <pre>[*.domain, * ]</pre>
         <p>
-          The returned <code>Promise</code> resolves to a <code>ConfirmExceptionResult</code>
+          The returned <code>Promise</code> resolves to a <code>ConfirmPermissionResult</code>
           object whose <code>boolean</code> property <code>exists</code>
           has the following possible values:
         </p>
@@ -2140,28 +2140,28 @@ object {
       </section>
     </section>
 
-    <section id="exceptions-ww-javascript-api">
-      <h3>Web-wide Exceptions</h3>
+    <section id="permission-ww-javascript-api">
+      <h3>Web-wide Permissions</h3>
 
-      <section id="exceptions-javascript-api-ww-rqst">
-        <h4>API to Request a Web-wide Exception</h4>
+      <section id="permission-javascript-api-ww-rqst">
+        <h4>API to Request a Web-wide Permission</h4>
 
         <p>
-          <code><dfn>Navigator.storeWebWideTrackingException</dfn></code>
+          <code><dfn>Navigator.storeWebWideTrackingPermission</dfn></code>
           is called by a page to request the addition of a web-wide grant for a
           specific site to the database.
         </p>
         <pre class="idl overlarge">
         partial interface Navigator {
-            Promise&lt;void&gt; storeWebWideTrackingException (
-                            StoreExceptionPropertyBag properties
+            Promise&lt;void&gt; storeWebWideTrackingPermission (
+                            StorePermissionPropertyBag properties
                           );
         };
         </pre>
         <p>
-          <a>Navigator.storeWebWideTrackingException</a> passes a
-          <a>StoreExceptionPropertyBag</a>, as described in
-          <a href="#exceptions-javascript-api-rqst" class="sectionRef"></a>.
+          <a>Navigator.storeWebWideTrackingPermission</a> passes a
+          <a>StorePermissionPropertyBag</a>, as described in
+          <a href="#permission-javascript-api-rqst" class="sectionRef"></a>.
         </p>
         <p>
           The single duplet
@@ -2172,25 +2172,25 @@ object {
         </p>
       </section>
 
-      <section id="exceptions-javascript-api-ww-cancel">
-        <h4>API to Cancel a Web-wide Exception</h4>
+      <section id="permission-javascript-api-ww-cancel">
+        <h4>API to Cancel a Web-wide Permission</h4>
 
         <p>
-          <code><dfn>Navigator.removeWebWideTrackingException</dfn></code>
+          <code><dfn>Navigator.removeWebWideTrackingPermission</dfn></code>
           is called by a page to request the removal of a web-wide grant for a
           specific site from the database.
         </p>
         <pre class="idl overlarge">
         partial interface Navigator {
-            Promise&lt;void&gt; removeWebWideTrackingException (
-                            RemoveExceptionPropertyBag properties
+            Promise&lt;void&gt; removeWebWideTrackingPermission (
+                            RemovePermissionPropertyBag properties
                           );
         };
         </pre>
         <p>
-          <a>Navigator.removeWebWideTrackingException</a> passes a
-          <a>RemoveExceptionPropertyBag</a>, as described in
-          <a href="#exceptions-javascript-api-cancel" class="sectionRef"></a>.
+          <a>Navigator.removeWebWideTrackingPermission</a> passes a
+          <a>RemovePermissionPropertyBag</a>, as described in
+          <a href="#permission-javascript-api-cancel" class="sectionRef"></a>.
         </p>
         <p>
           Ensures that the database of remembered grants no longer
@@ -2208,105 +2208,105 @@ object {
         </p>
       </section>
 
-      <section id="exceptions-javascript-api-ww-confirm">
-        <h4>API to Confirm a Web-wide Exception</h4>
+      <section id="permission-javascript-api-ww-confirm">
+        <h4>API to Confirm a Web-wide Permission</h4>
 
         <p>
-          <code><dfn>Navigator.confirmWebWideTrackingException</dfn></code>
+          <code><dfn>Navigator.confirmWebWideTrackingPermission</dfn></code>
           is called by a page to confirm that there exists in the database a
-          web-wide exception for a specific site.
+          web-wide permission for a specific site.
         </p>
         <pre class="idl overlarge">
         partial interface Navigator {
-          Promise&lt;ConfirmExceptionResult&gt; confirmWebWideTrackingException (
-            ConfirmSiteSpecificExceptionPropertyBag properties
+          Promise&lt;ConfirmPermissionResult&gt; confirmWebWideTrackingPermission (
+            ConfirmSiteSpecificPermissionPropertyBag properties
           );
         };
-        dictionary ConfirmExceptionResult {
+        dictionary ConfirmPermissionResult {
           boolean exists;
         };
         </pre>
         <p>
-          <a>Navigator.confirmWebWideTrackingException</a> passes a
-          <a>ConfirmExceptionPropertyBag</a>, as described in
-          <a href="#exceptions-javascript-api-confirm" class="sectionRef"></a>.
+          <a>Navigator.confirmWebWideTrackingPermission</a> passes a
+          <a>ConfirmPermissionPropertyBag</a>, as described in
+          <a href="#permission-javascript-api-confirm" class="sectionRef"></a>.
         </p>
         <p>
-          The returned <code>Promise</code> resolves to a <code>TrackingExceptionResult</code>
+          The returned <code>Promise</code> resolves to a <code>TrackingPermissionResult</code>
           object with a <code>boolean</code> property <code>exists</code> indicating whether the duplet
           <code>[ * , document-origin]</code> or <code>[ * , *.domain]</code>
           (based on if <code>domain</code> is provided and is not null and
           not empty) exists in the database.
         </p>
         <ul>
-          <li><code>true</code> indicates that the web-wide exception
+          <li><code>true</code> indicates that the web-wide permission
             exists;</li>
-          <li><code>false</code> indicates that the web-wide exception
+          <li><code>false</code> indicates that the web-wide permission
             does not exist.</li>
         </ul>
       </section>
     </section>
 
-    <section id="exceptions-ui" class="informative">
+    <section id="permission-ui" class="informative">
       <h3>User Interface Guidelines</h3>
 
       <p>
         As described above, it is the sole responsibility of the site
-        making an API call to determine that an exception grant reflects the
+        making an API call to determine that a permission grant reflects the
         user's informed consent at the time of the call.
       </p>
       <p>
         It is expected that a site will explain to the user, in its online
-        content, the need for an exception and the consequences of granting or
-        denying that exception.
+        content, the need for a permission and the consequences of granting or
+        denying that permission.
       </p>
       <p>
-        User agents are free to implement exception management user
+        User agents are free to implement permission management user
         interfaces as they see fit. Some agents might provide a notification
         to the user at the time of the request, or even not complete the
-        storing of the exception until the user approves. Some agents might
+        storing of the permission until the user approves. Some agents might
         provide a user-interface to see and edit the database of recorded
-        exception grants. The API parameters siteName, explanationString,
+        permission grants. The API parameters siteName, explanationString,
         and detailURI are provided so that the user agent can use them in
         their user interface. If a user agent presents these parameters to the
         user, it ought to be clear that they are provided for informational
-        value and are less important than the exception's technical effect.
+        value and are less important than the permission's technical effect.
       </p>
       <p>
-        A user agent that chooses to highlight when tracking exceptions have
+        A user agent that chooses to highlight when tracking permissions have
         been stored might provide an interface like the following:
       </p>
       <ul>
-        <li>an icon in the status bar indicating that an exception has been
+        <li>an icon in the status bar indicating that a permission has been
           stored, which, when clicked on, gives the user more information
-          about the exception and an option to revoke such an exception.</li>
+          about the permission and an option to revoke it.</li>
         <li>an infobar stating "Example News (news.example.com) has
           indicated to Browser that you have consented to granting it
-          exceptions to your general Do Not Track preference. If you believe
+          permission for tracking. If you believe
           this is incorrect, click Revoke."</li>
         <li>no UI at all.</li>
       </ul>
       <p>
-        In some user agent implementations, decisions to grant exceptions
+        In some user agent implementations, decisions to grant permissions
         might have been made in the past (and since forgotten) or might have
-        been made by other users of the device. Thus, exceptions might not
+        been made by other users of the device. Thus, permissions might not
         always represent the current preferences of the user. Some user
         agents might choose to provide ambient notice that user-opted
         tracking is ongoing, or easy access to view and control these
-        preferences. Users might also desire to edit exceptions within a
+        preferences. Users might also desire to edit permissions within a
         separate user interface, which would allow a user to modify their
-        stored exceptions without visiting the target sites.
+        stored permissions without visiting the target sites.
       </p>
     </section>
 
-    <section id="exceptions-no-js" class="informative">
-      <h3>Exceptions without Interactive JavaScript</h3>
+    <section id="permission-no-js" class="informative">
+      <h3>Permissions without Interactive JavaScript</h3>
 
       <p>
         Some third party servers that might wish to receive a user-granted
-        exception do not have the ability to invoke an interactive JavaScript
+        permission do not have the ability to invoke an interactive JavaScript
         presence on a page (for example, those that provide only images or
-        "tracking pixels"). They cannot request an exception under these
+        "tracking pixels"). They cannot request a permission under these
         circumstances because a script is needed to make the API call and
         it requires interaction to ensure the user is informed and to receive
         an indication of their consent. In general, this process of informing,
@@ -2314,11 +2314,11 @@ object {
         elements where such trackers are invoked.
       </p>
       <p>
-        To obtain an exception, a document (page, frame, etc.) that loads the
+        To obtain a permission, a document (page, frame, etc.) that loads the
         JavaScript is needed. The user might visit the site that desires an
-        exception directly, or the first party might provide a separate page
+        permission directly, or the first party might provide a separate page
         that could load script-enabled frames in which each third party
-        could ask for an exception (allowing for aggregation of requests).
+        could ask for a permission (allowing for aggregation of requests).
       </p>
       <p>
         In all these ways, the site is contributing to informing the user and
@@ -2327,63 +2327,63 @@ object {
       </p>
     </section>
 
-    <section id="exceptions-when-not-enabled">
-      <h3>Exceptions without an Expressed Preference</h3>
+    <section id="permission-when-not-enabled">
+      <h3>Permissions without an Expressed Preference</h3>
 
       <p>
-        Sites might wish to request exceptions even when a user arrives
+        Sites might wish to request permissions even when a user arrives
         without a DNT header field. Users might wish to grant affirmative
         permission to tracking on or by certain sites even without
         expressing a general tracking preference.
       </p>
       <p>
         User agents MAY instantiate
-        <code>Navigator.storeSiteSpecificTrackingException</code> even when
+        <code>Navigator.storeSiteSpecificTrackingPermission</code> even when
         <code>Navigator.doNotTrack</code> is null. Scripts SHOULD test for the
-        existence of <code>storeSiteSpecificTrackingException</code> before
-        calling the method. If an exception is granted and the user agent
+        existence of <code>storeSiteSpecificTrackingPermission</code> before
+        calling the method. If a permission is granted and the user agent
         stores that preference, a user agent might send the
         <a>DNT:0</a> tracking preference even if it has not
         enabled preferences to be sent for other requests. Persisted
-        exceptions MAY affect which preference is transmitted if a user
+        permissions MAY affect which preference is transmitted if a user
         later chooses to configure a general tracking preference.
       </p>
     </section>
 
-    <section id="exceptions-by-sites" class="informative">
-      <h3>Exception Use by Sites</h3>
+    <section id="permission-by-sites" class="informative">
+      <h3>Permission Use by Sites</h3>
 
       <p>
         This section is to inform the authors of sites on some
-        considerations in using the exceptions APIs to best effect; sites of
-        particular interest here are those that need an exception in order
+        considerations in using the permissions APIs to best effect; sites of
+        particular interest here are those that need a permission in order
         to allow the user to perform some operation or to have some access.
       </p>
       <p>
         The 'Store' calls return immediately, without a return value.
         If there is a problem with the calling parameters, then
-        a Javascript exception will be raised.
+        a Javascript exception will be thrown.
       </p>
       <p>
-        A user agent might not store the exception immediately, possibly
+        A user agent might not store the permission immediately, possibly
         because it is allowing the user to confirm. Even though the site has
         acquired the user's informed consent before calling the 'Store' API,
         it is possible that the user will change their mind, allow the
-        storing of an exception to proceed but later remove it, or perhaps
+        storing of a permission to proceed but later remove it, or perhaps
         deny the storage by prior configuration.
       </p>
       <p>
         Nonetheless, at the time of the call, the site has acquired the
         user's consent and can proceed on that basis, whether or not the
-        user-agent has stored the exception immediately. It is not necessary
+        user-agent has stored the permission immediately. It is not necessary
         to call the confirm API at the time of consent.
       </p>
       <p>
         On other visits, a site can call the 'Confirm' APIs to enquire
-        whether a specific exception has been granted and stands in the user
-        agent. This is the call to make to determine whether the exception
+        whether a specific permission has been granted and stands in the user
+        agent. This is the call to make to determine whether the permission
         exists, and hence to control access to the function or operation; if
-        it fails (the exception has been deleted or not yet granted), then
+        it fails (the permission has been deleted or not yet granted), then
         the user is ideally again offered the information needed to give
         their informed consent, and again offered the opportunity to
         indicate that they grant it. As stated in the normative text, the
@@ -2400,11 +2400,11 @@ object {
       </p>
       <ul>
         <li>does not assume that the storage is instantaneous and
-          mistakenly grant access when the exception does not (yet) stand;</li>
+          mistakenly grant access when the permission does not (yet) stand;</li>
         <li>does not call the Confirm API repeatedly, in a loop, without a
           user-interaction between each call; and,</li>
         <li>permits the user the opportunity to delete a previously
-        granted exception.</li>
+        granted permission.</li>
         </ul>
     </section>
 
@@ -2425,13 +2425,13 @@ object {
       <h3>Fingerprinting</h3>
 
       <p>
-        User-granted exceptions to Do Not Track come with a privacy
-risk. By storing a client-side configurable state and providing
-        functionality to learn about it later, this API might facilitate
-        user fingerprinting and tracking. User agent developers ought to
-        consider the possibility of fingerprinting during implementation and
-        might consider rate-limiting requests or using other heuristics to
-        mitigate fingerprinting risk.
+        User-granted permissions introduce a privacy risk. By storing
+        client-side configurable state and providing functionality to learn
+        about it later, the permissions API might facilitate user
+        fingerprinting and tracking. User agent developers ought to consider
+        the possibility of fingerprinting during implementation and might
+        consider rate-limiting requests or using other heuristics to mitigate
+        fingerprinting risk.
       </p>
   </section>
 </section>
