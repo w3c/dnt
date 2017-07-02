@@ -183,7 +183,6 @@
 
     <section id='terminology.http'>
       <h3>HTTP</h3>
-
       <p>
         The following terms are used as defined by HTTP/1.1 syntax [[!RFC7230]]
         and semantics [[!RFC7231]]:
@@ -199,10 +198,24 @@
         <dfn><a class="externalDFN" href="https://tools.ietf.org/html/rfc7230#section-2.3">intermediary</a></dfn>,
         <dfn><a class="externalDFN" href="https://tools.ietf.org/html/rfc7230#section-2.3">proxy</a></dfn>,
         <dfn><a class="externalDFN" href="https://tools.ietf.org/html/rfc7230#section-2.3">cache</a></dfn>,
+        <dfn><a class="externalDFN" href="https://tools.ietf.org/html/rfc7230#section-2.7">uri-host</a></dfn>,
+        <dfn><a class="externalDFN" href="https://tools.ietf.org/html/rfc7230#section-2.7">authority</a></dfn>,
         <dfn><a class="externalDFN" href="https://tools.ietf.org/html/rfc7230#section-3.2">header field</a></dfn>,
         <dfn><a class="externalDFN" href="https://tools.ietf.org/html/rfc7230#section-5.1">target resource</a></dfn>,
         <dfn><a class="externalDFN" href="https://tools.ietf.org/html/rfc7231#section-2">resource</a></dfn>, and
         <dfn><a class="externalDFN" href="https://tools.ietf.org/html/rfc7231#section-3">representation</a></dfn>.
+      </p>
+    </section>
+
+    <section id='terminology.html'>
+      <h3>HTML</h3>
+      <p>
+        The following terms are used as defined by HTML [[!HTML5]]:
+        <dfn><a class="externalDFN" href="https://www.w3.org/TR/html5/single-page.html#active-document">active document</a></dfn>,
+        <dfn><a class="externalDFN" href="https://www.w3.org/TR/html5/single-page.html#dom-document-domain">document.domain</a></dfn>,
+        <dfn><a class="externalDFN" href="https://www.w3.org/TR/html5/single-page.html#effective-script-origin">effective script origin</a></dfn>,
+        <dfn><a class="externalDFN" href="https://www.w3.org/TR/html5/single-page.html#responsible-document"></a>responsible document</dfn>, and
+        <dfn><a class="externalDFN" href="https://www.w3.org/TR/html5/single-page.html#top-level-browsing-context">top-level browsing context</a></dfn>.
       </p>
     </section>
 
@@ -627,9 +640,9 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
         <code><dfn data-cite="!HTML5#navigator">Navigator</dfn></code> object
         [[!HTML5]] to determine what
         <a>DNT</a> header field value would be sent in requests to the
-        document-origin, taking into account the user's general preference
-        (if any) and the current user-granted permissions applicable to that
-        origin server.
+        <a>effective script origin</a>, taking into account the user's general
+        preference (if any) and the current user-granted permissions
+        applicable to that <a>target domain</a>.
       </p>
       <pre class="idl">
         partial interface Navigator {
@@ -639,10 +652,8 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
       <p>
           The value of <a>Navigator.doNotTrack</a> is the string value that
           would be sent in a <a>DNT</a> field-value
-          (<a href="#dnt-header-field" class="sectionRef"></a>) to a
-          <a>target resource</a> that is the document-origin of the
-          <code>window</code>, in the browser context of the current
-          <strong>top-level origin</strong>.
+          (<a href="#dnt-header-field" class="sectionRef"></a>) in a
+          <a>request</a> to the <a>effective script origin</a>.
           The value is <code>null</code> if no DNT header field would be
           sent (e.g., because a tracking preference is <a>not enabled</a>);
           otherwise, the value is a string beginning with "0" or "1",
@@ -1565,36 +1576,11 @@ object {
   <section id='permissions' >
     <h2>User-Granted Permissions</h2>
 
-    <section id="permission-definitions">
-      <h3>Definitions</h3>
-
-      <p>
-        A <dfn>user-granted permission</dfn> is the record of a decision by
-        the user to grant consent for tracking (<a>DNT:0</a>) on future
-        requests to a set of target resources. A user-granted permission is
-        <dfn>site-specific</dfn> if it is limited to requests that are
-        embedded in, or referred by, a specific site; otherwise, it is a
-        <dfn>web-wide</dfn> permission.
-      </p>
-      <p>
-        A client-side database can be used for persistent storage of
-        user-granted permissions, such that permission to send <a>DNT:0</a>
-        can be obtained by a site and stored via a JavaScript API.
-        A user agent is expected to query such a database for an
-        applicable permission at the time of a request in order to determine
-        what value to send as the user's tracking preference. This provides
-        more transparency and control by the user over their own consent
-        decisions, as opposed to current usage of cookies to manage consent,
-        while providing better persistence of those permissions for sites.
-      </p>
-    </section>
-
     <section id="permission-principles">
-      <h3>Motivating Principles and Use Cases</h3>
+      <h3>Motivating Principles</h3>
 
       <p>
-        The following principles guide the design of user-agent-managed
-        permissions.
+        The following principles guide the design of user-granted permissions.
       </p>
       <ul>
         <li>Content providers might wish to prompt visitors to their
@@ -1613,210 +1599,283 @@ object {
         <li>The solution need not require cross-domain communication
           between a first-party publisher and its third parties.</li>
       </ul>
+    </section>
+
+    <section id="permission-model">
+      <h3>Permission Model</h3>
+
       <p>
-        When asking for a site-specific permission, the top-level origin
-        making the request might make some implicit or explicit claims as
-        to the actions and behavior of its third parties; for this reason,
-        it might want to establish permissions for only those for which it is
-        sure that those claims are true. (Consider a site that has some
-        trusted advertisers and analytics providers, along with some mashed-up
-        content from less-trusted sites). For this reason, there is support
-        both for explicitly named sites, as well as support for granting a
-        permission to all third-parties on a given site (site-wide permission,
-        using the conceptual wild-card "*").
+        A <dfn>user-granted permission</dfn> is the record of a decision by
+        the user to grant consent for tracking (<a>DNT:0</a>) on future
+        requests from a given context to a set of target domains.
+        Both context and target are scoped by domain, similar to the existing
+        domain scope of cookies
+        (<a href="https://www.w3.org/TR/html5/single-page.html#relaxing-the-same-origin-restriction">Section 5.3.1</a>
+        of [[!HTML5]]), in order to avoid asking the user's permission for
+        every subdomain context of a site and every target resource that
+        might be referenced.
       </p>
       <p>
-        There are some cases in which a user might desire a site to be allowed
-        to track them on any top-level origin. An API is provided so that
-        a site might obtain such a web-wide permission from the user.
+        A client-side database can be used for persistent storage of
+        user-granted permissions, such that permission to send <a>DNT:0</a>
+        is obtained by a site and stored via a JavaScript API. However, we
+        only define the API (below); the choice of storage mechanism is left
+        to each implementation. In comparison to the use of cookies to manage
+        consent, a permission database and APIs provide more transparency and
+        better user control over their own consent decisions, while also
+        providing better persistence of those permissions for sites.
+      </p>
+      <p>
+        There are potentially three different domain concepts involved
+        in the processing of user-granted permissions:
+      </p>
+      <dl>
+        <dt><dfn>script domain</dfn></dt>
+        <dd>the default context of a script when it accesses the permission
+          database: specifically, the current <a>document.domain</a> of the
+          script's <a>responsible document</a>.</dd>
+        <dt><dfn>site domain</dfn></dd>
+        <dd>the context of a given reference for which the permissions API
+          might be queried: specifically, the current <a>document.domain</a>
+          of the <a>top-level browsing context</a>'s <a>active document</a>.</dd>
+        <dt><dfn>target domain</dfn></dt>
+        <dd>the <a>uri-host</a> subcomponent of the <a>authority</a> component
+          of a referenced "http" or "https" URI</dd>
+      </dl>
+      <p>
+        A user-granted permission is <dfn>site-specific</dfn> if the context
+        is limited to requests embedded in, or referred by, a given
+        <a>site domain</a>; otherwise, the permission is <dfn>web-wide</dfn>
+        and applies to all contexts. For example, a user might wish to grant
+        a target domain a web-wide permission for the purpose of audience
+        surveys, perhaps in exchange for some incentive.
+      </p>
+      <p>
+        When asking for a <a>site-specific</a> permission, the site
+        making the request might make some implicit or explicit claims as
+        to the actions and behavior of its third parties; for this reason,
+        a site might want to establish permissions for only those target
+        domains for which it can be sure that those claims are true.
+        (Consider a site that has some trusted advertisers and analytics
+        providers, along with some mashed-up content from less-trusted
+        sites). For this reason, site-specific permissions can either be
+        limited to a named set of target domains or applicable to any target
+        domain ("*").
       </p>
     </section>
 
-    <section id='permission-model'>
-      <h3>Permission Model</h3>
+    <section id='permission-granting'>
+      <h3>Granting Permission</h3>
 
-      <section>
-        <h4>User Interaction</h4>
-        <p>
-          A site MUST ensure that a call to store a permission reflects the
-          user's intention to grant a permission at the time of that call.
-          This allows a user to change their mind and delete a stored
-          permission, even if that might result in the site explaining and
-          asking for the permission again. It is the sole responsibility of
-          the site to determine that a call to record a permission reflects
-          the user's informed consent at the time of that call.
-        </p>
-        <p>
-          A site's script MUST NOT make a call to store a permission unless
-          the effective script origin (as the designated resource) has a
-          <a>site-wide tracking status resource</a> with a valid
-          <a href="#status-representation">tracking status representation</a>.
-          This allows a user agent to obtain information about the calling
-          site’s controller and policies related to tracking.
-        </p>
-        <p>
-          A user agent MAY refuse to grant a permission for a
-          <a>target resource</a> that does not have a corresponding tracking
-          status resource with a valid tracking status representation, since
-          that would imply the target resource does not conform to this
-          protocol.
-        </p>
-        <p>
-          A site MAY ask for a permission, and have it stored, even when the
-          user's general preference is <a>not enabled</a>. This permits the
-          sending of <a>DNT</a> only for target resources for which an
-          expressed preference is desired (see
-          <a href="#permission-when-not-enabled" class="sectionRef"></a>).
-        </p>
-        <p>
-          The user agent MAY provide interfaces to the user to:
-        </p>
-        <ul>
-          <li>indicate that a call to store a permission has just been
-            made;</li>
-          <li>allow the user to confirm a user-granted permission prior
-            to storage;</li>
-          <li>indicate that one or more permissions exist for the
-            current top-level origin;</li>
-          <li>indicate that one or more permissions exist for sites
-            incorporated into the current page;</li>
-          <li>allow the user to see and possibly revoke stored
-            permissions;</li>
-          <li>maintain other aspects of the permission mechanism, as desired.</li>
-        </ul>
-        <p>
-          There is no required user interface for the user agent;
-          a user agent MAY choose to provide no user interface regarding
-          user-granted permissions.
-        </p>
-        <p>
-          If the user revokes a consent by deleting a permission, the
-          site MUST respect that revocation, though it MAY ask again for
-          a new permission.
-        </p>
-      </section>
+      <p class="note">
+        This section is supposed to describe how a site would go about asking
+        the user for the various types of permission. The existing text is
+        lacking that necessary information.
+      </p>
+      <p>
+        It is expected that a site will explain to the user, in its online
+        content, the need for a permission and the consequences of granting or
+        denying that permission.
+      </p>
+      <p>
+        The user agent adds to its local database one or more site-pair
+        duplets [document-origin, target]; one or the other of these MAY be a
+        wild-card ("*").
+      </p>
+      <p>
+        A site MAY ask for a permission, and have it stored, even when the
+        user's general preference is <a>not enabled</a>. This permits the
+        sending of <a>DNT</a> only for target resources for which an
+        expressed preference is desired (see
+        <a href="#permission-when-not-enabled" class="sectionRef"></a>).
+      </p>
+      <p>
+        A site MUST ensure that a call to store a permission reflects the
+        user's intention to grant a permission at the time of that call. It
+        is the sole responsibility of the site to determine that a call to
+        record a permission reflects the user's informed consent at the
+        time of that call.
+      </p>
+      <p>
+        A site MAY monitor for changes to its user-granted permissions.
+        If a user revokes consent by deleting a permission, the site MUST
+        respect that revocation, though it MAY ask again for a new
+        permission. In other words, a site MUST NOT resurrect a deleted
+        permission without first interacting with and receiving new 
+        permission from the user.
+      </p>
+      <p>
+        A site MUST have a <a>site-wide tracking status resource</a>
+        with a valid
+        <a href="#status-representation">tracking status representation</a>
+        when making an API call to store a user-granted permission.
+        This allows a user agent to obtain and possibly store additional
+        information about the calling site’s controller and tracking
+        policies at the time a permission is granted.
+      </p>
+      <p>
+        A user agent MAY choose to reject an API call if it cannot determine
+        the script origin or if the script origin does not have a
+        <a>site-wide tracking status resource</a> with a valid
+        <a href="#status-representation">tracking status representation</a>.
+      </p>
+      <p>
+        A user agent MAY choose to disregard a user-granted permission when
+        the <a>target resource</a> does not have a corresponding tracking
+        status resource with a valid tracking status representation, since
+        that would imply the <a>target resource</a> does not conform to this
+        specification.
+      </p>
+      <p>
+        A user-agent MUST handle each API request as a 'unit', granting and
+        maintaining it in its entirety, or not at all. That means that a
+        user agent MUST NOT indicate to a site that a request for targets
+        {a, b, c} exists in the database, and later remove only one or two
+        of {a, b, c} from its logical database of remembered grants. This
+        assures sites that the set of sites they need for operational
+        integrity is treated as a unit. Each separate call to an API is a
+        separate unit.
+      </p>
+      <p>
+        There is no required user interface for a user agent regarding the
+        granting of permissions; a user agent MAY choose to provide none.
+        Alternatively, a user agent MAY:
+      </p>
+      <ul>
+        <li>indicate that a call to store a permission has just been
+          made;</li>
+        <li>allow the user to confirm a user-granted permission prior
+          to storage;</li>
+        <li>indicate that one or more permissions exist for the
+          current top-level origin;</li>
+        <li>indicate that one or more permissions exist for sites
+          incorporated into the current page; or,</li>
+        <li>indicate how to <a href="#permission-management">manage the
+          permissions granted</a>.
+      </ul>
+      <p>
+        When an explicit list of domains is provided through the API,
+        their names might mean little to the user. The user might, for
+        example, be told that there is a stored permission for a specific
+        set of sites on such-and-such top-level origin, rather than
+        listing them by name; or the user agent might decide to store a
+        site-wide permission, effectively ignoring any list of domain names.
+      </p>
+      <p>
+        Conversely, if a wild-card is used, the user might be told that
+        there is a stored permission for all third-parties that are embedded
+        by the indicated top-level origin.
+      </p>
+    </section>
 
-      <section id='permission-processing'>
-        <h4>Processing Model</h4>
-        <p>
-          This section describes the effect of the APIs in terms of a
-          logical processing model; this model describes the behavior, but
-          is not to be read as mandating any specific implementation.
-          The model's description relies on the following defined terms:
-        </p>
-        <ul>
-          <li>A <dfn>top-level origin</dfn> is the
-              <a class="externalDFN" href="">top-level browsing context</a>,
-              as defined by [[!HTML5]];</li>
-          <li>A <strong>target</strong> site is the host subcomponent of the
-              authority part in an "http" or "https" URI, as defined by
-              [[!RFC7230]] and [[!RFC3986]]; and,</li>
-          <li>The <strong>document origin</strong> of a script is the
-              <strong>effective script origin</strong>, as defined by
-              [[!HTML5]].</li>
-        </ul>
-        <p>
-          This API considers permissions which are double-keyed to two
-          domains: the <strong>site</strong>, and the
-          <strong>target</strong>. A user might &#8212; for instance &#8212;
-          want AnalytiCo to be allowed to track them on Example News, but
-          not on Example Medical.        <p>
-           For instance, if the document at
-           <code>http://web.exnews.com/news/story/2098373.html</code>
-           references the resources
-           <code>http://exnews.analytico.net/1x1.gif</code> and
-           <code>http://widgets.exsocial.org/good-job-button.js</code>,
-           <strong>the top-level origin</strong> is <code>web.exnews.com</code>;
-           <code>exnews.analytico.net</code> and
-           <code>widgets.exsocial.org</code> are both
-           <strong>targets</strong>.
-        </p>
-        <p>
-          The domains that enter into the behavior of the APIs include:
-        </p>
-        <ul>
-          <li>As described above, the <strong>document origin</strong>
-            active at the time of the call, and;</li>
-          <li>Domain names passed to the API.</li>
-        </ul>
-        <p>
-          Domains that enter into the decision over what DNT header field to
-          be sent in a given request include:
-        </p>
-        <ul>
-          <li>The <strong>top-level origin</strong> of the current browser
-            context;</li>
-          <li>The <strong>target</strong> of the request.</li>
-        </ul>
-        <p class="note">
-          Note that these strict, machine-discoverable concepts might not
-          match the definitions of first and third party; in particular,
-          sites themselves need to determine when they are a first party in
-          relation to a given user action; the user agent does not change the
-          DNT header field based on the type of network interaction.
-        </p>
-        <p>
-          The calls cause the following steps to occur (subject to user
-          confirmation of the permission, if the user agent asks for it):
-        </p>
-        <ul>
-          <li>The user agent adds to its local database one or more site-pair
-            duplets [document-origin, target]; one or the other of these MAY
-            be a wild-card ("*");</li>
-          <li>While the user is browsing a given site (top-level origin),
-            and a DNT header field is to be sent to a target domain, if the
-            duplet [top-level origin, target domain] matches any duplet in the
-            database, then a <a>DNT:0</a> preference is sent,
-            otherwise the user’s general preference is sent (if any).</li>
-        </ul>
-        <p>
-          A pair of duplets [A,B] and [X,Y] match if A matches X and B matches Y.
-          A pair of values A and X match if and only if one of the following
-          is true:
-        </p>
-        <ul>
-          <li>either A or X is "*";</li>
-          <li>A and X are the same string;</li>
-          <li>A has the form '*.domain' and X is 'domain' or is of the form
-            'string.domain', where 'string' is any sequence of characters.</li>
-        </ul>
-        <p>
-          In addition, responses to the JavaScript API indicated should be
-          consistent with this user preference (see below).
-        </p>
-        <p>
-          User-agents MUST handle each API request as a 'unit', granting and
-          maintaining it in its entirety, or not at all. That means that a
-          user agent MUST NOT indicate to a site that a request for targets
-          {a, b, c} exists in the database, and later remove only one or two
-          of {a, b, c} from its logical database of remembered grants. This
-          assures sites that the set of sites they need for operational
-          integrity is treated as a unit. Each separate call to an API is a
-          separate unit.
-        </p>
-        <p>
-          It is left up to individual user agent implementations how to
-          determine and how and whether to store users' tracking
-          preferences.
-        </p>
-        <p>
-          When an explicit list of domains is provided through the API,
-          their names might mean little to the user. The user might, for
-          example, be told that there is a stored permission for a specific
-          set of sites on such-and-such top-level origin, rather than
-          listing them by name; or the user agent might decide to store a
-          site-wide permission, effectively ignoring any list of domain names.
-        </p>
-        <p>
-          Conversely, if a wild-card is used, the user might be told that
-          there is a stored permission for all third-parties that are embedded
-          by the indicated top-level origin.
-        </p>
-      </section>
+    <section id='permission-management'>
+      <h3>Permission Management</h3>
+
+      <p>
+        User agents are free to implement permission management user
+        interfaces as they see fit. Some agents might provide a notification
+        to the user at the time of the request, or even not complete the
+        storing of the permission until the user approves. Some agents might
+        provide a user-interface to see and edit the database of recorded
+        permission grants.
+      </p>
+      <p>
+        The API parameters siteName, explanationString,
+        and detailURI are provided so that the user agent can use them in
+        their user interface. If a user agent presents these parameters to the
+        user, it ought to be clear that they are provided for informational
+        value and are less important than the permission's technical effect.
+      </p>
+      <p>
+        A user agent that chooses to highlight when tracking permissions have
+        been stored might provide an interface like the following:
+      </p>
+      <ul>
+        <li>an icon in the status bar indicating that a permission has been
+          stored, which, when clicked on, gives the user more information
+          about the permission and an option to revoke it.</li>
+        <li>an infobar stating "Example News (news.example.com) has
+          indicated to Browser that you have consented to granting it
+          permission for tracking. If you believe
+          this is incorrect, click Revoke."</li>
+        <li>no UI at all.</li>
+      </ul>
+      <p>
+        In some user agent implementations, decisions to grant permissions
+        might have been made in the past (and since forgotten) or might have
+        been made by other users of the device. Thus, permissions might not
+        always represent the current preferences of the user. Some user
+        agents might choose to provide ambient notice that user-opted
+        tracking is ongoing, or easy access to view and control these
+        preferences. Users might also desire to edit permissions within a
+        separate user interface, which would allow a user to modify their
+        stored permissions without visiting the target sites.
+      </p>
+    </section>
+
+    <section id='permission-checking'>
+      <h3>Checking for Permission</h3>
+
+      <p>
+        A user agent is expected to query the permissions database at the
+        time of a request in order to determine what value (if any) to send
+        as the user's tracking preference.
+      </p>
+      <ul>
+        <li>While the user is browsing a given site (top-level origin),
+          and a DNT header field is to be sent to a target domain, if the
+          duplet [top-level origin, target domain] matches any duplet in the
+          database, then a <a>DNT:0</a> preference is sent,
+          otherwise the user’s general preference is sent (if any).</li>
+      </ul>
+      <p>
+        A pair of duplets [A,B] and [X,Y] match if A matches X and B matches Y.
+        A pair of values A and X match if and only if one of the following
+        is true:
+      </p>
+      <ul>
+        <li>either A or X is "*";</li>
+        <li>A and X are the same string;</li>
+        <li>A has the form '*.domain' and X is 'domain' or is of the form
+          'string.domain', where 'string' is any sequence of characters.</li>
+      </ul>
+      <p>
+        In addition, responses to the JavaScript API indicated should be
+        consistent with this user preference (see below).
+        <em>[The editor has no idea what that is supposed to mean.]</em>
+      </p>
+      <p class="example">
+        For example, a user might grant permission for metrics.example.net to
+        track their activity on news.example.com and weather.example.com, but
+        not on medical.example.org. If the document at
+        <code>http://news.example.com/news/story/2098373.html</code>
+        has embedded references to
+        <code>http://metrics.example.net/1x1.gif</code> and
+        <code>http://weather.example.com/widget.js</code>, the
+        site domain (context) for those references is
+        <code>news.example.com</code> and the target domains are
+        <code>metrics.example.net</code> and
+        <code>weather.example.com</code>, respectively. 
+      </p>
     </section>
 
     <section id="permission-javascript-api">
       <h3>Site-specific Permission</h3>
+
+      <p class="note">
+        We currently specify six different APIs (plus the doNotTrack property
+        which now appears to be useless) with three distinct definitions of
+        a permission record and three distinct return types. Also, we use a
+        single (inappropriate) exception to signal all errors.<br />
+        <br />
+        What we should have is one permission record and three APIs for
+        store/confirm/delete with a single Promise<void> return type and
+        a distinct exception name for each error. The interfaces should be
+        defined using an algorithm similar to other specifications of
+        promise-based interfaces. We should also remove the expires field
+        since it was intended to be replaced (everywhere) by maxAge and
+        is only kept in HTTP for legacy reasons.
+      </p>
 
       <section id="permission-javascript-api-rqst">
         <h4>API to Request a Site-specific Permission</h4>
@@ -1876,18 +1935,21 @@ object {
           <dd>A JavaScript array of strings.</dd>
         </dl>
         <p>
-          Calling <code>storeSiteSpecificTrackingPermission</code> returns a <code>Promise</code>
-          which either resolves to a <code>StorePermissionResult</code> object, or is rejected with
-          a <code>DOMException</code> SYNTAX_ERR result. The <code>Promise</code> resolves
-          immediately the Tracking Permission request has been processed, with the property <code>siteWide</code>
-          in the result object set <code>true</code> if the Permission is site-wide.
+          Calling <code>storeSiteSpecificTrackingPermission</code> returns a
+          <code>Promise</code> which either resolves to a
+          <code>StorePermissionResult</code> object, or is rejected with a
+          <code>DOMException</code> SYNTAX_ERR result. The
+          <code>Promise</code> resolves immediately the Tracking Permission
+          request has been processed, with the property
+          <code><dfn>siteWide</dfn></code> set to <code>true</code> if the
+          permission is site-wide.
         </p>
         <p>
           If the request does not include the
           <code>arrayOfDomainStrings</code>, then this request is for a
           site-wide permission. Otherwise each string in
           <code>arrayOfDomainStrings</code> specifies a
-          <strong>target</strong>.
+          <a>target domain</a>.
         </p>
         <p>
           If the list <code>arrayOfDomainStrings</code> is supplied, the
@@ -1896,17 +1958,13 @@ object {
         </p>
         <p>
           If <code>domain</code> is not specified or is null or empty then
-          the execution of this API and the use of the resulting permission
-          (if granted) use the 'implicit' parameter, when the API is called,
-          the <strong>document origin</strong>. This forms the first part of
-          the duplet in the logical model, and hence in operation will be
-          compared with the <strong>top-level origin</strong>.
+          the <a>script domain</a> is used instead.
         </p>
         <p>
           If permission is stored for an explicit list, then the set of
-          duplets (one per target):
+          duplets (one per <a>target domain</a>):
         </p>
-        <pre>[document-origin, target]</pre>
+        <pre>[<a>script domain</a>, <a>target domain</a>]</pre>
         <p>
           is added to the database of remembered grants.
         </p>
@@ -1914,7 +1972,7 @@ object {
           If permission is stored for a site-wide permission, then the
           duplet:
         </p>
-        <pre>[document-origin, * ]</pre>
+        <pre>[<a>script domain</a>, * ]</pre>
         <p>
           is added to the database of remembered grants.
         </p>
@@ -1922,7 +1980,7 @@ object {
           If <code>domain</code> is supplied and not empty then it is
           treated in the same way as the domain parameter to cookies and
           allows setting for subdomains. The <code>domain</code> argument
-          can be set to fully-qualified right-hand segment of the document
+          can be set to a fully-qualified right-hand segment of the document
           host name, up to one level below TLD.
         </p>
         <p>
@@ -1932,18 +1990,19 @@ object {
           <code>"something.else.example.com"</code> or <code>"com"</code>.
         </p>
         <p>
-          If the document-origin would not be able to set a cookie on the
-          <code>domain</code> following the cookie domain rules [[!RFC6265]]
-          (e.g. <code>domain</code> is not a right-hand match or is a TLD)
+          If the <a>effective script origin</a> would not be able to set a
+          cookie on the <code>domain</code> following the cookie domain rules
+          [[!RFC6265]] (e.g. <code>domain</code> is not a right-hand match or
+          is a TLD)
           then the duplet MUST NOT be entered into the database and the
-          returned <code>Promise</code>
+          returned <code>Promise</code> MUST be
           rejected with a <code>DOMException</code> SYNTAX_ERR.
         </p>
         <p>
           If permission is stored for an explicit list, then the set of
-          duplets (one per target):
+          duplets (one per <a>target domain</a>):
         </p>
-        <pre>[*.domain, target]</pre>
+        <pre>[*.domain, <a>target domain</a>]</pre>
         <p>
           is added to the database of remembered grants.
         </p>
@@ -1964,10 +2023,7 @@ object {
           If <code>expires</code> is supplied and not null or empty the
           remembered grant will be cancelled (i.e. processed as if the
           relevant Cancel API had been called) no later than the specified
-          date and time. After this the database of remembered grants will
-          no longer contain any duplets for which the first part is the
-          current document origin; i.e., no duplets
-          <code>[document-origin, target]</code> for any target.
+          date and time.
         </p>
         <p>
           If <code>maxAge</code> is supplied and not null, empty or negative
@@ -2014,27 +2070,31 @@ object {
               to which the permission applies.</dd>
         </dl>
         <p>
-          If domain is not supplied or is null or empty then this
-          ensures that the database of remembered grants no longer
-          contains any duplets for which the first part is the current
-          document origin; i.e., no duplets
-          <code>[document-origin, target]</code> for any target.
+          If domain is not supplied or is null or empty then
+          the <a>script domain</a> is used instead. This asks for
+          removal of all duplets in the grant database for which the first
+          part matches the <a>script domain</a>; i.e., no duplets
+          <code>[<a>script domain</a>, <a>target domain</a>]</code>
+          for any <a>target domain</a>.
         </p>
         <p>
           If domain is supplied and is not empty then this ensures that
           the database of remembered grants no longer contains any
           duplets for which the first part is the domain wildcard; i.e.,
-          no duplets <code>[*.domain, target]</code> for any target.
+          no duplets <code>[*.domain, <a>target domain</a>]</code>
+          for any <a>target domain</a>.
         </p>
         <p>
           A <code>Promise</code> resolving to <code>void</code> is returned.
           When the <code>Promise</code> has been resolved, it is assumed
-          that there are no site-specific or site-wide permissions for the given top-level origin.
+          that there are no site-specific or site-wide permissions for the
+          given top-level origin.
         </p>
         <p>
-          When the returned <code>Promise</code> is resolved, the database of grants no longer
-          contains the indicated grant(s); if some kind of processing error
-          occurred then an appropriate exception will be thrown.
+          When the returned <code>Promise</code> is resolved, the database of
+          grants no longer contains the indicated grant(s); if some kind of
+          processing error occurred then an appropriate exception will be
+          thrown.
         </p>
         <p>
           If there are no matching duplets in the database of remembered
@@ -2087,7 +2147,7 @@ object {
           <code>arrayOfDomainStrings</code>, then this call is to confirm a
           site-wide permission. Otherwise each string in
           <code>arrayOfDomainStrings</code> specifies a
-          <strong>target</strong>.
+          <a>target domain</a>.
         </p>
         <p>
           If the list <code>arrayOfDomainStrings</code> is supplied, and the
@@ -2096,23 +2156,20 @@ object {
         </p>
         <p>
           If the <code>domain</code> argument is not supplied or is null or
-          empty then the execution of this API uses the 'implicit'
-          parameter, when the API is called, the
-          <strong>document origin</strong>. This forms the first part of the
-          duplet in the logical model.
+          empty then the <a>script domain</a> is used instead.
         </p>
         <p>
           If the user agent stores explicit lists, and the call includes
           one, the database is checked for the existence of all the duplets
           (one per target):
         </p>
-        <pre>[document-origin, target]</pre>
+        <pre>[script domain, target]</pre>
         <p>
           If the user agent stores only site-wide permissions or the call did
           not include an explicit list, the database is checked for the
           single duplet:
         </p>
-        <pre>[document-origin, * ]</pre>
+        <pre>[script domain, * ]</pre>
         <p>
           If the user agent stores explicit lists, the call includes
           one, and the <code>domain</code> argument is provided and is not
@@ -2128,9 +2185,10 @@ object {
         </p>
         <pre>[*.domain, * ]</pre>
         <p>
-          The returned <code>Promise</code> resolves to a <code>ConfirmPermissionResult</code>
-          object whose <code>boolean</code> property <code>exists</code>
-          has the following possible values:
+          The returned <code>Promise</code> resolves to a
+          <code>ConfirmPermissionResult</code> object whose
+          <code>boolean</code> property <code><dfn>exists</dfn></code> has
+          the following possible values:
         </p>
         <ul>
           <li><code>true</code> all the duplets exist in the database;</li>
@@ -2165,7 +2223,7 @@ object {
         </p>
         <p>
           The single duplet
-          <code>[ * , document-origin]</code> or
+          <code>[ * , script domain]</code> or
           <code>[ * , *.domain]</code> (based on if <code>domain</code>
           is provided and is not null and not empty)
           is added to the database of remembered grants.
@@ -2194,7 +2252,7 @@ object {
         </p>
         <p>
           Ensures that the database of remembered grants no longer
-          contains the duplet <code>[ * , document-origin]</code>
+          contains the duplet <code>[ * , script domain]</code>
           or <code>[ * , *.domain]</code> (based on if <code>domain</code>
           is provided and is not null and not empty).
         </p>
@@ -2232,11 +2290,12 @@ object {
           <a href="#permission-javascript-api-confirm" class="sectionRef"></a>.
         </p>
         <p>
-          The returned <code>Promise</code> resolves to a <code>TrackingPermissionResult</code>
-          object with a <code>boolean</code> property <code>exists</code> indicating whether the duplet
-          <code>[ * , document-origin]</code> or <code>[ * , *.domain]</code>
-          (based on if <code>domain</code> is provided and is not null and
-          not empty) exists in the database.
+          The returned <code>Promise</code> resolves to a
+          <code>TrackingPermissionResult</code> object with a
+          <code>boolean</code> property <code>exists</code> indicating
+          whether the duplet <code>[ * , script domain]</code> or
+          <code>[ *, *.domain]</code> (based on if <code>domain</code> is
+          provided and is not null and not empty) exists in the database.
         </p>
         <ul>
           <li><code>true</code> indicates that the web-wide permission
@@ -2245,58 +2304,6 @@ object {
             does not exist.</li>
         </ul>
       </section>
-    </section>
-
-    <section id="permission-ui" class="informative">
-      <h3>User Interface Guidelines</h3>
-
-      <p>
-        As described above, it is the sole responsibility of the site
-        making an API call to determine that a permission grant reflects the
-        user's informed consent at the time of the call.
-      </p>
-      <p>
-        It is expected that a site will explain to the user, in its online
-        content, the need for a permission and the consequences of granting or
-        denying that permission.
-      </p>
-      <p>
-        User agents are free to implement permission management user
-        interfaces as they see fit. Some agents might provide a notification
-        to the user at the time of the request, or even not complete the
-        storing of the permission until the user approves. Some agents might
-        provide a user-interface to see and edit the database of recorded
-        permission grants. The API parameters siteName, explanationString,
-        and detailURI are provided so that the user agent can use them in
-        their user interface. If a user agent presents these parameters to the
-        user, it ought to be clear that they are provided for informational
-        value and are less important than the permission's technical effect.
-      </p>
-      <p>
-        A user agent that chooses to highlight when tracking permissions have
-        been stored might provide an interface like the following:
-      </p>
-      <ul>
-        <li>an icon in the status bar indicating that a permission has been
-          stored, which, when clicked on, gives the user more information
-          about the permission and an option to revoke it.</li>
-        <li>an infobar stating "Example News (news.example.com) has
-          indicated to Browser that you have consented to granting it
-          permission for tracking. If you believe
-          this is incorrect, click Revoke."</li>
-        <li>no UI at all.</li>
-      </ul>
-      <p>
-        In some user agent implementations, decisions to grant permissions
-        might have been made in the past (and since forgotten) or might have
-        been made by other users of the device. Thus, permissions might not
-        always represent the current preferences of the user. Some user
-        agents might choose to provide ambient notice that user-opted
-        tracking is ongoing, or easy access to view and control these
-        preferences. Users might also desire to edit permissions within a
-        separate user interface, which would allow a user to modify their
-        stored permissions without visiting the target sites.
-      </p>
     </section>
 
     <section id="permission-no-js" class="informative">
