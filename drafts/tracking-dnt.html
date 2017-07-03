@@ -1419,6 +1419,13 @@ object {
           expressed tracking preference (<a>DNT:1</a> or <a>DNT:0</a>).
         </p>
         <p>
+          An origin server MUST send a <code>policy</code> property if that
+          server is the <a>effective script origin</a> of a script that calls
+          the JavaScript API for storing a <a>user-granted exception</a>, as
+          described in
+          <a href="#exception-granting" class="sectionRef"></a>.
+        </p>
+        <p>
           The content of such a policy document is beyond the
           scope of this protocol and only supplemental to what is described
           in the machine-readable tracking status representation.
@@ -1509,7 +1516,7 @@ object {
     <section id='using-tracking-status' class="informative">
       <h3>Using the Tracking Status</h3>
 
-      <p class="note">
+      <p class="ednote">
         This section is for collecting use cases that describe questions a
         user agent might have about tracking status and how the protocol
         can be used to answer such questions.  More cases are needed.
@@ -1665,9 +1672,9 @@ object {
     </section>
 
     <section id='exception-granting'>
-      <h3>Granting Exception</h3>
+      <h3>Granting an Exception</h3>
 
-      <p class="note">
+      <p class="ednote">
         This section is supposed to describe how a site would go about asking
         the user for the various types of exception. The existing text is
         lacking that necessary information.
@@ -1702,13 +1709,14 @@ object {
         respect that revocation, though it MAY ask again for a new
         exception. In other words, a site MUST NOT resurrect a deleted
         exception without first interacting with and receiving new 
-        exception from the user.
+        consent from the user.
       </p>
       <p>
         A site MUST have a <a>site-wide tracking status resource</a>
         with a valid
         <a href="#status-representation">tracking status representation</a>
-        when making an API call to store a user-granted exception.
+        that includes a <a>policy</a> property when making an API call to
+        store a user-granted exception.
         This allows a user agent to obtain and possibly store additional
         information about the calling site’s controller and tracking
         policies at the time an exception is granted.
@@ -1814,7 +1822,7 @@ object {
     </section>
 
     <section id='exception-checking'>
-      <h3>Checking for Exception</h3>
+      <h3>Checking an Exception</h3>
 
       <p>
         A user agent is expected to query the exceptions database at the
@@ -1842,7 +1850,10 @@ object {
       <p>
         In addition, responses to the JavaScript API indicated should be
         consistent with this user preference (see below).
-        <em>[The editor has no idea what that is supposed to mean.]</em>
+      </p>
+      <p class="ednote">
+        The editor has no idea what the above paragraph is referring to
+        or what it is supposed to mean.
       </p>
       <p class="example">
         For example, a user might grant exception for metrics.example.net to
@@ -1862,7 +1873,7 @@ object {
     <section id="exception-javascript-api">
       <h3>Site-specific Exception</h3>
 
-      <p class="note">
+      <p class="ednote">
         We currently specify six different APIs (plus the doNotTrack property
         which now appears to be useless) with three distinct definitions of
         an exception record and three distinct return types. Also, we use a
