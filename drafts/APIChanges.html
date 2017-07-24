@@ -67,7 +67,17 @@
           "href"   : "http://orderly-json.org/",
           "title"  : "Orderly JSON",
           "date"   : "10 Feb 2015"
-        }
+        },
+       "PROMGUIDE":
+        {
+          "title": "Writing Promise-Using Specifications",
+          "href": "http://www.w3.org/2001/tag/doc/promises-guide",
+          "authors": [
+            "Domenic Denicola"
+          ],
+          "status": "finding",
+          "publisher": "W3C"
+          }
       },
       noIDLSectionTitle: true,
       noLegacyStyle: true
@@ -1864,7 +1874,15 @@ object {
 
     <section id="exception-javascript-api">
       <h3>Exception API</h3>
-
+      <p>
+        In the description below, the terms <dfn data-dfn-type="dfn" id="dfn-throw"><a ref="https://heycam.github.io/webidl/#dfn-throw">throw</a></dfn>,
+        <dfn data-dfn-type="dfn" id="dfn-promise"><a  ref="https://heycam.github.io/webidl/#idl-promise">Promise</a></dfn>
+        and the exception names SYNTAX_ERR and SECURITY_ERR are defined in [[!WEBIDL-LS]]
+      </p>
+      <p>
+        The terms resolving a Promise and rejecting a Promise are used as explained in 
+       [<cite><a class="bibref" href="#bib-PROMGUIDE">PROMGUIDE</a></cite>].
+      </p>
       <p class="ednote">
         We currently specify six different APIs (plus the doNotTrack property
         which now appears to be useless) with three distinct definitions of
