@@ -618,13 +618,13 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
           anything beyond the first character.
         </p>
         <p class="note">
-          This DNT-extension feature is at-risk because no known
-          extensions have been defined; implementors that do not read this
+          This DNT-extension feature is speculative because no known
+          extensions have been defined; implementers that do not read this
           specification are likely to assume that DNT only has the
           fixed values of "0" or "1". Furthermore, the potential benefits
           of this mechanism are unclear given that extension information
-          could be supplied using separate request header fields and
-          inappropriate extensions to the "1" value might cause the user's
+          could be supplied using separate request header fields.
+          Inappropriate extensions to the "1" value might cause the user's
           requests to be more easily
           <a href="#privacy.fingerprinting">fingerprinted</a>.
         </p>
@@ -1789,9 +1789,9 @@ object {
         exception grants.
       </p>
       <p>
-        The API parameters siteName, explanationString,
-        and detailURI are provided so that the user agent can use them in
-        their user interface. If a user agent presents these parameters to the
+        The API parameters siteName, explanationString, and detailURI are
+        provided for the sake of potential user interfaces.
+        If a user agent presents these parameters to the
         user, it ought to be clear that they are provided for informational
         value and are less important than the exception's technical effect.
       </p>
