@@ -1886,7 +1886,7 @@ object {
           is passed that defines the scope of the exception (the set of
           [context, target] duplets that encompass the granted exception)
           and optional information to be stored for that exception.
-          It returns a <code>Promise</code> which either resolves to an
+          It returns a <code>Promise</code> which either resolves to a
           <code><dfn>TrackingExceptionResult</dfn></code> or is rejected with
           a <code>DOMException</code> identifying the reason for the failure.
         </p>
@@ -1933,7 +1933,7 @@ object {
         </dl>
         <p>
           In addition to the granted exception data, a user agent might store
-          ambient information about the call, such as the URL associated
+          ambient information about the call, such as the URI associated
           with the top-level browsing context, effective script origin,
           current timestamp, or other information potentially obtained from
           applicable tracking status resources.
