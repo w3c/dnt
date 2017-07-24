@@ -1874,21 +1874,6 @@ object {
     <section id="exception-javascript-api">
       <h3>Exception API</h3>
 
-      <p class="ednote">
-        We currently specify six different APIs (plus the doNotTrack property
-        which now appears to be useless) with three distinct definitions of
-        an exception record and three distinct return types. Also, we use a
-        single (inappropriate) exception to signal all errors.<br />
-        <br />
-        What we should have is one exception record and three APIs for
-        store/confirm/delete with a single Promise&lt;T&gt; return type and
-        a distinct exception name for each error. The interfaces should be
-        defined using an algorithm similar to other specifications of
-        promise-based interfaces. We should also remove the expires field
-        since it was intended to be replaced (everywhere) by maxAge and
-        is only kept in HTTP for legacy reasons.
-      </p>
-
       <section id="exception-javascript-api-rqst">
         <h4>API to Request a Tracking Exception</h4>
 
@@ -1915,7 +1900,6 @@ object {
            DOMString? siteName;
            DOMString? explanationString;
            DOMString? detailURI;
-           DOMString? expires;
            long?      maxAge;
         };
         dictionary ExceptionResult {
@@ -1945,10 +1929,6 @@ object {
           <dt><code><dfn>detailURI</dfn></code></dt>
           <dd>A location at which further information about this request can
               be found.</dd>
-          <dt><code><dfn>expires</dfn></code></dt>
-          <dd>A date and time, encoded as described for the cookie
-              <code>Expires</code> attribute described in [[RFC6265]],
-              indicating the maximum lifetime of the remembered grant.</dd>
           <dt><code><dfn>maxAge</dfn></code></dt>
           <dd>A positive number of seconds indicating the maximum lifetime
               of the remembered grant.</dd>
@@ -2032,21 +2012,13 @@ object {
           is added to the database of remembered grants.
         </p>
         <p>
-          If <code>expires</code> is supplied and not null or empty the
-          remembered grant will be cancelled (i.e. processed as if the
-          relevant Cancel API had been called) no later than the specified
-          date and time.
-        </p>
-        <p>
-          If <code>maxAge</code> is supplied and not null, empty or negative
+          If <code>maxAge</code> is supplied and not null, empty, or negative,
           the remembered grant will be cancelled (i.e. processed as if the
           relevant Cancel API had been called) no later than the specified
           number of seconds following the grant.
         </p>
         <p>
-          If both <code>maxAge</code> and <code>expires</code> are supplied,
-          <code>maxAge</code> has precedence. If neither <code>maxAge</code>
-          or <code>expires</code> are supplied, the user agent MAY retain
+          If <code>maxAge</code> is not supplied, the user agent MAY retain
           the remembered grant until it is cancelled.
         </p>
         <p>
