@@ -659,6 +659,10 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
           otherwise, the value is a string beginning with "0" or "1",
           possibly followed by DNT-extension characters.
       </p>
+      <p>
+        Because activity in multiple browsing contexts can determine the current value of <code>Navigator.doNotTrack</code>,
+        it is only guaranteed to be accurate during the resolution of a TrackingException API Promise.
+      </p>
     </section>
 
     <section id='other-protocols'>
