@@ -1642,9 +1642,10 @@ object {
           database: specifically, the current <a>document.domain</a> of the
           script's <a>responsible document</a>.</dd>
         <dt><dfn>site domain</dfn></dd>
-        <dd>the context of a given reference for which the user-granted exceptions API
-          might be queried: specifically, the current <a>document.domain</a>
-          of the <a>top-level browsing context</a>'s <a>active document</a>.</dd>
+        <dd>the context of a given reference for which the user-granted
+          exceptions API might be queried: specifically, the current
+          <a>document.domain</a> of the <a>top-level browsing context</a>'s
+          <a>active document</a>.</dd>
         <dt><dfn>target domain</dfn></dt>
         <dd>the <a>uri-host</a> subcomponent of the <a>authority</a> component
           of a referenced "http" or "https" URI</dd>
@@ -1869,37 +1870,24 @@ object {
         <code>weather.example.com</code>, respectively. 
       </p>
     </section>
-        <section id="exception-javascript-api">
+
+    <section id="exception-javascript-api">
       <h3>Exception API</h3>
 
-      <p class="ednote">
-        We currently specify six different APIs (plus the doNotTrack property
-        which now appears to be useless) with three distinct definitions of
-        an exception record and three distinct return types. Also, we use a
-        single (inappropriate) exception to signal all errors.<br />
-        <br />
-        What we should have is one exception record and three APIs for
-        store/confirm/delete with a single Promise&lt;T&gt; return type and
-        a distinct exception name for each error. The interfaces should be
-        defined using an algorithm similar to other specifications of
-        promise-based interfaces. We should also remove the expires field
-        since it was intended to be replaced (everywhere) by maxAge and
-        is only kept in HTTP for legacy reasons.
-      </p>
+      <section id="exception-javascript-api-rqst">
+        <h4>API to Request a Tracking Exception</h4>
 
-        <section id="exception-javascript-api-rqst">
-            <h4>API to Request a Tracking Exception</h4>
-
-            <p>
-                <code><dfn>Navigator.storeTrackingException</dfn></code>
-                is called by a page to store a tracking exception,
-                which can be site-specific, site-wide site-specific, or web-wide.
-                A <code><dfn>StoreExceptionPropertyBag</dfn></code> dictionary
-                contains the information to be stored for that exception.
-                It returns a <code>Promise</code> which either resolves to an <code><dfn>ExceptionResult</dfn></code> result,
-                or is rejected with a <code>DOMException</code> identifying the reason for the failure.
-            </p>
-            <pre class="idl overlarge">
+        <p>
+          <code><dfn>Navigator.storeTrackingException</dfn></code>
+          is called by a page to store a tracking exception,
+          which can be site-specific, site-wide site-specific, or web-wide.
+          A <code><dfn>StoreExceptionPropertyBag</dfn></code> dictionary
+          contains the information to be stored for that exception.
+          It returns a <code>Promise</code> which either resolves to an
+          <code><dfn>ExceptionResult</dfn></code> result, or is rejected with
+          a <code>DOMException</code> identifying the reason for the failure.
+        </p>
+        <pre class="idl overlarge">
         partial interface Navigator {
             Promise&lt;ExceptionResult&gt; storeTrackingException (
             StoreExceptionPropertyBag properties
@@ -1912,7 +1900,6 @@ object {
            DOMString? siteName;
            DOMString? explanationString;
            DOMString? detailURI;
-           DOMString? expires;
            long?      maxAge;
         };
         dictionary ExceptionResult {
@@ -1920,162 +1907,149 @@ object {
           boolean? exists;
         };
         </pre>
-            <p>
-                <a>Navigator.storeTrackingException</a> passes a
-                <a>StoreExceptionPropertyBag</a> that can contain the following
-                properties:
-            </p>
-            <dl data-dfn-for="StoreExceptionPropertyBag">
-                <dt><code><dfn>isWebWide</dfn></code></dt>
-                <dd>A boolean specifying this request to be for a web-wide exception. If <code>isWebWide</code> is empty, <code>false</code> or <code>null</code> this is for a site-specific exception</dd>
-                <dt><code><dfn>domain</dfn></code></dt>
-                <dd>
-                    a cookie-domain as defined in [[!RFC6265]],
-                    to which the exception applies.
-                </dd>
-                <dt><code><dfn>arrayOfDomainStrings</dfn></code></dt>
-                <dd>A JavaScript array of strings.</dd>
-                <dt><code><dfn>siteName</dfn></code></dt>
-                <dd>A user-readable string for the name of the top-level origin.</dd>
-                <dt><code><dfn>explanationString</dfn></code></dt>
-                <dd>A short explanation of the request.</dd>
-                <dt><code><dfn>detailURI</dfn></code></dt>
-                <dd>
-                    A location at which further information about this request
-                    can be found.
-                </dd>
-                <dt><code><dfn>expires</dfn></code></dt>
-                <dd>
-                    A date and time, encoded as described for the cookie
-                    <code>Expires</code> attribute described in [[RFC6265]],
-                    indicating the maximum lifetime of the remembered grant.
-                </dd>
-                <dt><code><dfn>maxAge</dfn></code></dt>
-                <dd>
-                    A positive number of seconds indicating the maximum lifetime
-                    of the remembered grant.
-                </dd>
-            </dl>
-            <p>
-                Calling <code>storeTrackingException</code> returns a
-                <code>Promise</code> which either resolves to an
-                <code><a>ExceptionResult</a></code> object, or is rejected with a
-                <code>DOMException</code> result. The
-                <code>Promise</code> resolves immediately the Tracking Exception
-                request has been processed, with the property
-                <code>isSiteWide</code> set to <code>true</code> if the
-                request was for a site-specific exception and the resulting operation is site-wide.
-            </p>
-            <p>
-                If the request is for a site-specific exception and it does not include the
-                <code>arrayOfDomainStrings</code>, then this request is for a
-                site-wide, site-specific  exception. Otherwise each string in
-                <code>arrayOfDomainStrings</code> specifies a
-                <a>target domain</a>.
-            </p>
-            <p>
-                If the list <code>arrayOfDomainStrings</code> is supplied and the request is for a site-specific exception, the
-                user agent MAY choose to store a site-wide, site-specific exception. If it does
-                so it MUST indicate this by setting the <code>isSiteWide</code> property to <code>true</code>.
-            </p>
-            <p>
-                If <code>domain</code> is supplied and not empty then it is
-                treated in the same way as the domain parameter to cookies and
-                allows setting for subdomains. The <code>domain</code> argument
-                can be set to a fully-qualified right-hand segment of the document
-                host name, up to one level below TLD.
-                In the description below the variable <em>Domain</em> would have the value <code>*.domain</code>
-            </p>
-            <p>
-                For example, <em>www.foo.bar.example.com</em> can set the domain
-                parameter as as <code>"bar.example.com"</code> or
-                <code>"example.com"</code>, but not to
-                <code>"something.else.example.com"</code> or <code>"com"</code>.
-            </p>
-            <p>
-                If <code>domain</code> is not specified or is null or empty then the request would be processed as if it had been set to
-                the <a>script domain</a>.
-                In the description below the variable <em>Domain</em> would have the value <a>script domain</a>
-            </p>
-            <p>
-                If <code>isWebWide</code> is not <code>true</code> and the exception is stored for an explicit list, then the set of
-                duplets (one per <a>target domain</a>):
-            </p>
-            <pre>[Domain, target domain]</pre>
-            <p>
-                is added to the database of remembered grants.
-            </p>
-            <p>
-                If <code>isWebWide</code> is not <code>true</code> and the exception is stored for a site-wide exception, then the
-                duplet:
-            </p>
-            <pre>[Domain, * ]</pre>
-            <p>
-                is added to the database of remembered grants.
-            </p>
-            <p>
-                If <code>isWebWide</code> is not <code>true</code> and the exception is stored for an explicit list, then the set of
-                duplets (one per <a>target domain</a>):
-            </p>
-            <pre>[Domain, target domain]</pre>
-            <p>
-                is added to the database of remembered grants.
-            </p>
-            <p>
-                If <code>isWebWide</code> is <code>true</code> then this request is for a Web-Wide Exception and the
-                duplet:
-            </p>
-            <pre>[*, Domain]</pre>
-            <p>
-                is added to the database of remembered grants.
-            </p>
-
-            <p>
-                If <code>expires</code> is supplied and not null or empty the
-                remembered grant will be cancelled (i.e. processed as if the
-                relevant Cancel API had been called) no later than the specified
-                date and time.
-            </p>
-            <p>
-                If <code>maxAge</code> is supplied and not null, empty or negative
-                the remembered grant will be cancelled (i.e. processed as if the
-                relevant Cancel API had been called) no later than the specified
-                number of seconds following the grant.
-            </p>
-            <p>
-                If both <code>maxAge</code> and <code>expires</code> are supplied,
-                <code>maxAge</code> has precedence. If neither <code>maxAge</code>
-                or <code>expires</code> are supplied, the user agent MAY retain
-                the remembered grant until it is cancelled.
-            </p>
-            <p>
-                If the <a>effective script origin</a> would not be able to set a
-                cookie on the <code>domain</code> following the cookie domain rules
-                [[!RFC6265]] (e.g. <code>domain</code> is not a right-hand match or
-                is a TLD)
-                then the duplet MUST NOT be entered into the database and the
-                returned <code>Promise</code> MUST be
-                rejected with a <code>DOMException.SECURITY_ERR</code>.
-            </p>
-            <p>
-                Any other failuure, such as an incorrectly formatted parameter in the <a>StoreExceptionPropertyBag</a>,
-                will result in no duplet being added to the data base of remebered grants, and
-                the returned <code>Promise</code> being
-                rejected with a <code>DOMException.SYNTAX_ERR</code>.
-            </p>
-            <p>
-                A particular response to the API &mdash; like a DNT response header
-                field &mdash; is only valid immediately; a user might later choose
-                to edit stored exceptions and revoke some or all of them.
-            </p>
-        </section>
+        <p>
+          <a>Navigator.storeTrackingException</a> passes a
+          <a>StoreExceptionPropertyBag</a> that can contain the following
+          properties:
+        </p>
+        <dl data-dfn-for="StoreExceptionPropertyBag">
+          <dt><code><dfn>isWebWide</dfn></code></dt>
+          <dd>A boolean specifying this request to be for a web-wide
+              exception. If <code>isWebWide</code> is empty, <code>false</code>
+              or <code>null</code> this is for a site-specific exception</dd>
+          <dt><code><dfn>domain</dfn></code></dt>
+          <dd>a cookie-domain, as defined in [[!RFC6265]], to which the
+              exception applies.</dd>
+          <dt><code><dfn>arrayOfDomainStrings</dfn></code></dt>
+          <dd>A JavaScript array of strings.</dd>
+          <dt><code><dfn>siteName</dfn></code></dt>
+          <dd>A user-readable string for the name of the top-level origin.</dd>
+          <dt><code><dfn>explanationString</dfn></code></dt>
+          <dd>A short explanation of the request.</dd>
+          <dt><code><dfn>detailURI</dfn></code></dt>
+          <dd>A location at which further information about this request can
+              be found.</dd>
+          <dt><code><dfn>maxAge</dfn></code></dt>
+          <dd>A positive number of seconds indicating the maximum lifetime
+              of the remembered grant.</dd>
+        </dl>
+        <p>
+          Calling <code>storeTrackingException</code> returns a
+          <code>Promise</code> which either resolves to an
+          <code><a>ExceptionResult</a></code> object, or is rejected with a
+          <code>DOMException</code> result. The
+          <code>Promise</code> resolves immediately the Tracking Exception
+          request has been processed, with the property
+          <code>isSiteWide</code> set to <code>true</code> if the request was
+          for a site-specific exception and the resulting operation is
+          site-wide.
+        </p>
+        <p>
+          If the request is for a site-specific exception and it does not
+          include the <code>arrayOfDomainStrings</code>, then this request is
+          for a site-wide, site-specific exception. Otherwise each string in
+          <code>arrayOfDomainStrings</code> specifies a <a>target domain</a>.
+        </p>
+        <p>
+          If the list <code>arrayOfDomainStrings</code> is supplied and the
+          request is for a site-specific exception, the user agent MAY choose
+          to store a site-wide, site-specific exception. If it does so it
+          MUST indicate this by setting the <code>isSiteWide</code> property
+          to <code>true</code>.
+        </p>
+        <p>
+          If <code>domain</code> is supplied and not empty then it is treated
+          in the same way as the domain parameter to cookies and allows
+          setting for subdomains. The <code>domain</code> argument can be set
+          to a fully-qualified right-hand segment of the document host name,
+          up to one level below TLD. In the description below the variable
+          <em>Domain</em> would have the value <code>*.domain</code>
+        </p>
+        <p>
+          For example, <em>www.foo.bar.example.com</em> can set the domain
+          parameter as as <code>"bar.example.com"</code> or
+          <code>"example.com"</code>, but not to
+          <code>"something.else.example.com"</code> or <code>"com"</code>.
+        </p>
+        <p>
+          If <code>domain</code> is not specified or is null or empty then
+          the request would be processed as if it had been set to the
+          <a>script domain</a>. In the description below the variable
+          <em>Domain</em> would have the value <a>script domain</a>
+        </p>
+        <p>
+          If <code>isWebWide</code> is not <code>true</code> and the
+          exception is stored for an explicit list, then the set of duplets
+          (one per <a>target domain</a>):
+        </p>
+        <pre>[Domain, target domain]</pre>
+        <p>
+          is added to the database of remembered grants.
+        </p>
+        <p>
+          If <code>isWebWide</code> is not <code>true</code> and the
+          exception is stored for a site-wide exception, then the duplet:
+        </p>
+        <pre>[Domain, * ]</pre>
+        <p>
+          is added to the database of remembered grants.
+        </p>
+        <p>
+          If <code>isWebWide</code> is not <code>true</code> and the
+          exception is stored for an explicit list, then the set of duplets
+          (one per <a>target domain</a>):
+        </p>
+        <pre>[Domain, target domain]</pre>
+        <p>
+          is added to the database of remembered grants.
+        </p>
+        <p>
+          If <code>isWebWide</code> is <code>true</code> then this request is
+          for a Web-Wide Exception and the duplet:
+        </p>
+        <pre>[*, Domain]</pre>
+        <p>
+          is added to the database of remembered grants.
+        </p>
+        <p>
+          If <code>maxAge</code> is supplied and not null, empty, or negative,
+          the remembered grant will be cancelled (i.e. processed as if the
+          relevant Cancel API had been called) no later than the specified
+          number of seconds following the grant.
+        </p>
+        <p>
+          If <code>maxAge</code> is not supplied, the user agent MAY retain
+          the remembered grant until it is cancelled.
+        </p>
+        <p>
+          If the <a>effective script origin</a> would not be able to set a
+          cookie on the <code>domain</code> following the cookie domain rules
+          [[!RFC6265]] (e.g. <code>domain</code> is not a right-hand match or
+          is a TLD)
+          then the duplet MUST NOT be entered into the database and the
+          returned <code>Promise</code> MUST be
+          rejected with a <code>DOMException.SECURITY_ERR</code>.
+        </p>
+        <p>
+          Any other failure, such as an incorrectly formatted parameter in
+          the <a>StoreExceptionPropertyBag</a>, will result in no duplet
+          being added to the data base of remembered grants, and the returned
+          <code>Promise</code> being rejected with a
+          <code>DOMException.SYNTAX_ERR</code>.
+        </p>
+        <p>
+          A particular response to the API &mdash; like a DNT response header
+          field &mdash; is only valid immediately; a user might later choose
+          to edit stored exceptions and revoke some or all of them.
+        </p>
+      </section>
 
       <section id="exception-javascript-api-cancel">
         <h4>API to Cancel a Tracking Exception</h4>
 
         <p>
-          <code><dfn>Navigator.removeTrackingException</dfn></code>
-          is called by a page to cancel a site-specific or web-wide tracking exception.
+          <code><dfn>Navigator.removeTrackingException</dfn></code> is called
+          by a page to cancel a site-specific or web-wide tracking exception.
           The <code><dfn>RemoveExceptionPropertyBag</dfn></code> dictionary
           contains information to identify the exception.
         </p>
@@ -2090,60 +2064,59 @@ object {
            DOMString? domain;
            boolean? isWebWide;
         };
-
         </pre>
-          <p>
-              <a>Navigator.removeTrackingException</a> passes a
-              <a>RemoveExceptionPropertyBag</a> that can contain the following
-              properties:
-          </p>
-          <dl data-dfn-for="RemoveExceptionPropertyBag">
-              <dt><code><dfn>isWebWide</dfn></code></dt>
-              <dd>
-                  A boolean specifying whether a web-wide or a site-specific exception should be removed.
-                  If <code>isWebWide</code> is empty, <code>false</code> or <code>null</code> this call refers to a site-specific exception
-              </dd>
-              <dt><code><dfn>domain</dfn></code></dt>
-              <dd>
-                  a cookie-domain as defined in [[!RFC6265]],
-                  to which the exception applies.
-              </dd>
-          </dl>
-          <p>
-              If <code>domain</code> is supplied and not empty then it is
-              treated in the same way as the domain parameter to cookies and
-              allows setting for subdomains. The <code>domain</code> argument
-              can be set to a fully-qualified right-hand segment of the document
-              host name, up to one level below TLD.
-              In the description below the variable <em>Domain</em> would have the value <code>*.domain</code>
-          </p>
-          <p>
-              If <code>domain</code> is not specified or is null or empty then the request would be processed as if it had been set to
-              the <a>script domain</a>.
-              In the description below the variable <em>Domain</em> would have the value <a>script domain</a>
-          </p>
-          <p>
-              The return value is a <code>Promise</code> which either resolves to a <code>void</code> result,
-              or is rejected with a <code>DOMException</code>.
-          </p>
-          <p>
-              Any processing failure, such as an incorrectly formatted parameter in the <a>RemoveExceptionPropertyBag</a>,
-              will result in no duplet being removed from the data base of remebered grants, and
-              the returned <code>Promise</code> being
-              rejected with a <code>DOMException.SYNTAX_ERR</code>.
-          </p>
-          <p>
+        <p>
+            <a>Navigator.removeTrackingException</a> passes a
+            <a>RemoveExceptionPropertyBag</a> that can contain the following
+            properties:
+        </p>
+        <dl data-dfn-for="RemoveExceptionPropertyBag">
+            <dt><code><dfn>isWebWide</dfn></code></dt>
+            <dd>A boolean specifying whether a web-wide or a site-specific
+                exception should be removed. If <code>isWebWide</code> is
+                empty, <code>false</code> or <code>null</code> this call
+                refers to a site-specific exception.</dd>
+            <dt><code><dfn>domain</dfn></code></dt>
+            <dd>a cookie-domain, as defined in [[!RFC6265]],
+                to which the exception applies.</dd>
+        </dl>
+        <p>
+          If <code>domain</code> is supplied and not empty then it is treated
+          in the same way as the domain parameter to cookies and allows
+          setting for subdomains. The <code>domain</code> argument can be set
+          to a fully-qualified right-hand segment of the document host name,
+          up to one level below TLD. In the description below the variable
+          <em>Domain</em> would have the value <code>*.domain</code>
+        </p>
+        <p>
+          If <code>domain</code> is not specified or is null or empty then
+          the request would be processed as if it had been set to the
+          <a>script domain</a>. In the description below the variable
+          <em>Domain</em> would have the value <a>script domain</a>
+        </p>
+        <p>
+          The return value is a <code>Promise</code> which either resolves to
+          a <code>void</code> result, or is rejected with a
+          <code>DOMException</code>.
+        </p>
+        <p>
+          Any processing failure, such as an incorrectly formatted parameter
+          in the <a>RemoveExceptionPropertyBag</a>, will result in no duplet
+          being removed from the data base of remembered grants, and the
+          returned <code>Promise</code> being rejected with a
+          <code>DOMException.SYNTAX_ERR</code>.
+        </p>
+        <p>
           When the <code>Promise</code> has been resolved, it is assumed
           that there are no exceptions of the specified type for the
           given <a>Domain</a>, and the database of
           grants no longer contains the indicated grant(s); 
         </p>
-          <p>
-              If there are no matching duplets in the database of remembered
-              grants when the method is called then this operation does nothing,
-              other than resolving the <code>Promise</code>.
-          </p>
-
+        <p>
+          If there are no matching duplets in the database of remembered
+          grants when the method is called then this operation does nothing,
+          other than resolving the <code>Promise</code>.
+        </p>
       </section>
 
       <section id="exception-javascript-api-confirm">
@@ -2154,8 +2127,9 @@ object {
           is called by a page to confirm a tracking exception.
           A <code><dfn>ExceptionPropertyBag</dfn></code> dictionary
           contains information to identify the exception.
-          It returns a <code>Promise</code> which either resolves to an <code><dfn>ExceptionResult</dfn></code> result,
-            or is rejected with a <code>DOMException</code> identifying the reason for the failure.
+          It returns a <code>Promise</code> which either resolves to an
+          <code><dfn>ExceptionResult</dfn></code> result, or is rejected with
+          a <code>DOMException</code> identifying the reason for the failure.
         </p>
         <pre class="idl overlarge">
         partial interface Navigator {
@@ -2176,75 +2150,77 @@ object {
           <a>ConfirmExceptionPropertyBag</a> that can contain the following
           properties:
         </p>
-          <dl data-dfn-for="ConfirmExceptionPropertyBag">
-              <dt><code><dfn>isWebWide</dfn></code></dt>
-              <dd>
-                  A boolean specifying whether a web-wide or a site-specific exception should be confirmed
-                  If <code>isWebWide</code> is empty, <code>false</code> or <code>null</code> this call refers to a site-specific exception
-              </dd>
-              <dt><code><dfn>domain</dfn></code></dt>
-              <dd>
-                  a cookie-domain as defined in [[!RFC6265]],
-                  to which the exception applies.
-              </dd>
-              <dt><code><dfn>arrayOfDomainStrings</dfn></code></dt>
-              <dd>A JavaScript array of strings.</dd>
-          </dl>
+        <dl data-dfn-for="ConfirmExceptionPropertyBag">
+          <dt><code><dfn>isWebWide</dfn></code></dt>
+          <dd>A boolean specifying whether a web-wide or a site-specific
+              exception should be confirmed If <code>isWebWide</code> is empty,
+              <code>false</code> or <code>null</code> this call refers to a
+              site-specific exception </dd>
+          <dt><code><dfn>domain</dfn></code></dt>
+          <dd>a cookie-domain as defined in [[!RFC6265]],
+            to which the exception applies.</dd>
+          <dt><code><dfn>arrayOfDomainStrings</dfn></code></dt>
+          <dd>A JavaScript array of strings.</dd>
+        </dl>
         <p>
-          If <code>isWebWide</code> is not <code>true</code> and the call does not include the
-          <code>arrayOfDomainStrings</code>, then this call is to confirm a
-          site-wide exception. Otherwise each string in
-          <code>arrayOfDomainStrings</code> specifies a
-          <a>target domain</a>.
+          If <code>isWebWide</code> is not <code>true</code> and the call
+          does not include the <code>arrayOfDomainStrings</code>, then this
+          call is to confirm a site-wide exception. Otherwise each string in
+          <code>arrayOfDomainStrings</code> specifies a <a>target domain</a>.
         </p>
-          <p>
-              If <code>isWebWide</code> is not <code>true</code>, the list <code>arrayOfDomainStrings</code> is supplied, and the
-              user agent stores only site-wide exceptions, then the user agent
-              MUST match by confirming a site-wide exception.
-          </p>
-          <p>
-              If <code>domain</code> is supplied and not empty then it is
-              treated in the same way as the domain parameter to cookies and
-              allows setting for subdomains. The <code>domain</code> argument
-              can be set to a fully-qualified right-hand segment of the document
-              host name, up to one level below TLD.
-              In the description below the variable <em>Domain</em> would have the value <code>*.domain</code>
-          </p>
-          <p>
-              If <code>domain</code> is not specified or is null or empty then the request would be processed as if it had been set to
-              the <a>script domain</a>.
-              In the description below the variable <em>Domain</em> would have the value <a>script domain</a>
-          </p>
-          <p>
-              If <code>isWebWide</code> is <code>true</code> then any <code>arrayOfDomainStrings</code> is ignored, and
-              the user agent MUST match by confirming a web-wide exception, i.e. the database is checked for the duplet:
-
-          </p>
-          <pre>[*,Domain]</pre>
         <p>
-          If the user agent stores explicit lists, <code>isWebWide</code> is not <code>true</code> and the call includes
-          an  <code>arrayOfDomainStrings</code>, the database is checked for the existence of all the duplets
-          (one per target):
+          If <code>isWebWide</code> is not <code>true</code>, the list
+          <code>arrayOfDomainStrings</code> is supplied, and the user agent
+          stores only site-wide exceptions, then the user agent MUST match by
+          confirming a site-wide exception.
+        </p>
+        <p>
+          If <code>domain</code> is supplied and not empty then it is treated
+          in the same way as the domain parameter to cookies and allows
+          setting for subdomains. The <code>domain</code> argument can be set
+          to a fully-qualified right-hand segment of the document host name,
+          up to one level below TLD. In the description below the variable
+          <em>Domain</em> would have the value <code>*.domain</code>
+        </p>
+        <p>
+          If <code>domain</code> is not specified or is null or empty then
+          the request would be processed as if it had been set to the
+          <a>script domain</a>. In the description below the variable
+          <em>Domain</em> would have the value <a>script domain</a>
+        </p>
+        <p>
+          If <code>isWebWide</code> is <code>true</code> then any
+          <code>arrayOfDomainStrings</code> is ignored, and the user agent
+          MUST match by confirming a web-wide exception, i.e. the database is
+          checked for the duplet:
+        </p>
+        <pre>[*,Domain]</pre>
+        <p>
+          If the user agent stores explicit lists, <code>isWebWide</code> is
+          not <code>true</code> and the call includes an
+          <code>arrayOfDomainStrings</code>, the database is checked for the
+          existence of all the duplets (one per target):
         </p>
         <pre>[Domain, target domain]</pre>
         <p>
-          If <code>isWebWide</code> is not <code>true</code>, the user agent stores only site-wide exceptions or the call did
-          not include an explicit list, the database is checked for the
-          single duplet:
+          If <code>isWebWide</code> is not <code>true</code>, the user agent
+          stores only site-wide exceptions or the call did not include an
+          explicit list, the database is checked for the single duplet:
         </p>
         <pre>[Domain, * ]</pre>
         <p>
-          If <code>isWebWide</code> is not <code>true</code>, the user agent stores explicit lists and the call includes
-          one, then the database is checked for the existence of all the
-          duplets (one per target):
+          If <code>isWebWide</code> is not <code>true</code>, the user agent
+          stores explicit lists and the call includes one, then the database
+          is checked for the existence of all the duplets (one per target):
         </p>
-          <pre>[Domain, target domain]</pre>
-          <p>
-              Any processing failure, such as an incorrectly formatted parameter in the <a>ConfirmExceptionPropertyBag</a>,
-              will result in no duplet being removed from the data base of remebered grants, and
-              the returned <code>Promise</code> being
-              rejected with a <code>DOMException.SYNTAX_ERR</code>.
-          </p>
+        <pre>[Domain, target domain]</pre>
+        <p>
+          Any processing failure, such as an incorrectly formatted parameter
+          in the <a>ConfirmExceptionPropertyBag</a>, will result in no duplet
+          being removed from the data base of remebered grants, and the
+          returned <code>Promise</code> being rejected with a
+          <code>DOMException.SYNTAX_ERR</code>.
+        </p>
         <p>
           Otherwise the returned <code>Promise</code> resolves to a
           <code>ExceptionResult</code> object which MUST contain a
