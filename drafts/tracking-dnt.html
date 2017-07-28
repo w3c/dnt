@@ -1639,12 +1639,12 @@ object {
       <p>
         A <dfn>user-granted exception</dfn> is the record of a decision by
         the user to grant consent for tracking (<a>DNT:0</a>) on future
-        requests from a given context to a set of target domains.
-        Both context and target are scoped by domain, similar to the existing
+        requests from a given site to a set of target domains.
+        Both site and target are scoped by domain, similar to the existing
         domain scope of cookies
         (<a href="https://www.w3.org/TR/html5/single-page.html#relaxing-the-same-origin-restriction">Section 5.3.1</a>
         of [[!HTML5]]), in order to avoid asking the user's exception for
-        every subdomain context of a site and every target resource that
+        every subdomain of a site and every target resource that
         might be referenced.
       </p>
       <p>
@@ -1663,11 +1663,12 @@ object {
       </p>
       <dl>
         <dt><dfn>script domain</dfn></dt>
-        <dd>the default context of a script when it accesses the exception
+        <dd>the default site of a script when it accesses the exception
           database: specifically, the current <a>document.domain</a> of the
           script's <a>responsible document</a>.</dd>
         <dt><dfn>site domain</dfn></dd>
-        <dd>the context of a given reference for which the user-granted
+        <dd>the domain associated with a site on which a given reference
+          might be found and for which the user-granted
           exceptions API might be queried: specifically, the current
           <a>document.domain</a> of the <a>top-level browsing context</a>'s
           <a>active document</a>.</dd>
@@ -1676,12 +1677,13 @@ object {
           of a referenced "http" or "https" URI</dd>
       </dl>
       <p>
-        A user-granted exception is <dfn>site-specific</dfn> if the context
+        A user-granted exception is <dfn>site-specific</dfn> if the exception
         is limited to requests embedded in, or referred by, a given
         <a>site domain</a>; otherwise, the exception is <dfn>web-wide</dfn>
-        and applies to all contexts. For example, a user might wish to grant
+        and applies to all sites. For example, a user might wish to grant
         a target domain a web-wide exception for the purpose of audience
-        surveys, perhaps in exchange for some incentive.
+        measurement across multiple sites, perhaps in exchange for some
+        incentive.
       </p>
       <p>
         When asking for consent to record a <a>site-specific</a> exception,
@@ -1711,9 +1713,9 @@ object {
       <p>
         Upon fulfillment of the storeTrackingException promise, the user agent
         has added to its local database one or more site-pair
-        duplets [context, target], each indicating that a request from context
+        duplets [site, target], each indicating that a request from that site
         domain to the target domain will include <a>DNT:0</a> regardless of
-        the user's general tracking preference. Note that either context or
+        the user's general tracking preference. Note that either site or
         target (but not both) can be a wild-card ("*") character to indicate
         all domains.
       </p>
@@ -1883,7 +1885,7 @@ object {
         has embedded references to
         <code>http://metrics.example.net/1x1.gif</code> and
         <code>http://weather.example.com/widget.js</code>, the
-        site domain (context) for those references is
+        site domain for those references is
         <code>news.example.com</code> and the target domains are
         <code>metrics.example.net</code> and
         <code>weather.example.com</code>, respectively. 
@@ -1903,7 +1905,7 @@ object {
           to store one or more tracking exceptions related to that site.
           A <code><dfn>StoreTrackingExceptionData</dfn></code> object
           is passed that defines the scope of the exception (the set of
-          [context, target] duplets that encompass the granted exception)
+          [site, target] duplets that encompass the granted exception)
           and optional information to be stored for that exception.
           It returns a <code>Promise</code> which either resolves to a
           <code><dfn>TrackingExceptionResult</dfn></code> or is rejected with
@@ -1935,12 +1937,12 @@ object {
         </p>
         <dl data-dfn-for="StoreTrackingExceptionData">
           <dt><code><dfn>siteContext</dfn></code></dt>
-          <dd>A context for which the exception applies, as defined below.</dd>
+          <dd>A site for which the exception applies, as defined below.</dd>
           <dt><code><dfn>targets</dfn></code></dt>
           <dd>An array of targets for which the exception applies, as defined
             below.</dd>
           <dt><code><dfn>siteName</dfn></code></dt>
-          <dd>A user-readable string for the name of the context.</dd>
+          <dd>A user-readable string for the name of the site.</dd>
           <dt><code><dfn>explanationString</dfn></code></dt>
           <dd>A short explanation of the granted exception.</dd>
           <dt><code><dfn>detailURI</dfn></code></dt>
@@ -1953,7 +1955,8 @@ object {
         <p>
           In addition to the granted exception data, a user agent might store
           ambient information about the call, such as the URI associated
-          with the top-level browsing context, effective script origin,
+          with the <a>top-level browsing context</a>,
+          <a>effective script origin</a>,
           current timestamp, or other information potentially obtained from
           applicable tracking status resources.
         </p>
