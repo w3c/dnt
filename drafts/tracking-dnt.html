@@ -1669,40 +1669,42 @@ object {
         surveys, perhaps in exchange for some incentive.
       </p>
       <p>
-        When asking for a <a>site-specific</a> exception, the site
-        making the request might make some implicit or explicit claims as
-        to the actions and behavior of its third parties; for this reason,
-        a site might want to establish exceptions for only those target
-        domains for which it can be sure that those claims are true.
-        (Consider a site that has some trusted advertisers and analytics
-        providers, along with some mashed-up content from less-trusted
-        sites). For this reason, site-specific exceptions can either be
-        limited to a named set of target domains or applicable to any target
-        domain ("*").
+        When asking for consent to record a <a>site-specific</a> exception,
+        a site might make some claims regarding limitations on the actions and
+        behavior of the known third parties that it references. Such a site
+        might wish to restrict its <a>site-specific</a> exceptions to only
+        target domains for which those claims have been verified.
+        (For example, consider the dilemma of a site that has trusted
+        advertisers and analytics providers, along with some less trusted
+        mashed-up content that might reference other sites). For this reason,
+        site-specific exceptions can either be limited to a named set of
+        target domains or be applicable to any target domain ("*").
       </p>
     </section>
 
     <section id='exception-granting'>
       <h3>Granting an Exception</h3>
 
-      <p class="ednote">
-        This section is supposed to describe how a site would go about asking
-        the user for the various types of exception. The existing text is
-        lacking that necessary information.
-      </p>
       <p>
         It is expected that a site will explain to the user, in its online
         content, the need for an exception and the consequences of granting or
-        denying that exception.
+        denying that exception. Upon receipt of an informed consent from the
+        user, a script operating on the site's page is expected to call the
+        <a>Navigator.storeTrackingException()</a> API with parameters
+        consistent with the consent granted by the user.
       </p>
       <p>
-        The user agent adds to its local database one or more site-pair
-        duplets [document-origin, target]; one or the other of these MAY be a
-        wild-card ("*").
+        Upon fulfillment of the storeTrackingException promise, the user agent
+        has added to its local database one or more site-pair
+        duplets [context, target], each indicating that a request from context
+        domain to the target domain will include <a>DNT:0</a> regardless of
+        the user's general tracking preference. Note that either context or
+        target (but not both) can be a wild-card ("*") character to indicate
+        all domains.
       </p>
       <p>
-        A site MAY ask for an exception, and have it stored, even when the
-        user's general preference is <a>not enabled</a>. This permits the
+        A site MAY ask for consent and store an exception even when
+        the user's general preference is <a>not enabled</a>. This permits the
         sending of <a>DNT</a> only for target resources for which an
         expressed preference is desired (see
         <a href="#exception-when-not-enabled" class="sectionRef"></a>).
