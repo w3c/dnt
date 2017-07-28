@@ -64,11 +64,11 @@
         },
         "Orderly": {
           "authors": ["Lloyd Hilaiel"],
-          "href"   : "http://orderly-json.org/",
+          "href"   : "https://github.com/lloyd/orderly",
           "title"  : "Orderly JSON",
-          "date"   : "10 Feb 2015"
+          "date"   : "22 Feb 2010"
         },
-       "PROMGUIDE":
+       "PromiseGuide":
         {
           "title": "Writing Promise-Using Specifications",
           "href": "http://www.w3.org/2001/tag/doc/promises-guide",
@@ -374,6 +374,21 @@
         WebIDL [[!WEBIDL]] to define scripting APIs.
         Conformance criteria and considerations regarding error handling are
         defined in Section 2.5 of [RFC7230].
+      </p>
+      <p>
+        How to <dfn><a class="externalDFN" href="https://heycam.github.io/webidl/#dfn-throw">throw</a></dfn>
+        a <dfn><a class="externalDFN" href="https://heycam.github.io/webidl/#idl-DOMException">DOMexception</a></dfn>
+        and the <dfn><a class="externalDFN" href="https://heycam.github.io/webidl/#idl-exceptions">exceptions</a></dfn>
+        named "SyntaxError" and "SecurityError" are defined in [[!WEBIDL]].
+      </p>
+      <p>
+        <dfn><a class="externalDFN" href="https://tc39.github.io/ecma262/#sec-promise-objects">Promise objects</a></dfn>
+        are defined in [[ECMASCRIPT]]; the phrases
+        <dfn><a class="externalDFN" href="https://www.w3.org/2001/tag/doc/promises-guide#resolve-promise">resolve promise</a></dfn>,
+        <dfn><a class="externalDFN" href="https://www.w3.org/2001/tag/doc/promises-guide#reject-promise">reject promise</a></dfn>,
+        <dfn><a class="externalDFN" href="https://www.w3.org/2001/tag/doc/promises-guide#upon-fulfillment">upon fulfillment</a></dfn>, and
+        <dfn><a class="externalDFN" href="https://www.w3.org/2001/tag/doc/promises-guide#upon-rejection">upon rejection</a></dfn>
+        are used in accordance with [[PromiseGuide]].
       </p>
     </section>
   </section>
@@ -1877,15 +1892,7 @@ object {
 
     <section id="exception-javascript-api">
       <h3>Exception API</h3>
-      <p>
-        In the description below, the terms <dfn data-dfn-type="dfn" id="dfn-throw"><a ref="https://heycam.github.io/webidl/#dfn-throw">throw</a></dfn>,
-        <dfn data-dfn-type="dfn" id="dfn-promise"><a  ref="https://heycam.github.io/webidl/#idl-promise">Promise</a></dfn>
-        and the exception names SYNTAX_ERR and SECURITY_ERR are defined in [[!WEBIDL-LS]]
-       <p>
-      <p>
-        The terms resolving a Promise and rejecting a Promise are used as explained in 
-        [<cite><a class="bibref" href="#bib-PROMGUIDE">PROMGUIDE</a></cite>].
-      </p>
+
       <section id="exception-javascript-api-rqst">
         <h4>API to Store a Tracking Exception</h4>
 
