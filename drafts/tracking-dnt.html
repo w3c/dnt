@@ -663,11 +663,11 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
         The <code><dfn>Navigator.doNotTrack</dfn></code> property enables
         a client-side script with read access to the
         <code><dfn data-cite="!HTML5#navigator">Navigator</dfn></code> object
-        [[!HTML5]] to determine what
-        <a>DNT</a> header field value would be sent in requests to the
-        <a>effective script origin</a>, taking into account the user's general
-        preference (if any) and the current user-granted exceptions
-        applicable to that <a>target domain</a>.
+        [[!HTML5]] to determine what <a>DNT</a> header field value would be
+        sent to the <a>effective script origin</a>, taking into account the
+        user's general preference (if any) and user-granted exceptions
+        applicable to the <a>target domain</a> when referenced by the
+        active document's <a>top-level browsing context</a>.
       </p>
       <pre class="idl">
         partial interface Navigator {
@@ -675,14 +675,28 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
         };
       </pre>
       <p>
-          The value of <a>Navigator.doNotTrack</a> is the string value that
-          would be sent in a <a>DNT</a> field-value
-          (<a href="#dnt-header-field" class="sectionRef"></a>) in a
-          <a>request</a> to the <a>effective script origin</a>.
-          The value is <code>null</code> if no DNT header field would be
-          sent (e.g., because a tracking preference is <a>not enabled</a>);
-          otherwise, the value is a string beginning with "0" or "1",
-          possibly followed by DNT-extension characters.
+        The value is <code>null</code> if no DNT header field would be
+        sent (e.g., because a tracking preference is <a>not enabled</a>
+        and no user-granted exception is applicable);
+        otherwise, the value is a string beginning with "0" or "1",
+        possibly followed by DNT-extension characters.
+      </p>
+      <p>
+        Specifically, the value of <a>Navigator.doNotTrack</a> for a given
+        script is either <code>null</code> or the string value that would be
+        sent in a <a>DNT</a> field-value
+        (<a href="#dnt-header-field" class="sectionRef"></a>)
+        in a request to a <a>target resource</a> at the
+        <a>effective script origin</a> (the current <a>document.domain</a> of
+        the script's <a>responsible document</a>) when that request is due to
+        an embedded reference from this site (the <a>document.domain</a> of
+        the <a>top-level browsing context</a>'s <a>active document</a>).
+      </p>
+      <p>
+        Ideally, the value of <a>Navigator.doNotTrack</a> ought to reflect
+        the current set of user-granted exceptions in effect when the
+        attribute is read. In practice, however, the value might only reflect
+        the value that was in effect when the script was initiated.
       </p>
     </section>
 
@@ -1972,12 +1986,12 @@ object {
             <code>false</code>.</dd>
         </p>
         <p>
-          The exception's context is defined by one of the following:
+          The exception's site is defined by one of the following:
         </p>
         <ul>
           <li>If
             <a data-link-for="StoreTrackingExceptionData">siteContext</a> is
-            undefined, null, or the empty string, the exception's context
+            undefined, null, or the empty string, the exception's site
             defaults to the <a>site domain</a>.</li>
           <li>If
             <a data-link-for="StoreTrackingExceptionData">siteContext</a> is
@@ -1989,7 +2003,7 @@ object {
             <a data-link-for="StoreTrackingExceptionData">siteContext</a> and
             any of the <a data-link-for="StoreTrackingExceptionData">targets</a>
             are "*".</li>
-          <li>Otherwise, the exception's context is defined by a domain found
+          <li>Otherwise, the exception's site is defined by a domain found
             in <a data-link-for="StoreTrackingExceptionData">siteContext</a>
             that is treated in the same way as the domain parameter to
             cookies [[!RFC6265]] and allows setting for subdomains. The value
@@ -2009,20 +2023,19 @@ object {
         <ul>
           <li>If <a data-link-for="StoreTrackingExceptionData">targets</a> is
             undefined, null, or an empty array, the user-granted exception to
-            be stored is <code>[context, *]</code>, meaning that the
-            exception applies to all domains referenced by the context
-            site(s).</li>
+            be stored is <code>[site, *]</code>, meaning that the
+            exception applies to all domains referenced by the site.</li>
           <li>Otherwise, for each domain string in the
             <a data-link-for="StoreTrackingExceptionData">targets</a> array,
             the user-granted exception to be stored is the tuple
-            <code>[context, domain]</code>.</li>
+            <code>[site, domain]</code>.</li>
         </ul>
         <p>
           When a list of <a data-link-for="StoreTrackingExceptionData">targets</a>
-          is supplied for a site-specific exception (i.e., a context other
+          is supplied for a site-specific exception (i.e., a site other
           than "*"), the user agent MAY ignore that list, choosing instead to
           store a site-specific exception for all targets
-          (<code>[context, *]</code>), if it also indicates that result by
+          (<code>[site, *]</code>), if it also indicates that result by
           setting the returned promise's <code>isSiteWide</code> property to
           <code>true</code>.
         </p>
@@ -2037,8 +2050,8 @@ object {
         </p>
         <p>
           If the <a>effective script origin</a> would not be able to set a
-          cookie on the context following the cookie domain rules
-          [[!RFC6265]] (e.g. the context is not a right-hand match or
+          cookie on the site following the cookie domain rules
+          [[!RFC6265]] (e.g. the site is not a right-hand match or
           is a TLD) then the duplet MUST NOT be stored and
           the returned promise MUST be rejected with a
           <code>DOMException.SECURITY_ERR</code>.
