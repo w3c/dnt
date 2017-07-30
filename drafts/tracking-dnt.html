@@ -59,14 +59,14 @@
           "authors": ["Joshua Gomez","Travis Pinnick","Ashkan Soltani"],
           "href"   : "http://www.knowprivacy.org/report/KnowPrivacy_Final_Report.pdf",
           "title"  : "KnowPrivacy",
-          "date"   : "01 Jun 2009",
+          "date"   : "01 June 2009",
           "publisher": "UC Berkeley, School of Information"
         },
         "Orderly": {
           "authors": ["Lloyd Hilaiel"],
           "href"   : "https://github.com/lloyd/orderly",
           "title"  : "Orderly JSON",
-          "date"   : "22 Feb 2010"
+          "date"   : "22 February 2010"
         },
        "PromiseGuide":
         {
@@ -75,8 +75,9 @@
           "authors": [
             "Domenic Denicola"
           ],
-          "status": "finding",
-          "publisher": "W3C"
+          "status": "Finding of the W3C TAG",
+          "publisher": "W3C",
+          "date"   : "03 January 2017"
         }
       },
       noIDLSectionTitle: true,
@@ -411,7 +412,8 @@
       this applies equally to both the general preference and exceptions.
       The basic principle is that a tracking preference expression is only
       transmitted when it reflects a deliberate choice by the user. In the
-      absence of user choice, there is no tracking preference expressed.
+      absence of user choice, there is no tracking preference expressed
+      (see <a href="#privacy.not-preconfigured" class="sectionRef"></a>).
     </p>
     <p>
       A user agent MUST offer users a minimum of two alternative choices
@@ -548,23 +550,6 @@
         site-specific user preferences or third-party registration services,
         to inform or adjust their behavior when no explicit preference is
         expressed via this protocol.
-      </p>
-      <p class="note">
-        This specification defines a protocol for communicating the user's
-        tracking preference, not a protocol that prevents tracking on its own.
-        It might be tempting to assume that <q>design for privacy</q> would
-        justify calling for <a>DNT:1</a> to be preconfigured as the default
-        for all user agents. However, that would violate the field's semantics,
-        make its presence in a request meaningless, and add eight extra bytes
-        to every HTTP request (with no effect).<br />
-        <br />
-        The DNT signal alone does nothing to enhance a user's privacy.
-        It is only when recipients believe that the signal has been
-        deliberately and knowingly configured, and not defined as a default,
-        that they will consider it to be the user's preference.
-        Furthermore, when no signal is sent, recipients remain subject to
-        whatever regulatory, legal, or other regional requirements regarding
-        tracking exist in the absence of consent.
       </p>
     </section>
 
@@ -1720,12 +1705,21 @@ object {
         It is expected that a site will explain to the user, in its online
         content, the need for an exception and the consequences of granting or
         denying that exception. Upon receipt of an informed consent from the
-        user, a script operating on the site's page is expected to call the
-        <a>Navigator.storeTrackingException()</a> API with parameters
-        consistent with the consent granted by the user.
+        user, a script operating on the site's page is expected to
+        promise-call the <a>Navigator.storeTrackingException()</a> API using
+        parameters consistent with the consent granted by the user.
       </p>
       <p>
-        Upon fulfillment of the storeTrackingException promise, the user agent
+        A site's page might be used to obtain consent for multiple parties;
+        e.g., using multiple iframe elements containing scripts that can
+        convey information about each party's policies and obtain specific
+        consent for each party. In this case, the <a>effective script origin</a>
+        might be different from the site for which consent is being granted,
+        which is why the storeTrackingException promise-call defaults to the
+        domain of the <a>top-level browsing context</a>.
+      </p>
+      <p>
+        Upon fulfillment of the promise, the user agent
         has added to its local database one or more site-pair
         duplets [site, target], each indicating that a request from that site
         domain to the target domain will include <a>DNT:0</a> regardless of
@@ -2376,12 +2370,48 @@ object {
     <h2>Security Considerations</h2>
 
     <p>
-      TBD.
+      Information communicated via the DNT header field is minimized to
+      avoid abuse of the field for fingerprinting or as a side-channel.
+      However, future DNT-extensions might allow for the sending of additional
+      information when signaling consent for tracking via <a>DNT:0</a>,
+      since this consent mechanism is intended to be more persistent than
+      cookies and could be used to convey a pseudonymous identifier as a
+      user-preferred alternative to allowing a cookie to be set.
+    </p>
+    <p>
+      Use of client-side storage is always a security concern. Although the
+      information being stored for each <a>user-granted exception</a> is
+      limited and cannot be directly accessed by scripts, storing too many
+      exceptions might exceed available storage or indicate an attempt to
+      exploit other vulnerabilities.
     </p>
   </section>
 
   <section id='privacy'>
     <h2>Privacy Considerations</h2>
+
+    <section id='privacy.not-preconfigured'>
+      <h3>Why DNT:1 is Not Preconfigured by Default</h3>
+
+      <p>
+        This specification defines a protocol for communicating the user's
+        tracking preference, not a protocol that prevents tracking on its own.
+        It might be tempting to assume that <q>design for privacy</q> would
+        justify calling for <a>DNT:1</a> to be preconfigured as the default
+        for all user agents. However, that would violate the field's semantics,
+        make its presence in a request meaningless, and add eight extra bytes
+        to every HTTP request (with no effect).
+      </p>
+      <p>
+        The DNT signal alone does nothing to enhance a user's privacy.
+        It is only when recipients believe that the signal has been
+        deliberately and knowingly configured, and not defined as a default,
+        that they will consider it to be the user's preference.
+        Furthermore, when no signal is sent, recipients remain subject to
+        whatever regulatory, legal, or other regional requirements regarding
+        tracking exist in the absence of consent.
+      </p>
+    </section>
 
     <section id='privacy.fingerprinting'>
       <h3>Fingerprinting</h3>
@@ -2394,6 +2424,19 @@ object {
         the possibility of fingerprinting during implementation and might
         consider rate-limiting requests or using other heuristics to mitigate
         fingerprinting risk.
+      </p>
+    </section>
+
+    <section id='privacy.history'>
+      <h3>Stored Exceptions are Stored History</h3>
+
+      <p>
+        A database of stored exceptions is effectively storing a
+        local history of the sites browsed by the user over time.
+        Separate databases are needed per user profile (and per incognito
+        session) and ought to be protected from observation. A user might
+        wish to clear stored exceptions, or clear the database as a whole,
+        but as a separate action from clearing the visible browser history.
       </p>
   </section>
 </section>
