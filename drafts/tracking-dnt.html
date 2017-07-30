@@ -1826,7 +1826,7 @@ object {
         exception grants.
       </p>
       <p>
-        The API parameters siteName, explanationString, and detailURI are
+        The API parameters siteName, explanation, and details are
         provided for the sake of potential user interfaces.
         If a user agent presents these parameters to the
         user, it ought to be clear that they are provided for informational
@@ -1910,7 +1910,7 @@ object {
           When a script on a site's page has obtained a user-granted exception,
           the script can call
           <code><dfn>Navigator.storeTrackingException</dfn></code>
-          to store one or more tracking exceptions related to that site.
+          to store one or more tracking exceptions.
           A <code><dfn>StoreTrackingExceptionData</dfn></code> object
           is passed that defines the scope of the exception (the set of
           [site, target] duplets that encompass the granted exception)
@@ -1926,11 +1926,11 @@ object {
             );
         };
         dictionary StoreTrackingExceptionData {
-           DOMString? siteContext;
+           DOMString? site;
            sequence&lt;DOMString&gt;? targets;
            DOMString? siteName;
-           DOMString? explanationString;
-           DOMString? detailURI;
+           DOMString? explanation;
+           DOMString? details;
            long?      maxAge;
         };
         dictionary TrackingExceptionResult {
@@ -1944,16 +1944,16 @@ object {
           following properties:
         </p>
         <dl data-dfn-for="StoreTrackingExceptionData">
-          <dt><code><dfn>siteContext</dfn></code></dt>
-          <dd>A site for which the exception applies, as defined below.</dd>
+          <dt><code><dfn>site</dfn></code></dt>
+          <dd>A site domain for which the exception applies, as defined below.</dd>
           <dt><code><dfn>targets</dfn></code></dt>
-          <dd>An array of targets for which the exception applies, as defined
-            below.</dd>
+          <dd>An array of target domains for which the exception applies,
+            as defined below.</dd>
           <dt><code><dfn>siteName</dfn></code></dt>
           <dd>A user-readable string for the name of the site.</dd>
-          <dt><code><dfn>explanationString</dfn></code></dt>
+          <dt><code><dfn>explanation</dfn></code></dt>
           <dd>A short explanation of the granted exception.</dd>
-          <dt><code><dfn>detailURI</dfn></code></dt>
+          <dt><code><dfn>details</dfn></code></dt>
           <dd>A location at which further information about the granted
               exception can be found.</dd>
           <dt><code><dfn>maxAge</dfn></code></dt>
@@ -1984,21 +1984,21 @@ object {
         </p>
         <ul>
           <li>If
-            <a data-link-for="StoreTrackingExceptionData">siteContext</a> is
+            <a data-link-for="StoreTrackingExceptionData">site</a> is
             undefined, null, or the empty string, the exception's site
             defaults to the <a>site domain</a>.</li>
           <li>If
-            <a data-link-for="StoreTrackingExceptionData">siteContext</a> is
+            <a data-link-for="StoreTrackingExceptionData">site</a> is
             defined and equal to "*", the exception is intended to be
             web-wide for the set of
             <a data-link-for="StoreTrackingExceptionData">targets</a>.
             A user agent MUST reject the promise with a
             <code>DOMException.SECURITY_ERR</code> if both
-            <a data-link-for="StoreTrackingExceptionData">siteContext</a> and
+            <a data-link-for="StoreTrackingExceptionData">site</a> and
             any of the <a data-link-for="StoreTrackingExceptionData">targets</a>
             are "*".</li>
           <li>Otherwise, the exception's site is defined by a domain found
-            in <a data-link-for="StoreTrackingExceptionData">siteContext</a>
+            in <a data-link-for="StoreTrackingExceptionData">site</a>
             that is treated in the same way as the domain parameter to
             cookies [[!RFC6265]] and allows setting for subdomains. The value
             can be set to a fully-qualified right-hand segment of the
@@ -2006,7 +2006,7 @@ object {
         </ul>
         <p>
           For example, <em>www.foo.bar.example.com</em> can set the
-          <a data-link-for="StoreTrackingExceptionData">siteContext</a> as
+          <a data-link-for="StoreTrackingExceptionData">site</a> as
           <code>"bar.example.com"</code> or
           <code>"example.com"</code>, but not to
           <code>"something.else.example.com"</code> or <code>"com"</code>.
