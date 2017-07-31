@@ -1660,23 +1660,19 @@ object {
         providing better persistence of those exceptions for sites.
       </p>
       <p>
-        There are potentially three different domain concepts involved
+        There are two primary domain concepts involved
         in the processing of user-granted exceptions:
       </p>
       <dl>
-        <dt><dfn>script domain</dfn></dt>
-        <dd>the default site of a script when it accesses the exception
-          database: specifically, the current <a>document.domain</a> of the
-          script's <a>responsible document</a>.</dd>
         <dt><dfn>site domain</dfn></dd>
         <dd>the domain associated with a site on which a given reference
           might be found and for which the user-granted
           exceptions API might be queried: specifically, the current
           <a>document.domain</a> of the <a>top-level browsing context</a>'s
-          <a>active document</a>.</dd>
+          <a>active document</a> [[!HTML5]].</dd>
         <dt><dfn>target domain</dfn></dt>
         <dd>the <a>uri-host</a> subcomponent of the <a>authority</a> component
-          of a referenced "http" or "https" URI</dd>
+          of a referenced "http" or "https" URI [[!RFC7230]].</dd>
       </dl>
       <p>
         A user-granted exception is <dfn>site-specific</dfn> if the exception
