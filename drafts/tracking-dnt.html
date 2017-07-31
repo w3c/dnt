@@ -1916,21 +1916,21 @@ object {
           site can <a>promise-call</a>
           <code><dfn>Navigator.storeTrackingException</dfn></code>
           to store one or more tracking exceptions.
-          A <code><dfn>StoreTrackingExData</dfn></code> object is
+          A <code><dfn>TrackingExData</dfn></code> object is
           supplied as a parameter to define the exception's scope (the set of
           [site, target] duplets that encompass the granted exception)
           and optional information to be stored for that exception.
-          The call returns a <code>Promise</code> which either resolves to a
+          The call returns a promise which either resolves to a
           <code><dfn>TrackingExResult</dfn></code> or is rejected with
           a <code>DOMException</code> identifying the reason for the failure.
         </p>
         <pre class="idl">
         partial interface Navigator {
             Promise&lt;TrackingExResult&gt; storeTrackingException (
-              StoreTrackingExData properties
+              TrackingExData properties
             );
         };
-        dictionary StoreTrackingExData {
+        dictionary TrackingExData {
            DOMString? site;
            sequence&lt;DOMString&gt;? targets;
            DOMString? name;
@@ -1939,73 +1939,73 @@ object {
            long?      maxAge;
         };
         dictionary TrackingExResult {
-          boolean? isSiteWide;
-          boolean? exists;
+          boolean isSiteWide;
         };
         </pre>
         <p>
           <a>Navigator.storeTrackingException</a> passes a
-          <a>StoreTrackingExData</a> object that can contain the
-          following properties:
+          <a>TrackingExData</a> object. A user agent MUST ignore unknown
+          properties of the <a>TrackingExData</a> object (for future
+          extensibility). The following OPTIONAL properties are defined:
         </p>
-        <dl data-dfn-for="StoreTrackingExData">
+        <dl data-dfn-for="TrackingExData">
           <dt><code><dfn>site</dfn></code></dt>
           <dd>The referring domain scope for which the exception applies:
-        <ul>
-          <li>If
-            <a data-link-for="StoreTrackingExData">site</a> is
-            undefined, null, or the empty string, the exception's referring
-            domain scope defaults to the <a>site domain</a>.</li>
-          <li>If
-            <a data-link-for="StoreTrackingExData">site</a> is
-            defined and equal to "<code>*</code>", the exception is intended
-            to be web-wide for the set of
-            <a data-link-for="StoreTrackingExData">targets</a>.
-            A user agent MUST reject the promise with the
-            <code>DOMException</code> named "SecurityError" if both
-            <a data-link-for="StoreTrackingExData">site</a> and
-            any of the <a data-link-for="StoreTrackingExData">targets</a>
-            are "<code>*</code>".</li>
-          <li>Otherwise, the exception's referring domain scope is defined by
-            a domain found
-            in <a data-link-for="StoreTrackingExData">site</a>
-            that is treated in the same way as the domain parameter to
-            cookies [[!RFC6265]], allowing subdomains to be included with the
-            prefix "<code>*.</code>". The value
-            can be set to a fully-qualified right-hand segment of the
-            document host name, up to one level below TLD.</li>
-        </ul></dd>
+            <ul>
+              <li>If
+                <a data-link-for="TrackingExData">site</a> is
+                undefined, null, or the empty string, the exception's referring
+                domain scope defaults to the <a>site domain</a>.</li>
+              <li>If
+                <a data-link-for="TrackingExData">site</a> is
+                defined and equal to "<code>*</code>", the exception is
+                intended to be web-wide for the set of
+                <a data-link-for="TrackingExData">targets</a>.
+                A user agent MUST reject the promise with the
+                <code>DOMException</code> named "SecurityError" if both
+                <a data-link-for="TrackingExData">site</a> and
+                any of the <a data-link-for="TrackingExData">targets</a>
+                are "<code>*</code>".</li>
+              <li>Otherwise, the exception's referring domain scope is defined
+                by a domain found
+                in <a data-link-for="TrackingExData">site</a>
+                that is treated in the same way as the domain parameter to
+                cookies [[!RFC6265]], allowing subdomains to be included with
+                the prefix "<code>*.</code>". The value
+                can be set to a fully-qualified right-hand segment of the
+                document host name, up to one level below TLD.</li>
+            </ul></dd>
           <dt><code><dfn>targets</dfn></code></dt>
           <dd>An array of target domains for which the exception applies:
             <ul>
-              <li>If <a data-link-for="StoreTrackingExData">targets</a>
+              <li>If <a data-link-for="TrackingExData">targets</a>
                 is undefined, null, or an empty array, the user-granted
-                exception to be stored is <code>[site, *]</code>, meaning
+                exception to be stored is <code>[site,&nbsp;*]</code>, meaning
                 that the exception applies to all domains referenced by the
                 site.</li>
               <li>Otherwise, for each domain string in the
-                <a data-link-for="StoreTrackingExData">targets</a>
-                array, the user-granted exception to be stored is the tuple
+                <a data-link-for="TrackingExData">targets</a>
+                array, the user-granted exception to be stored is the duplet
                 <code>[site,&nbsp;domain]</code>.</li>
             </ul></dd>
           <dt><code><dfn>name</dfn></code></dt>
           <dd>When defined and not null or an empty string,
-            <a data-link-for="StoreTrackingExData">name</a> is a
+            <a data-link-for="TrackingExData">name</a> is a
             user-readable string for naming the exception, usually
             descriptive of the targets or their intended purpose for this
             site.</dd>
           <dt><code><dfn>explanation</dfn></code></dt>
           <dd>When defined and not null or an empty string,
-            <a data-link-for="StoreTrackingExData">explanation</a> is a
+            <a data-link-for="TrackingExData">explanation</a> is a
             user-readable short explanation of the granted exception.</dd>
           <dt><code><dfn>details</dfn></code></dt>
           <dd>When defined and not null or an empty string,
-            <a data-link-for="StoreTrackingExData">details</a> is a URI
+            <a data-link-for="TrackingExData">details</a> is a URI
             reference at which further information about the granted
             exception can be found.</dd>
           <dt><code><dfn>maxAge</dfn></code></dt>
           <dd>When defined and not null,
-            <a data-link-for="StoreTrackingExData">maxAge</a> is a positive
+            <a data-link-for="TrackingExData">maxAge</a> is a positive
             number of seconds indicating the maximum lifetime of the grant:
             <ul>
               <li>If <code>maxAge</code> is supplied and not null, empty, or
@@ -2036,9 +2036,9 @@ object {
             the listed targets); otherwise, <code>false</code>.</dd>
         </p>
         <p>
-          When a list of <a data-link-for="StoreTrackingExData">targets</a>
+          When a list of <a data-link-for="TrackingExData">targets</a>
           is supplied for a site-specific exception (i.e., a
-          <a data-link-for="StoreTrackingExData">site</a> other
+          <a data-link-for="TrackingExData">site</a> other
           than "*"), the user agent MAY ignore that list, choosing instead to
           store a site-specific exception for all domains
           (<code>[site,&nbsp;*]</code>), if it also indicates that result by
@@ -2048,28 +2048,23 @@ object {
         </p>
         <p>
           If the <a>site domain</a> would not be able to set a
-          cookie on the <a data-link-for="StoreTrackingExData">site</a>
+          cookie on the <a data-link-for="TrackingExData">site</a>
           following the cookie domain rules [[!RFC6265]],
           the user agent MUST NOT store the duplets and MUST reject the
           promise with a <a>DOMException</a> named "SecurityError".
         </p>
         <p class="example">
           For example, a script on <em>www.foo.bar.example.com</em> can set
-          the <a data-link-for="StoreTrackingExData">site</a> as
+          the <a data-link-for="TrackingExData">site</a> as
           <code>"bar.example.com"</code> or
           <code>"example.com"</code>, but not to
           <code>"something.else.example.com"</code> or <code>"com"</code>.
         </p>
         <p>
           For any other failure, such as an incorrectly formatted parameter in
-          the <a>StoreTrackingExData</a>, the user agent MUST NOT store
+          the <a>TrackingExData</a>, the user agent MUST NOT store
           any of the target duplets in the database and MUST reject the promise
           with a <a>DOMException</a> named "SyntaxError".
-        </p>
-        <p>
-          Because the database might be changed at any time (via other windows
-          or additional user interfaces), a particular response to the API
-          might only be accurate at the time the promise is fulfilled.
         </p>
         <p class="note" id="api-security">
           There are some security concerns here regarding the ability of a
@@ -2080,7 +2075,7 @@ object {
           <a>effective script origin</a> differs from those targets.
           However, a solution to these concerns would require additional
           requests to verify that the <a>effective script origin</a> has the
-          right to set DNT for the given tuples, which is overkill given how
+          right to set DNT for the given duplets, which is overkill given how
           little value is obtained by setting the field without a legitimate
           record of consent having been received.<br />
           <br />
@@ -2097,74 +2092,84 @@ object {
         <h4>API to Remove a Tracking Exception</h4>
 
         <p>
-          <code><dfn>Navigator.removeTrackingException</dfn></code> is called
-          by a page to remove a tracking exception.
-          The <code><dfn>RemoveTrackingExData</dfn></code> dictionary
-          contains information to identify the exception.
+          When a site decides, or has been directed by the user, to revoke a
+          <a>user-granted exception</a>, a script running within an active
+          <a>browsing context</a> or <a>nested browsing context</a> of that
+          site can <a>promise-call</a>
+          <code><dfn>Navigator.removeTrackingException</dfn></code>
+          to remove one or more tracking exceptions.
+          A <a>TrackingExData</a> object is supplied as a
+          parameter to identify which exceptions are to be removed.
+          The call returns a promise which either resolves to
+          indicate success or is rejected with a <a>DOMException</a>
+          identifying the reason for the failure.
         </p>
         <pre class="idl">
         partial interface Navigator {
           Promise&lt;void&gt; removeTrackingException (
-            RemoveTrackingExData properties
+            TrackingExData properties
           );
-        };
-
-        dictionary RemoveTrackingExData {
-           DOMString? domain;
-           boolean? isWebWide;
         };
         </pre>
         <p>
-            <a>Navigator.removeTrackingException</a> passes a
-            <a>RemoveTrackingExData</a> that can contain the following
-            properties:
+          <a>Navigator.removeTrackingException</a> passes a
+          <a>TrackingExData</a> object. A user agent MUST ignore unknown
+          properties of the <a>TrackingExData</a> object (for future
+          extensibility). The following OPTIONAL properties are defined:
         </p>
-        <dl data-dfn-for="RemoveTrackingExData">
-            <dt><code><dfn>isWebWide</dfn></code></dt>
-            <dd>A boolean specifying whether a web-wide or a site-specific
-                exception should be removed. If <code>isWebWide</code> is
-                empty, <code>false</code>, or <code>null</code>, this call
-                refers to a site-specific exception.</dd>
-            <dt><code><dfn>domain</dfn></code></dt>
-            <dd>a cookie-domain, as defined in [[!RFC6265]],
-                to which the exception applies.</dd>
+        <dl>
+          <dt><a data-link-for="TrackingExData">site</a></dt>
+          <dd>The referring domain scope for which the exception applies:
+            <ul>
+              <li>If
+                <a data-link-for="TrackingExData">site</a> is
+                undefined, null, or the empty string, the calling script's
+                <a>site domain</a> is used by default. All stored exceptions
+                matching that domain, regardless of target, are to be removed.
+              </li>
+              <li>If
+                <a data-link-for="TrackingExData">site</a> is
+                defined and equal to "<code>*</code>", the exceptions to be
+                removed are web-wide and identified by the set of
+                <a data-link-for="TrackingExData">targets</a>.</li>
+              <li>Otherwise, the exceptions to be removed are identified by a
+                domain found in
+                <a data-link-for="TrackingExData">site</a>
+                that is treated in the same way as the domain parameter to
+                cookies [[!RFC6265]], allowing subdomains to be included with
+                the prefix "<code>*.</code>". All stored exceptions matching
+                that domain, regardless of target, are to be removed.
+              </li>
+            </ul></dd>
+          <dt><a data-link-for="TrackingExData">targets</a></dt>
+          <dd>An array of target domains for which the exception applies:
+            <ul>
+              <li>If <a data-link-for="TrackingExData">site</a> is
+                defined and equal to "<code>*</code>", then for each domain
+                string in the
+                <a data-link-for="TrackingExData">targets</a>
+                array, a web-wide exception to be removed is the duplet
+                <code>[*,&nbsp;domain]</code>.</li>
+              <li>Otherwise,
+                <a data-link-for="TrackingExData">targets</a>
+                is ignored.</li>
+            </ul></dd>
         </dl>
         <p>
-          If <code>domain</code> is supplied and not empty then it is treated
-          in the same way as the domain parameter to cookies and allows
-          setting for subdomains. The <code>domain</code> argument can be set
-          to a fully-qualified right-hand segment of the document host name,
-          up to one level below TLD. In the description below the variable
-          <em>Domain</em> would have the value <code>*.domain</code>
-        </p>
-        <p>
-          If <code>domain</code> is not specified or is null or empty then
-          the request would be processed as if it had been set to the
-          <a>script domain</a>. In the description below the variable
-          <em>Domain</em> would have the value <a>script domain</a>
-        </p>
-        <p>
-          The return value is a <code>Promise</code> which either resolves to
-          a <code>void</code> result, or is rejected with a
-          <code>DOMException</code>.
-        </p>
-        <p>
           Any processing failure, such as an incorrectly formatted parameter
-          in the <a>RemoveTrackingExData</a>, will result in no duplet
-          being removed from the data base of stored grants, and the
-          returned <code>Promise</code> being rejected with a
-          <code>DOMException.SYNTAX_ERR</code>.
-        </p>
-        <p>
-          When the <code>Promise</code> has been resolved, it is assumed
-          that there are no exceptions of the specified type for the
-          given <a>Domain</a>, and the database of
-          grants no longer contains the indicated grant(s); 
+          in the <a>TrackingExData</a>, will result in no duplet
+          being removed from the database of stored grants and the
+          returned promise being rejected with a
+          <a>DOMException</a> named "SyntaxError".
         </p>
         <p>
           If there are no matching duplets in the database of stored
-          grants when the method is called then this operation does nothing,
-          other than resolving the <code>Promise</code>.
+          grants when the method is called, this operation does nothing
+          other than resolve the promise.
+        </p>
+        <p>
+          <a>Upon fulfillment</a>, the user agent MUST have removed any
+          stored exceptions that matched the identified duplet(s).
         </p>
       </section>
 
@@ -2172,115 +2177,84 @@ object {
         <h4>API to Confirm a Tracking Exception</h4>
 
         <p>
-          <code><dfn>Navigator.confirmTrackingException</dfn></code>
-          is called by a page to confirm a tracking exception.
-          An <code><dfn>TrackingExData</dfn></code> dictionary
-          contains information to identify the exception.
-          It returns a <code>Promise</code> which either resolves to an
-          <a>TrackingExResult</a> result, or is rejected with
-          a <code>DOMException</code> identifying the reason for the failure.
+          When a site wishes to confirm that a <a>user-granted exception</a>
+          exists for a set of target domains potentially referenced by that
+          site, a script running within an active <a>browsing context</a> or
+          <a>nested browsing context</a> of that site can <a>promise-call</a>
+          <code><dfn>Navigator.trackingExceptionExists</dfn></code> with a
+          <a>TrackingExData</a> object supplied as a parameter that identifies
+          targets for which to confirm an exception exists.
+          The call returns a promise which either resolves to true or
+          false or is rejected with a <a>DOMException</a>
+          identifying the reason for the failure.
         </p>
         <pre class="idl">
         partial interface Navigator {
-          Promise&lt;TrackingExResult&gt; confirmTrackingException (
-            ConfirmTrackingExData properties
+          Promise&lt;boolean&gt; trackingExceptionExists (
+            TrackingExData properties
           );
         };
-
-        dictionary ConfirmTrackingExData {
-           DOMString? domain;
-           boolean? isWebWide;
-           sequence&lt;DOMString&gt;? arrayOfDomainStrings;
-        };
-
         </pre>
         <p>
-          <a>Navigator.confirmTrackingException</a> passes a
-          <a>ConfirmTrackingExData</a> that can contain the following
-          properties:
+          <a>Navigator.trackingExceptionExists()</a> passes a
+          <a>TrackingExData</a> object. A user agent MUST ignore unknown
+          properties of the <a>TrackingExData</a> object (for future
+          extensibility). The following OPTIONAL properties are defined:
         </p>
-        <dl data-dfn-for="ConfirmTrackingExData">
-          <dt><code><dfn>isWebWide</dfn></code></dt>
-          <dd>A boolean specifying whether a web-wide or a site-specific
-              exception should be confirmed If <code>isWebWide</code> is empty,
-              <code>false</code> or <code>null</code> this call refers to a
-              site-specific exception </dd>
-          <dt><code><dfn>domain</dfn></code></dt>
-          <dd>a cookie-domain as defined in [[!RFC6265]],
-            to which the exception applies.</dd>
-          <dt><code><dfn>arrayOfDomainStrings</dfn></code></dt>
-          <dd>A JavaScript array of strings.</dd>
+        <dl>
+          <dt><a data-link-for="TrackingExData">site</a></dt>
+          <dd>The referring domain scope:
+            <ul>
+              <li>To avoid revealing too much information about other sites,
+                any value for
+                <a data-link-for="TrackingExData">site</a> is ignored and
+                the calling script's <a>site domain</a> is used instead for
+                matching with stored exceptions.
+              </li>
+            </ul></dd>
+          <dt><a data-link-for="TrackingExData">targets</a></dt>
+          <dd>An array of target domains:
+            <ul>
+              <li>If <a data-link-for="TrackingExData">targets</a>
+                is undefined, null, or an empty array, the duplet
+                <code>[site,&nbsp;*]</code> (an exception applicable to all
+                domains referenced by the site) is identified for matching
+                against the database of stored user-granted exceptions.</li>
+              <li>Otherwise, for each domain string in the
+                <a data-link-for="TrackingExData">targets</a> array, the
+                duplet <code>[site,&nbsp;domain]</code> is identified for
+                matching against the database of stored
+                user-granted exceptions.</li>
+            </ul></dd>
         </dl>
         <p>
-          If <code>isWebWide</code> is not <code>true</code> and the call
-          does not include the <code>arrayOfDomainStrings</code>, then this
-          call is to confirm a site-wide exception. Otherwise each string in
-          <code>arrayOfDomainStrings</code> specifies a <a>target domain</a>.
-        </p>
-        <p>
-          If <code>isWebWide</code> is not <code>true</code>, the list
-          <code>arrayOfDomainStrings</code> is supplied, and the user agent
-          stores only site-wide exceptions, then the user agent MUST match by
-          confirming a site-wide exception.
-        </p>
-        <p>
-          If <code>domain</code> is supplied and not empty then it is treated
-          in the same way as the domain parameter to cookies and allows
-          setting for subdomains. The <code>domain</code> argument can be set
-          to a fully-qualified right-hand segment of the document host name,
-          up to one level below TLD. In the description below the variable
-          <em>Domain</em> would have the value <code>*.domain</code>
-        </p>
-        <p>
-          If <code>domain</code> is not specified or is null or empty then
-          the request would be processed as if it had been set to the
-          <a>script domain</a>. In the description below the variable
-          <em>Domain</em> would have the value <a>script domain</a>
-        </p>
-        <p>
-          If <code>isWebWide</code> is <code>true</code> then any
-          <code>arrayOfDomainStrings</code> is ignored, and the user agent
-          MUST match by confirming a web-wide exception, i.e. the database is
-          checked for the duplet:
-        </p>
-        <pre>[*,Domain]</pre>
-        <p>
-          If the user agent stores explicit lists, <code>isWebWide</code> is
-          not <code>true</code> and the call includes an
-          <code>arrayOfDomainStrings</code>, the database is checked for the
-          existence of all the duplets (one per target):
-        </p>
-        <pre>[Domain, target domain]</pre>
-        <p>
-          If <code>isWebWide</code> is not <code>true</code>, the user agent
-          stores only site-wide exceptions or the call did not include an
-          explicit list, the database is checked for the single duplet:
-        </p>
-        <pre>[Domain, * ]</pre>
-        <p>
-          If <code>isWebWide</code> is not <code>true</code>, the user agent
-          stores explicit lists and the call includes one, then the database
-          is checked for the existence of all the duplets (one per target):
-        </p>
-        <pre>[Domain, target domain]</pre>
-        <p>
           Any processing failure, such as an incorrectly formatted parameter
-          in the <a>ConfirmTrackingExData</a>, will result in no duplet
-          being removed from the data base of stored grants, and the
-          returned <code>Promise</code> being rejected with a
-          <code>DOMException.SYNTAX_ERR</code>.
+          in the <a>TrackingExData</a>, will result in the
+          returned promise being rejected with a
+          <a>DOMException</a> named "SyntaxError".
         </p>
         <p>
-          Otherwise the returned <code>Promise</code> resolves to a
-          <a>TrackingExResult</a> object which MUST contain a
-          <code>boolean</code> property <code><dfn>exists</dfn></code> with
-          the following possible values:
+          A user agent MUST fulfill the promise with the value
+          <code>true</code> if a current (non-expired) matching exception
+          exists for all of the duplets identified above, or
+          <code>false</code> if any of the identified duplets do not have a
+          matching exception.
         </p>
-        <ul>
-          <li><code>true</code> all the duplets exist in the database;</li>
-          <li><code>false</code> one or more of the duplets does not exist
-              in the database.</li>
-        </ul>
+        <p>
+          Because the database might be changed at any time (via other windows
+          or additional user interfaces), a particular response to the API
+          might only be accurate at the time the promise is fulfilled.
+        </p>
+        <p class="note">
+          This API does not allow a script to directly confirm that a
+          web-wide exception (<code>[*,&nbsp;target]</code>) exists, since
+          that would allow too much of the user's personal configuration,
+          including exceptions set while on other sites, to be visible to
+          arbitrary scripts on the active site. However, it might be
+          reasonable (in the future) to add an API that allows a script
+          to check for a web-wide exception targeting its own domain
+          (i.e., matching the domain in its <a>effective script origin</a>).
+        </p>
       </section>
     </section>
 
@@ -2323,9 +2297,9 @@ object {
       </p>
       <p>
         User agents MAY instantiate
-        <code>Navigator.storeSiteSpecificTrackingException</code> even when
-        <code>Navigator.doNotTrack</code> is null. Scripts SHOULD test for the
-        existence of <code>storeSiteSpecificTrackingException</code> before
+        <a>Navigator.storeTrackingException</a> even when
+        <a>Navigator.doNotTrack</a> is null. Scripts SHOULD test for the
+        existence of <a>Navigator.storeTrackingException</a> before
         calling the method. If an exception is granted and the user agent
         stores that preference, a user agent might send the
         <a>DNT:0</a> tracking preference even if it has not
