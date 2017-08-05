@@ -2367,37 +2367,6 @@ object {
         for operational integrity is treated as a unit.
       </p>
     </section>
-
-    <section id="exception-by-sites" class="informative">
-      <h3>Exception Use by Sites</h3>
-
-      <p>
-        This section is to inform the authors of sites on some considerations
-        in using the user-granted exceptions APIs to best effect; sites of
-        particular interest here are those that need an exception in order to
-        allow the user to perform some operation or to have some access.
-      </p>
-      <p>
-        The 'Store' calls return immediately, without a return value.
-        If there is a problem with the calling parameters, then
-        a Javascript exception will be thrown.
-      </p>
-      <p>
-        If they do grant it (using some positive interaction such as a
-        button), the site can return to checking the 'Confirm' API.
-      </p>
-      <p>
-        In this way the site:
-      </p>
-      <ul>
-        <li>does not assume that the storage is instantaneous and
-          mistakenly grant access when the exception does not (yet) stand;</li>
-        <li>does not call the Confirm API repeatedly, in a loop, without a
-          user-interaction between each call; and,</li>
-        <li>permits the user the opportunity to delete a previously
-        granted exception.</li>
-        </ul>
-    </section>
   </section>
 
   <section id='security'>
