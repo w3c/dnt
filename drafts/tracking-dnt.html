@@ -1618,25 +1618,23 @@ object {
       </p>
       <ul>
         <li>Content providers might wish to prompt visitors to their
-          properties to <q>opt back in</q> to tracking for behavioral
+          properties to <q>opt in</q> to tracking for behavioral
           advertising or similar purposes when they arrive with the Do Not
           Track setting enabled.</li>
+        <li>Granting an exception in one context (e.g., while browsing a news
+          site) does not imply that exception is applicable to other contexts
+          (e.g., browsing an unrelated medical site).</li>
         <li>Privacy-conscious users might wish to view or edit all the
           exceptions they've granted in a single, consistent user interface,
           rather than managing preferences in a different way on every
           content provider or tracker's privacy page.</li>
-        <li>Granting an exception in one context (e.g., while browsing a news
-          site) does not imply that exception is applicable to other contexts
-          (e.g., browsing an unrelated medical site).</li>
-        <li>Tracking providers ought to be able to avoid second-guessing a
-          user's expressed tracking preference.</li>
         <li>The solution need not require cross-domain communication
           between a first-party publisher and its third parties.</li>
       </ul>
     </section>
 
-    <section id="exception-model">
-      <h3>Exception Model</h3>
+    <section id="exception-overview">
+      <h3>Overview</h3>
 
       <p>
         A <dfn>user-granted exception</dfn> is the record of a decision by
@@ -1645,9 +1643,8 @@ object {
         Both site and target are scoped by domain, similar to the existing
         domain scope of cookies
         (<a href="https://www.w3.org/TR/html5/single-page.html#relaxing-the-same-origin-restriction">Section 5.3.1</a>
-        of [[!HTML5]]), in order to avoid asking the user's exception for
-        every subdomain of a site and every target resource that
-        might be referenced.
+        of [[!HTML5]]), to avoid prompting the user for every subdomain of a
+        site and every target resource that might be referenced.
       </p>
       <p>
         A client-side database can be used for persistent storage of
@@ -1695,6 +1692,50 @@ object {
         <a>site-specific</a> exceptions can either be limited to a named set of
         target domains or be applicable to any target domain ("*").
       </p>
+      <p>
+        A site MAY ask for consent and store an exception even when
+        the user's general preference is <a>not enabled</a>. This permits the
+        sending of <a>DNT</a> only for target resources for which an
+        expressed preference is desired. Stored exceptions MAY affect which
+        preference is transmitted if a user later chooses to configure a
+        general tracking preference.
+      </p>
+      <p>
+        A user agent is expected to query the exceptions database at the
+        time of a request in order to determine what value (if any) to send
+        as the user's tracking preference.
+      </p>
+      <ul>
+        <li>While the user is browsing a given site (top-level origin),
+          if the
+          duplet [top-level origin, target domain] matches any duplet in the
+          database, then a <a>DNT:0</a> preference is sent,
+          otherwise the user’s general preference is sent (if any).</li>
+      </ul>
+      <p>
+        A pair of duplets [A,B] and [X,Y] match if A matches X and B matches Y.
+        A pair of values A and X match if and only if one of the following
+        is true:
+      </p>
+      <ul>
+        <li>either A or X is "*";</li>
+        <li>A and X are the same string;</li>
+        <li>A has the form '*.domain' and X is 'domain' or is of the form
+          'string.domain', where 'string' is any sequence of characters.</li>
+      </ul>
+      <p class="example">
+        For example, a user might grant an exception for metrics.example.net
+        to track their activity on news.example.com and weather.example.com,
+        but not on medical.example.org. If the document at
+        <code>http://news.example.com/news/story/2098373.html</code>
+        has embedded references to
+        <code>http://metrics.example.net/1x1.gif</code> and
+        <code>http://weather.example.com/widget.js</code>, the
+        site domain for those references is
+        <code>news.example.com</code> and the target domains are
+        <code>metrics.example.net</code> and
+        <code>weather.example.com</code>, respectively. 
+      </p>
     </section>
 
     <section id='exception-granting'>
@@ -1729,13 +1770,6 @@ object {
         the user's general tracking preference. Note that either site or
         target (but not both) can be a wild-card ("*") character to indicate
         all domains.
-      </p>
-      <p>
-        A site MAY ask for consent and store an exception even when
-        the user's general preference is <a>not enabled</a>. This permits the
-        sending of <a>DNT</a> only for target resources for which an
-        expressed preference is desired (see
-        <a href="#exception-when-not-enabled" class="sectionRef"></a>).
       </p>
       <p>
         A site MUST ensure that a call to store an exception reflects the
@@ -1859,47 +1893,6 @@ object {
         preferences. Users might also desire to edit exceptions within a
         separate user interface, which would allow a user to modify their
         stored exceptions without visiting the target sites.
-      </p>
-    </section>
-
-    <section id='exception-checking'>
-      <h3>Checking for an Exception</h3>
-
-      <p>
-        A user agent is expected to query the exceptions database at the
-        time of a request in order to determine what value (if any) to send
-        as the user's tracking preference.
-      </p>
-      <ul>
-        <li>While the user is browsing a given site (top-level origin),
-          and a DNT header field is to be sent to a target domain, if the
-          duplet [top-level origin, target domain] matches any duplet in the
-          database, then a <a>DNT:0</a> preference is sent,
-          otherwise the user’s general preference is sent (if any).</li>
-      </ul>
-      <p>
-        A pair of duplets [A,B] and [X,Y] match if A matches X and B matches Y.
-        A pair of values A and X match if and only if one of the following
-        is true:
-      </p>
-      <ul>
-        <li>either A or X is "*";</li>
-        <li>A and X are the same string;</li>
-        <li>A has the form '*.domain' and X is 'domain' or is of the form
-          'string.domain', where 'string' is any sequence of characters.</li>
-      </ul>
-      <p class="example">
-        For example, a user might grant exception for metrics.example.net to
-        track their activity on news.example.com and weather.example.com, but
-        not on medical.example.org. If the document at
-        <code>http://news.example.com/news/story/2098373.html</code>
-        has embedded references to
-        <code>http://metrics.example.net/1x1.gif</code> and
-        <code>http://weather.example.com/widget.js</code>, the
-        site domain for those references is
-        <code>news.example.com</code> and the target domains are
-        <code>metrics.example.net</code> and
-        <code>weather.example.com</code>, respectively. 
       </p>
     </section>
 
@@ -2077,6 +2070,12 @@ object {
           the <a>TrackingExData</a>, the user agent MUST NOT store
           any of the target duplets in the database and MUST reject the promise
           with a <a>DOMException</a> named "SyntaxError".
+        </p>
+        <p>
+          User agents MAY instantiate <a>Navigator.storeTrackingException</a>
+          even when <a>Navigator.doNotTrack</a> is null. Scripts SHOULD test
+          for the existence of <a>Navigator.storeTrackingException</a> before
+          calling the method.
         </p>
         <p class="note" id="api-security">
           There are some security concerns here regarding the ability of a
@@ -2317,29 +2316,6 @@ object {
       </p>
     </section>
 
-    <section id="exception-when-not-enabled">
-      <h3>Exceptions without an Expressed Preference</h3>
-
-      <p>
-        Sites might wish to request exceptions even when a user arrives
-        without a DNT header field. Users might wish to grant permission
-        for tracking on or by certain sites even without
-        expressing a general tracking preference.
-      </p>
-      <p>
-        User agents MAY instantiate
-        <a>Navigator.storeTrackingException</a> even when
-        <a>Navigator.doNotTrack</a> is null. Scripts SHOULD test for the
-        existence of <a>Navigator.storeTrackingException</a> before
-        calling the method. If an exception is granted and the user agent
-        stores that preference, a user agent might send the
-        <a>DNT:0</a> tracking preference even if it has not
-        enabled preferences to be sent for other requests. Persisted
-        exceptions MAY affect which preference is transmitted if a user
-        later chooses to configure a general tracking preference.
-      </p>
-    </section>
-
     <section id="exception-by-sites" class="informative">
       <h3>Exception Use by Sites</h3>
 
@@ -2397,7 +2373,6 @@ object {
         granted exception.</li>
         </ul>
     </section>
-
   </section>
 
   <section id='security'>
