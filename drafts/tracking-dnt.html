@@ -1678,10 +1678,10 @@ object {
         A user-granted exception is <dfn>site-specific</dfn> if the exception
         is limited to requests embedded in, or referred by, a given
         <a>site domain</a>; otherwise, the exception is <dfn>web-wide</dfn>
-        and applies to all sites. For example, a user might wish to grant
-        a target domain a web-wide exception for the purpose of audience
-        measurement across multiple sites, perhaps in exchange for some
-        incentive.
+        because it applies to the target domain regardless of the referring
+        site. For example, a user might wish to grant a certain target domain
+        a web-wide exception for the purpose of audience measurement across
+        multiple sites, perhaps in exchange for some incentive.
       </p>
       <p>
         When asking for consent to record a <a>site-specific</a> exception,
@@ -1709,13 +1709,17 @@ object {
         parameters consistent with the consent granted by the user.
       </p>
       <p>
-        A site's page might be used to obtain consent for multiple parties;
+        A site's page (the <a>top-level browsing context</a>) might be used
+        to obtain <a>site-specific</a> consent for multiple parties;
         e.g., using multiple iframe elements containing scripts that can
         convey information about each party's policies and obtain specific
         consent for each party. In this case, the <a>effective script origin</a>
-        might be different from the site for which consent is being granted,
-        which is why the storeTrackingException promise-call defaults to the
-        domain of the <a>top-level browsing context</a>.
+        might be different from the site for which consent is being granted.
+      </p>
+      <p>
+        A <a>web-wide</a> exception can only be stored via the API when
+        interacting with the web-wide target domain directly as a
+        <a>first party</a>.
       </p>
       <p>
         Upon fulfillment of the promise, the user agent
@@ -1777,7 +1781,7 @@ object {
         user agent MUST NOT indicate to a site that a request for targets
         {a, b, c} exists in the database, and later remove only one or two
         of {a, b, c} from its logical database of stored grants. This
-        assures sites that the set of sites they need for operational
+        assures sites that the set of target domains they need for operational
         integrity is treated as a unit. Each separate call to an API is a
         separate unit.
       </p>
@@ -2043,11 +2047,12 @@ object {
           to <code>true</code>.
         </p>
         <p>
-          If the <a>site domain</a> would not be able to set a
+          For a <a>site-specific</a> exception,
+          a user agent MUST NOT store the duplets and MUST reject the
+          promise with a <a>DOMException</a> named "SecurityError"
+          if the script's <a>site domain</a> would not be able to set a
           cookie on the <a data-link-for="TrackingExData">site</a>
           following the cookie domain rules [[!RFC6265]],
-          the user agent MUST NOT store the duplets and MUST reject the
-          promise with a <a>DOMException</a> named "SecurityError".
         </p>
         <p class="example">
           For example, a script on <em>www.foo.bar.example.com</em> can set
@@ -2055,6 +2060,17 @@ object {
           <code>"bar.example.com"</code> or
           <code>"example.com"</code>, but not to
           <code>"something.else.example.com"</code> or <code>"com"</code>.
+        </p>
+        <p>
+          For each of the <a data-link-for="TrackingExData">targets</a> in a
+          <a>web-wide</a> exception, a user agent MUST NOT store the duplets
+          and MUST reject the promise with a <a>DOMException</a> named
+          "SecurityError" unless the target domain matches both the
+          <a>document.domain</a> of the script's <a>responsible document</a>
+          and the
+          <a>document.domain</a> of the <a>top-level browsing context</a>'s
+          <a>active document</a> [[!HTML5]]. This effectively limits the API
+          for web-wide exceptions to the single target domain of the caller.
         </p>
         <p>
           For any other failure, such as an incorrectly formatted parameter in
@@ -2065,10 +2081,10 @@ object {
         <p class="note" id="api-security">
           There are some security concerns here regarding the ability of a
           script with an <a>effective script origin</a> different from the
-          site being able to set exceptions that might impact the behavior
-          of that site. Likewise, it might be unwise for a script to be able
-          to impact the DNT values received by target domains when the
-          <a>effective script origin</a> differs from those targets.
+          site being able to set site-specific exceptions that might impact
+          the behavior of that site. Likewise, it might be unwise for a script
+          to be able to impact the DNT values received by target domains when
+          the <a>effective script origin</a> differs from those targets.
           However, a solution to these concerns would require additional
           requests to verify that the <a>effective script origin</a> has the
           right to set DNT for the given duplets, which is overkill given how
@@ -2151,6 +2167,25 @@ object {
                 is ignored.</li>
             </ul></dd>
         </dl>
+        <p>
+          For a <a>site-specific</a> exception,
+          a user agent MUST NOT remove the duplets and MUST reject the
+          promise with a <a>DOMException</a> named "SecurityError"
+          if the script's <a>site domain</a> would not be able to set a
+          cookie on the <a data-link-for="TrackingExData">site</a>
+          following the cookie domain rules [[!RFC6265]],
+        </p>
+        <p>
+          For each of the <a data-link-for="TrackingExData">targets</a> in a
+          <a>web-wide</a> exception, a user agent MUST NOT remove the duplets
+          and MUST reject the promise with a <a>DOMException</a> named
+          "SecurityError" unless the target domain matches both the
+          <a>document.domain</a> of the script's <a>responsible document</a>
+          and the
+          <a>document.domain</a> of the <a>top-level browsing context</a>'s
+          <a>active document</a> [[!HTML5]]. This effectively limits the API
+          for web-wide exceptions to the single target domain of the caller.
+        </p>
         <p>
           Any processing failure, such as an incorrectly formatted parameter
           in the <a>TrackingExData</a>, will result in no duplet
