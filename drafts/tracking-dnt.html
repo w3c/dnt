@@ -1856,68 +1856,6 @@ object {
       </p>
     </section>
 
-    <section id='exception-management'>
-      <h3>User Agent Management of Exceptions</h3>
-
-      <p>
-        There is no required user interface for a user agent regarding the
-        granting of exceptions; a user agent MAY choose to provide none.
-        Alternatively, a user agent MAY:
-      </p>
-      <ul>
-        <li>indicate that a call to store an exception has just been
-          made;</li>
-        <li>allow the user to confirm a user-granted exception prior
-          to storage;</li>
-        <li>indicate that one or more exceptions exist for the
-          current site;</li>
-        <li>indicate that one or more exceptions exist for target domains
-          incorporated into the current page; or,</li>
-        <li>provide a user interface to see and edit the database of recorded
-          exception grants.</li>
-      </ul>
-      <p>
-        When an explicit list of target domains is provided through the API,
-        their names might mean little to the user. The user might, for
-        example, be told that there is a stored exception for a specific
-        set of targets on such-and-such site, rather than
-        listing them by name; or the user agent might decide to store an
-        all-target exception, effectively ignoring any list of targets.
-      </p>
-      <p>
-        Conversely, if a wild-card is used for the target, the user might be
-        told that there is a stored exception for all third parties that are
-        embedded by the indicated site.
-      </p>
-      <p>
-        A user agent that chooses to highlight when tracking exceptions are
-        applicable might provide an interface, such as a selectable icon in
-        the status bar, that can direct the user to more information about
-        the exception and how to revoke it.
-      </p>
-      <p>
-        In some user agent implementations, decisions to grant exceptions
-        might have been made in the past (and since forgotten) or might have
-        been made by other users of the device. Thus, exceptions might not
-        always represent the current preferences of the user. Some user
-        agents might choose to provide ambient notice that user-opted
-        tracking is ongoing, or easy access to view and control these
-        preferences. Users might also desire to edit exceptions within a
-        separate user interface, which would allow a user to modify their
-        stored exceptions without visiting the target sites.
-      </p>
-      <p>
-        A user-agent MUST handle each set of exception duplets stored by a
-        single storeTrackingException call as a 'unit', granting and
-        maintaining the duplets in their entirety, or not at all.
-        A user agent MUST NOT indicate to a site that it has stored an
-        exception for targets {a, b, c} in the database, and later remove
-        only one or two of {a, b, c} from its logical database of stored
-        grants. This assures sites that the set of target domains they need
-        for operational integrity is treated as a unit.
-      </p>
-    </section>
-
     <section id="exception-javascript-api">
       <h3>Client-side Scripting API</h3>
 
@@ -2365,6 +2303,68 @@ object {
         In all these ways, the site is contributing to informing the user and
         obtaining their consent, while enabling a call to the Javascript API
         when such consent is granted.
+      </p>
+    </section>
+
+    <section id='exception-management'>
+      <h3>User Agent Management of Exceptions</h3>
+
+      <p>
+        There is no required user interface for a user agent regarding the
+        granting of exceptions; a user agent MAY choose to provide none.
+        Alternatively, a user agent MAY:
+      </p>
+      <ul>
+        <li>indicate that a call to store an exception has just been
+          made;</li>
+        <li>allow the user to confirm a user-granted exception prior
+          to storage;</li>
+        <li>indicate that one or more exceptions exist for the
+          current site;</li>
+        <li>indicate that one or more exceptions exist for target domains
+          incorporated into the current page; or,</li>
+        <li>provide a user interface to see and edit the database of recorded
+          exception grants.</li>
+      </ul>
+      <p>
+        When an explicit list of target domains is provided through the API,
+        their names might mean little to the user. The user might, for
+        example, be told that there is a stored exception for a specific
+        set of targets on such-and-such site, rather than
+        listing them by name; or the user agent might decide to store an
+        all-target exception, effectively ignoring any list of targets.
+      </p>
+      <p>
+        Conversely, if a wild-card is used for the target, the user might be
+        told that there is a stored exception for all third parties that are
+        embedded by the indicated site.
+      </p>
+      <p>
+        A user agent that chooses to highlight when tracking exceptions are
+        applicable might provide an interface, such as a selectable icon in
+        the status bar, that can direct the user to more information about
+        the exception and how to revoke it.
+      </p>
+      <p>
+        In some user agent implementations, decisions to grant exceptions
+        might have been made in the past (and since forgotten) or might have
+        been made by other users of the device. Thus, exceptions might not
+        always represent the current preferences of the user. Some user
+        agents might choose to provide ambient notice that user-opted
+        tracking is ongoing, or easy access to view and control these
+        preferences. Users might also desire to edit exceptions within a
+        separate user interface, which would allow a user to modify their
+        stored exceptions without visiting the target sites.
+      </p>
+      <p>
+        A user-agent MUST handle each set of exception duplets stored by a
+        single storeTrackingException call as a 'unit', granting and
+        maintaining the duplets in their entirety, or not at all.
+        A user agent MUST NOT indicate to a site that it has stored an
+        exception for targets {a, b, c} in the database, and later remove
+        only one or two of {a, b, c} from its logical database of stored
+        grants. This assures sites that the set of target domains they need
+        for operational integrity is treated as a unit.
       </p>
     </section>
 
