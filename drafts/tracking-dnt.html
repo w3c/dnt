@@ -84,7 +84,52 @@
       noLegacyStyle: true
     };
   </script>
-  <link rel="stylesheet" href="additional.css" type="text/css" media="screen" title="custom formatting for TPWG editors">
+  <style type="text/css">
+    p, li, dd {
+      hyphens: none;
+    }
+    table {
+      border-collapse: collapse;
+      border-style: hidden hidden none;
+    }
+    table thead {
+      border-bottom: medium solid;
+    }
+    table td, table th {
+      border-bottom: thin solid;
+      border-left: medium solid;
+      border-right: medium solid;
+      padding: 0.2em;
+      vertical-align: top;
+    }
+    table.simple {
+        margin-left: auto;
+        margin-right: auto;
+        width: 80%;
+    }
+    .simple tr {
+        vertical-align: top;
+    }
+    .example .example .example-title {
+        display: none
+    }
+    .option {
+        margin: 1em 0em 0em;
+        padding:    1em;
+        border: 2px solid #E2E3FF;
+        background: #F0F0FC;
+    }
+    .option::before {
+        content:    "Option";
+        display:    block;
+        width:  150px;
+        margin: -1.5em 0 0.5em 0;
+        font-weight:    bold;
+        border: 1px solid #8084FF;
+        background: #fff;
+        padding:    3px 1em;
+    }
+  </style>
 </head>
 <body>
   <section id='abstract'>
@@ -1610,34 +1655,20 @@ object {
   <section id='exceptions' >
     <h2>User-Granted Exceptions</h2>
 
-    <section id="exception-principles">
-      <h3>Motivating Principles</h3>
+    <section id="exception-overview">
+      <h3>Overview</h3>
 
       <p>
-        The following principles guide the design of user-granted exceptions.
+        Content providers might wish to prompt visitors to <q>opt in</q> to
+        tracking for behavioral advertising or similar purposes when they
+        arrive with the Do Not Track setting enabled. However, granting an
+        exception in one context (e.g., while browsing a news site) does not
+        imply that exception is applicable to other contexts (e.g., browsing
+        an unrelated medical site). Furthermore, users might wish to view or
+        edit all the exceptions they've granted in a single, consistent user
+        interface, rather than managing preferences in a different way on
+        every content provider or tracker's privacy page.
       </p>
-      <ul>
-        <li>Content providers might wish to prompt visitors to their
-          properties to <q>opt back in</q> to tracking for behavioral
-          advertising or similar purposes when they arrive with the Do Not
-          Track setting enabled.</li>
-        <li>Privacy-conscious users might wish to view or edit all the
-          exceptions they've granted in a single, consistent user interface,
-          rather than managing preferences in a different way on every
-          content provider or tracker's privacy page.</li>
-        <li>Granting an exception in one context (e.g., while browsing a news
-          site) does not imply that exception is applicable to other contexts
-          (e.g., browsing an unrelated medical site).</li>
-        <li>Tracking providers ought to be able to avoid second-guessing a
-          user's expressed tracking preference.</li>
-        <li>The solution need not require cross-domain communication
-          between a first-party publisher and its third parties.</li>
-      </ul>
-    </section>
-
-    <section id="exception-model">
-      <h3>Exception Model</h3>
-
       <p>
         A <dfn>user-granted exception</dfn> is the record of a decision by
         the user to grant consent for tracking (<a>DNT:0</a>) on future
@@ -1645,9 +1676,8 @@ object {
         Both site and target are scoped by domain, similar to the existing
         domain scope of cookies
         (<a href="https://www.w3.org/TR/html5/single-page.html#relaxing-the-same-origin-restriction">Section 5.3.1</a>
-        of [[!HTML5]]), in order to avoid asking the user's exception for
-        every subdomain of a site and every target resource that
-        might be referenced.
+        of [[!HTML5]]), to avoid prompting the user for every subdomain of a
+        site and every target resource that might be referenced.
       </p>
       <p>
         A client-side database can be used for persistent storage of
@@ -1656,9 +1686,14 @@ object {
         only define the API (below); the choice of storage mechanism is left
         to each implementation. In comparison to the use of cookies to manage
         consent, an exception database and APIs provide more transparency and
-        better user control over their own consent decisions, while also
-        providing better persistence of those exceptions for sites.
+        better user control, while also providing better persistence of those
+        exceptions for sites.
       </p>
+    </section>
+
+    <section id="exception-scope">
+      <h3>Site-specific or Web-wide</h3>
+
       <p>
         There are two primary domain concepts involved
         in the processing of user-granted exceptions:
@@ -1705,37 +1740,8 @@ object {
         content, the need for an exception and the consequences of granting or
         denying that exception. Upon receipt of an informed consent from the
         user, a script operating on the site's page is expected to
-        promise-call the <a>Navigator.storeTrackingException()</a> API using
+        promise-call the <a>Navigator.storeTrackingException</a> API using
         parameters consistent with the consent granted by the user.
-      </p>
-      <p>
-        A site's page (the <a>top-level browsing context</a>) might be used
-        to obtain <a>site-specific</a> consent for multiple parties;
-        e.g., using multiple iframe elements containing scripts that can
-        convey information about each party's policies and obtain specific
-        consent for each party. In this case, the <a>effective script origin</a>
-        might be different from the site for which consent is being granted.
-      </p>
-      <p>
-        A <a>web-wide</a> exception can only be stored via the API when
-        interacting with the web-wide target domain directly as a
-        <a>first party</a>.
-      </p>
-      <p>
-        Upon fulfillment of the promise, the user agent
-        has added to its local database one or more site-pair
-        duplets [site, target], each indicating that a request from that site
-        domain to the target domain will include <a>DNT:0</a> regardless of
-        the user's general tracking preference. Note that either site or
-        target (but not both) can be a wild-card ("*") character to indicate
-        all domains.
-      </p>
-      <p>
-        A site MAY ask for consent and store an exception even when
-        the user's general preference is <a>not enabled</a>. This permits the
-        sending of <a>DNT</a> only for target resources for which an
-        expressed preference is desired (see
-        <a href="#exception-when-not-enabled" class="sectionRef"></a>).
       </p>
       <p>
         A site MUST ensure that a call to store an exception reflects the
@@ -1745,120 +1751,51 @@ object {
         time of that call.
       </p>
       <p>
-        A site MAY monitor for changes to its user-granted exceptions.
-        If a user revokes consent by deleting an exception, the site MUST
-        respect that revocation, though it MAY ask again for a new
-        exception. In other words, a site MUST NOT resurrect a deleted
-        exception without first interacting with and receiving new 
-        consent from the user.
+        Third party target domains that might wish to receive a user-granted
+        exception often do not have the ability to invoke an interactive
+        JavaScript presence on a page (for example, those that provide only
+        images or "tracking pixels"). They cannot request an exception under
+        these circumstances, either because a script is needed to make the
+        API call or it requires interaction to ensure the user is informed
+        and to receive an indication of their consent. In general, this
+        process of informing, getting consent, and calling the API is not
+        expected within page elements where such trackers are invoked.
       </p>
       <p>
-        A site MUST have a <a>site-wide tracking status resource</a>
-        with a valid
-        <a href="#status-representation">tracking status representation</a>
-        that includes a <a>policy</a> property when making an API call to
-        store a user-granted exception.
-        This allows a user agent to obtain and possibly store additional
-        information about the calling site’s controller and tracking
-        policies at the time an exception is granted.
+        A first party site's page (the <a>top-level browsing context</a>)
+        might be used to obtain <a>site-specific</a> consent for multiple
+        parties;
+        e.g., using multiple iframe elements containing scripts that can
+        convey information about each party's policies and obtain specific
+        consent for each party. In this case, the <a>effective script origin</a>
+        might be different from the site for which consent is being granted.
       </p>
       <p>
-        A user agent MAY choose to reject an API call if it cannot determine
-        the script origin or if the script origin does not have a
-        <a>site-wide tracking status resource</a> with a valid
-        <a href="#status-representation">tracking status representation</a>.
+        Alternatively, a third party might encourage the user to visit their
+        own site directly in order to engage in a consent dialog and make use
+        of the API to store a <a>web-wide</a> exception.
+        A <a>web-wide</a> exception can only be stored via the API when
+        interacting with the web-wide target domain directly as a
+        <a>first party</a>.
       </p>
       <p>
-        A user agent MAY choose to disregard a user-granted exception when
-        the <a>target resource</a> does not have a corresponding tracking
-        status resource with a valid tracking status representation, since
-        that would imply the <a>target resource</a> does not conform to this
-        specification.
+        A site can request an exception be stored even when the user's
+        general preference is <a>not enabled</a>. This permits the sending of
+        <a>DNT</a> only for target resources for which an expressed
+        preference is desired. Stored exceptions could affect which
+        preference is transmitted if a user later chooses to configure a
+        general tracking preference.
       </p>
       <p>
-        A user-agent MUST handle each API request as a 'unit', granting and
-        maintaining it in its entirety, or not at all. That means that a
-        user agent MUST NOT indicate to a site that a request for targets
-        {a, b, c} exists in the database, and later remove only one or two
-        of {a, b, c} from its logical database of stored grants. This
-        assures sites that the set of target domains they need for operational
-        integrity is treated as a unit. Each separate call to an API is a
-        separate unit.
-      </p>
-      <p>
-        There is no required user interface for a user agent regarding the
-        granting of exceptions; a user agent MAY choose to provide none.
-        Alternatively, a user agent MAY:
-      </p>
-      <ul>
-        <li>indicate that a call to store an exception has just been
-          made;</li>
-        <li>allow the user to confirm a user-granted exception prior
-          to storage;</li>
-        <li>indicate that one or more exceptions exist for the
-          current top-level origin;</li>
-        <li>indicate that one or more exceptions exist for sites
-          incorporated into the current page; or,</li>
-        <li>indicate how to <a href="#exception-management">manage the
-          exceptions granted</a>.
-      </ul>
-      <p>
-        When an explicit list of target domains is provided through the API,
-        their names might mean little to the user. The user might, for
-        example, be told that there is a stored exception for a specific
-        set of targets on such-and-such top-level origin, rather than
-        listing them by name; or the user agent might decide to store an
-        all-target exception, effectively ignoring any list of targets.
-      </p>
-      <p>
-        Conversely, if a wild-card is used for the target, the user might be
-        told that there is a stored exception for all third-parties that are
-        embedded by the indicated top-level origin.
-      </p>
-    </section>
-
-    <section id='exception-management'>
-      <h3>Exception Management</h3>
-
-      <p>
-        User agents are free to implement exception management user
-        interfaces as they see fit. Some agents might provide a notification
-        to the user at the time of the request, or even not complete the
-        storing of the exception until the user approves. Some agents might
-        provide a user-interface to see and edit the database of recorded
-        exception grants.
-      </p>
-      <p>
-        The API parameters siteName, explanation, and details are
-        provided for the sake of potential user interfaces.
-        If a user agent presents these parameters to the
-        user, it ought to be clear that they are provided for informational
-        value and are less important than the exception's technical effect.
-      </p>
-      <p>
-        A user agent that chooses to highlight when tracking exceptions have
-        been stored might provide an interface like the following:
-      </p>
-      <ul>
-        <li>an icon in the status bar indicating that an exception has been
-          stored, which, when clicked on, gives the user more information
-          about the exception and an option to revoke it.</li>
-        <li>an infobar stating "Example News (news.example.com) has
-          indicated to Browser that you have consented to granting it
-          exception for tracking. If you believe
-          this is incorrect, click Revoke."</li>
-        <li>no UI at all.</li>
-      </ul>
-      <p>
-        In some user agent implementations, decisions to grant exceptions
-        might have been made in the past (and since forgotten) or might have
-        been made by other users of the device. Thus, exceptions might not
-        always represent the current preferences of the user. Some user
-        agents might choose to provide ambient notice that user-opted
-        tracking is ongoing, or easy access to view and control these
-        preferences. Users might also desire to edit exceptions within a
-        separate user interface, which would allow a user to modify their
-        stored exceptions without visiting the target sites.
+        A user agent might not store the exception immediately, possibly
+        because it is allowing the user to confirm. Even though the site has
+        acquired the user's informed consent before calling the store API,
+        it is possible that the user will change their mind, allow the
+        storing of an exception to proceed but later remove it, or perhaps
+        deny the storage by prior configuration.
+        Nonetheless, at the time of a call, the site has acquired the
+        user's consent and can proceed on that basis whether or not the
+        user agent has stored an exception.
       </p>
     </section>
 
@@ -1866,15 +1803,21 @@ object {
       <h3>Checking for an Exception</h3>
 
       <p>
+        A site can promise-call the <a>Navigator.trackingExceptionExists</a>
+        API to enquire whether an exception has been granted and stands in
+        the user agent. If it resolves to false (the exception has expired,
+        been deleted, or has not yet been stored), the user can be asked
+        again for consent.
+      </p>
+      <p>
         A user agent is expected to query the exceptions database at the
         time of a request in order to determine what value (if any) to send
         as the user's tracking preference.
       </p>
       <ul>
-        <li>While the user is browsing a given site (top-level origin),
-          and a DNT header field is to be sent to a target domain, if the
-          duplet [top-level origin, target domain] matches any duplet in the
-          database, then a <a>DNT:0</a> preference is sent,
+        <li>While the user is browsing a given site,
+          if the duplet [<a>site domain</a>, <a>target domain</a>] matches
+          any duplet in the database, then a <a>DNT:0</a> preference is sent,
           otherwise the user’s general preference is sent (if any).</li>
       </ul>
       <p>
@@ -1889,9 +1832,9 @@ object {
           'string.domain', where 'string' is any sequence of characters.</li>
       </ul>
       <p class="example">
-        For example, a user might grant exception for metrics.example.net to
-        track their activity on news.example.com and weather.example.com, but
-        not on medical.example.org. If the document at
+        For example, a user might grant an exception for metrics.example.net
+        to track their activity on news.example.com and weather.example.com,
+        but not on medical.example.org. If the document at
         <code>http://news.example.com/news/story/2098373.html</code>
         has embedded references to
         <code>http://metrics.example.net/1x1.gif</code> and
@@ -1901,10 +1844,36 @@ object {
         <code>metrics.example.net</code> and
         <code>weather.example.com</code>, respectively. 
       </p>
+      <p>
+        A user agent MAY choose to disregard a user-granted exception when
+        the <a>target resource</a> does not have a corresponding tracking
+        status resource with a valid tracking status representation, since
+        that would imply the <a>target resource</a> does not conform to this
+        specification.
+      </p>
+    </section>
+
+    <section id='exception-revoking'>
+      <h3>Revoking an Exception</h3>
+
+      <p>
+        A site that stores exceptions is also expected to enable revocation
+        of those exceptions. The <a>Navigator.removeTrackingException</a> API
+        can be promise-called by a script to remove all exceptions applicable
+        to that site.
+      </p>
+      <p>
+        A site MAY monitor for changes to its user-granted exceptions.
+        If a user revokes consent by deleting an exception, the site MUST
+        respect that revocation, though it MAY ask again for a new
+        exception. In other words, a site MUST NOT resurrect a deleted
+        exception without first interacting with and receiving new 
+        consent from the user.
+      </p>
     </section>
 
     <section id="exception-javascript-api">
-      <h3>Exception API</h3>
+      <h3>Client-side Scripting API</h3>
 
       <section id="exception-javascript-api-store">
         <h4>API to Store a Tracking Exception</h4>
@@ -2018,6 +1987,15 @@ object {
           </dd>
         </dl>
         <p>
+          The properties <a data-link-for="TrackingExData">name</a>,
+          <a data-link-for="TrackingExData">explanation</a>, and
+          <a data-link-for="TrackingExData">details</a> are provided by the
+          caller for the sake of potential user interfaces.
+          If a user agent presents these properties to the user, it ought to
+          be clear that they are provided for informational value and are
+          less important than the exception's technical effect.
+        </p>
+        <p>
           In addition to the data above, a user agent might also store
           ambient information about the call, such as the URI associated
           with the <a>top-level browsing context</a>,
@@ -2026,25 +2004,21 @@ object {
           resources.
         </p>
         <p>
-          <a>Upon fulfillment</a>, the promise object contains the following
-          <a>TrackingExResult</a> attribute:
-        </p>
-        <dl data-dfn-for="TrackingExResult">
-          <dt><code><dfn>isSiteWide</dfn></code></dt>
-          <dd><code>true</code> if the user agent stored a potentially
-            broader exception that applies to all domains (as opposed to just
-            the listed targets); otherwise, <code>false</code>.</dd>
+          The calling site MUST have a
+          <a>site-wide tracking status resource</a> with a valid
+          <a href="#status-representation">tracking status representation</a>
+          that includes a <a>policy</a> property.
+          This allows a user agent to obtain and possibly store additional
+          information about the calling site’s controller and tracking
+          policies at the time an exception is granted.
         </p>
         <p>
-          When a list of <a data-link-for="TrackingExData">targets</a>
-          is supplied for a <a>site-specific</a> exception (i.e., a
-          <a data-link-for="TrackingExData">site</a> other
-          than "*"), the user agent MAY ignore that list, choosing instead to
-          store a <a>site-specific</a> exception for all domains
-          (<code>[site,&nbsp;*]</code>), if it also indicates that result by
-          setting the returned promise's
-          <a data-link-for="TrackingExResult">isSiteWide</a> property
-          to <code>true</code>.
+          A user agent MAY reject the promise with a <a>DOMException</a>
+          named "InvalidStateError" if it cannot determine the
+          <a>effective script origin</a> or if the site corresponding to that
+          origin does not have a
+          <a>site-wide tracking status resource</a> with a valid
+          <a href="#status-representation">tracking status representation</a>.
         </p>
         <p>
           For a <a>site-specific</a> exception,
@@ -2077,6 +2051,37 @@ object {
           the <a>TrackingExData</a>, the user agent MUST NOT store
           any of the target duplets in the database and MUST reject the promise
           with a <a>DOMException</a> named "SyntaxError".
+        </p>
+        <p>
+          <a>Upon fulfillment</a>, the user agent has added to its local
+          database one or more site-pair duplets [site, target], each
+          indicating that a request from that <a>site domain</a> to the
+          <a>target domain</a> will include <a>DNT:0</a> regardless of the
+          user's general tracking preference. The fulfilled promise object
+          contains the following <a>TrackingExResult</a> attribute:
+        </p>
+        <dl data-dfn-for="TrackingExResult">
+          <dt><code><dfn>isSiteWide</dfn></code></dt>
+          <dd><code>true</code> if the user agent stored a potentially
+            broader exception that applies to all domains (as opposed to just
+            the listed targets); otherwise, <code>false</code>.</dd>
+        </p>
+        <p>
+          When a list of <a data-link-for="TrackingExData">targets</a>
+          is supplied for a <a>site-specific</a> exception (i.e., a
+          <a data-link-for="TrackingExData">site</a> other
+          than "*"), the user agent MAY ignore that list, choosing instead to
+          store a <a>site-specific</a> exception for all domains
+          (<code>[site,&nbsp;*]</code>), if it also indicates that result by
+          setting the returned promise's
+          <a data-link-for="TrackingExResult">isSiteWide</a> property
+          to <code>true</code>.
+        </p>
+        <p>
+          User agents MAY instantiate <a>Navigator.storeTrackingException</a>
+          even when <a>Navigator.doNotTrack</a> is null. Scripts SHOULD test
+          for the existence of <a>Navigator.storeTrackingException</a> before
+          calling the method.
         </p>
         <p class="note" id="api-security">
           There are some security concerns here regarding the ability of a
@@ -2227,7 +2232,7 @@ object {
         };
         </pre>
         <p>
-          <a>Navigator.trackingExceptionExists()</a> passes a
+          <a>Navigator.trackingExceptionExists</a> passes a
           <a>TrackingExData</a> object. A user agent MUST ignore unknown
           properties of the <a>TrackingExData</a> object (for future
           extensibility). The following OPTIONAL properties are defined:
@@ -2289,115 +2294,67 @@ object {
       </section>
     </section>
 
-    <section id="exception-no-js" class="informative">
-      <h3>Exceptions without Interactive JavaScript</h3>
+    <section id='exception-management'>
+      <h3>User Agent Management of Exceptions</h3>
 
       <p>
-        Some third party servers that might wish to receive a user-granted
-        exception do not have the ability to invoke an interactive JavaScript
-        presence on a page (for example, those that provide only images or
-        "tracking pixels"). They cannot request an exception under these
-        circumstances because a script is needed to make the API call and
-        it requires interaction to ensure the user is informed and to receive
-        an indication of their consent. In general, this process of informing,
-        getting consent, and calling the API is not expected within page
-        elements where such trackers are invoked.
-      </p>
-      <p>
-        To obtain an exception, a document (page, frame, etc.) that loads the
-        JavaScript is needed. The user might visit the site that desires an
-        exception directly, or the first party might provide a separate page
-        that could load script-enabled frames in which each third party
-        could ask for an exception (allowing for aggregation of requests).
-      </p>
-      <p>
-        In all these ways, the site is contributing to informing the user and
-        obtaining their consent, while enabling a call to the Javascript API
-        when such consent is granted.
-      </p>
-    </section>
-
-    <section id="exception-when-not-enabled">
-      <h3>Exceptions without an Expressed Preference</h3>
-
-      <p>
-        Sites might wish to request exceptions even when a user arrives
-        without a DNT header field. Users might wish to grant permission
-        for tracking on or by certain sites even without
-        expressing a general tracking preference.
-      </p>
-      <p>
-        User agents MAY instantiate
-        <a>Navigator.storeTrackingException</a> even when
-        <a>Navigator.doNotTrack</a> is null. Scripts SHOULD test for the
-        existence of <a>Navigator.storeTrackingException</a> before
-        calling the method. If an exception is granted and the user agent
-        stores that preference, a user agent might send the
-        <a>DNT:0</a> tracking preference even if it has not
-        enabled preferences to be sent for other requests. Persisted
-        exceptions MAY affect which preference is transmitted if a user
-        later chooses to configure a general tracking preference.
-      </p>
-    </section>
-
-    <section id="exception-by-sites" class="informative">
-      <h3>Exception Use by Sites</h3>
-
-      <p>
-        This section is to inform the authors of sites on some considerations
-        in using the user-granted exceptions APIs to best effect; sites of
-        particular interest here are those that need an exception in order to
-        allow the user to perform some operation or to have some access.
-      </p>
-      <p>
-        The 'Store' calls return immediately, without a return value.
-        If there is a problem with the calling parameters, then
-        a Javascript exception will be thrown.
-      </p>
-      <p>
-        A user agent might not store the exception immediately, possibly
-        because it is allowing the user to confirm. Even though the site has
-        acquired the user's informed consent before calling the 'Store' API,
-        it is possible that the user will change their mind, allow the
-        storing of an exception to proceed but later remove it, or perhaps
-        deny the storage by prior configuration.
-      </p>
-      <p>
-        Nonetheless, at the time of the call, the site has acquired the
-        user's consent and can proceed on that basis, whether or not the
-        user-agent has stored the exception immediately. It is not necessary
-        to call the confirm API at the time of consent.
-      </p>
-      <p>
-        On other visits, a site can call the 'Confirm' APIs to enquire
-        whether a specific exception has been granted and stands in the user
-        agent. This is the call to make to determine whether the exception
-        exists, and hence to control access to the function or operation; if
-        it fails (the exception has been deleted or not yet granted), then
-        the user is ideally again offered the information needed to give
-        their informed consent, and again offered the opportunity to
-        indicate that they grant it. As stated in the normative text, the
-        site needs to explain and acquire consent immediately prior to
-        calling the Store API, and not remember some past consent; this
-        allows a user to change their mind.
-      </p>
-      <p>
-        If they do grant it (using some positive interaction such as a
-        button), the site can return to checking the 'Confirm' API.
-      </p>
-      <p>
-        In this way the site:
+        There is no required user interface for a user agent regarding the
+        granting of exceptions; a user agent MAY choose to provide none.
+        Alternatively, a user agent MAY:
       </p>
       <ul>
-        <li>does not assume that the storage is instantaneous and
-          mistakenly grant access when the exception does not (yet) stand;</li>
-        <li>does not call the Confirm API repeatedly, in a loop, without a
-          user-interaction between each call; and,</li>
-        <li>permits the user the opportunity to delete a previously
-        granted exception.</li>
-        </ul>
+        <li>indicate that a call to store an exception has just been
+          made;</li>
+        <li>allow the user to confirm a user-granted exception prior
+          to storage;</li>
+        <li>indicate that one or more exceptions exist for the
+          current site;</li>
+        <li>indicate that one or more exceptions exist for target domains
+          incorporated into the current page; or,</li>
+        <li>provide a user interface to see and edit the database of recorded
+          exception grants.</li>
+      </ul>
+      <p>
+        When an explicit list of target domains is provided through the API,
+        their names might mean little to the user. The user might, for
+        example, be told that there is a stored exception for a specific
+        set of targets on such-and-such site, rather than
+        listing them by name; or the user agent might decide to store an
+        all-target exception, effectively ignoring any list of targets.
+      </p>
+      <p>
+        Conversely, if a wild-card is used for the target, the user might be
+        told that there is a stored exception for all third parties that are
+        embedded by the indicated site.
+      </p>
+      <p>
+        A user agent that chooses to highlight when tracking exceptions are
+        applicable might provide an interface, such as a selectable icon in
+        the status bar, that can direct the user to more information about
+        the exception and how to revoke it.
+      </p>
+      <p>
+        In some user agent implementations, decisions to grant exceptions
+        might have been made in the past (and since forgotten) or might have
+        been made by other users of the device. Thus, exceptions might not
+        always represent the current preferences of the user. Some user
+        agents might choose to provide ambient notice that user-opted
+        tracking is ongoing, or easy access to view and control these
+        preferences. Users might also desire to edit exceptions within a
+        separate user interface, which would allow a user to modify their
+        stored exceptions without visiting the target sites.
+      </p>
+      <p>
+        A user-agent MUST handle each set of exception duplets stored by a
+        single storeTrackingException call as a 'unit', granting and
+        maintaining the duplets in their entirety, or not at all.
+        A user agent MUST NOT indicate to a site that it has stored an
+        exception for targets {a, b, c} in the database, and later remove
+        only one or two of {a, b, c} from its logical database of stored
+        grants. This assures sites that the set of target domains they need
+        for operational integrity is treated as a unit.
+      </p>
     </section>
-
   </section>
 
   <section id='security'>
