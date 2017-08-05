@@ -1863,13 +1863,6 @@ object {
         exception grants.
       </p>
       <p>
-        The API parameters siteName, explanation, and details are
-        provided for the sake of potential user interfaces.
-        If a user agent presents these parameters to the
-        user, it ought to be clear that they are provided for informational
-        value and are less important than the exception's technical effect.
-      </p>
-      <p>
         A user agent that chooses to highlight when tracking exceptions have
         been stored might provide an interface like the following:
       </p>
@@ -2010,6 +2003,15 @@ object {
             </ul>
           </dd>
         </dl>
+        <p>
+          The properties <a data-link-for="TrackingExData">name</a>,
+          <a data-link-for="TrackingExData">explanation</a>, and
+          <a data-link-for="TrackingExData">details</a> are provided by the
+          caller for the sake of potential user interfaces.
+          If a user agent presents these properties to the user, it ought to
+          be clear that they are provided for informational value and are
+          less important than the exception's technical effect.
+        </p>
         <p>
           In addition to the data above, a user agent might also store
           ambient information about the call, such as the URI associated
