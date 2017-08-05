@@ -1740,7 +1740,7 @@ object {
         content, the need for an exception and the consequences of granting or
         denying that exception. Upon receipt of an informed consent from the
         user, a script operating on the site's page is expected to
-        promise-call the <a>Navigator.storeTrackingException()</a> API using
+        promise-call the <a>Navigator.storeTrackingException</a> API using
         parameters consistent with the consent granted by the user.
       </p>
       <p>
@@ -1751,14 +1751,29 @@ object {
         time of that call.
       </p>
       <p>
-        A site's page (the <a>top-level browsing context</a>) might be used
-        to obtain <a>site-specific</a> consent for multiple parties;
+        Third party target domains that might wish to receive a user-granted
+        exception often do not have the ability to invoke an interactive
+        JavaScript presence on a page (for example, those that provide only
+        images or "tracking pixels"). They cannot request an exception under
+        these circumstances, either because a script is needed to make the
+        API call or it requires interaction to ensure the user is informed
+        and to receive an indication of their consent. In general, this
+        process of informing, getting consent, and calling the API is not
+        expected within page elements where such trackers are invoked.
+      </p>
+      <p>
+        A first party site's page (the <a>top-level browsing context</a>)
+        might be used to obtain <a>site-specific</a> consent for multiple
+        parties;
         e.g., using multiple iframe elements containing scripts that can
         convey information about each party's policies and obtain specific
         consent for each party. In this case, the <a>effective script origin</a>
         might be different from the site for which consent is being granted.
       </p>
       <p>
+        Alternatively, a third party might encourage the user to visit their
+        own site directly in order to engage in a consent dialog and make use
+        of the API to store a <a>web-wide</a> exception.
         A <a>web-wide</a> exception can only be stored via the API when
         interacting with the web-wide target domain directly as a
         <a>first party</a>.
@@ -1842,9 +1857,10 @@ object {
       <h3>Revoking an Exception</h3>
 
       <p>
-        A site that stores exceptions is also expected to enable revocation of
-        those exceptions. The <a>Navigator.removeTrackingException</a> can be
-        called by a script to remove all exceptions applicable to that site.
+        A site that stores exceptions is also expected to enable revocation
+        of those exceptions. The <a>Navigator.removeTrackingException</a> API
+        can be promise-called by a script to remove all exceptions applicable
+        to that site.
       </p>
       <p>
         A site MAY monitor for changes to its user-granted exceptions.
@@ -2276,34 +2292,6 @@ object {
           (i.e., matching the domain in its <a>effective script origin</a>).
         </p>
       </section>
-    </section>
-
-    <section id="exception-no-js" class="informative">
-      <h3>Exceptions without Interactive JavaScript</h3>
-
-      <p>
-        Some third party servers that might wish to receive a user-granted
-        exception do not have the ability to invoke an interactive JavaScript
-        presence on a page (for example, those that provide only images or
-        "tracking pixels"). They cannot request an exception under these
-        circumstances because a script is needed to make the API call and
-        it requires interaction to ensure the user is informed and to receive
-        an indication of their consent. In general, this process of informing,
-        getting consent, and calling the API is not expected within page
-        elements where such trackers are invoked.
-      </p>
-      <p>
-        To obtain an exception, a document (page, frame, etc.) that loads the
-        JavaScript is needed. The user might visit the site that desires an
-        exception directly, or the first party might provide a separate page
-        that could load script-enabled frames in which each third party
-        could ask for an exception (allowing for aggregation of requests).
-      </p>
-      <p>
-        In all these ways, the site is contributing to informing the user and
-        obtaining their consent, while enabling a call to the Javascript API
-        when such consent is granted.
-      </p>
     </section>
 
     <section id='exception-management'>
