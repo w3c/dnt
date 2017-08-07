@@ -427,7 +427,8 @@
         How to <dfn><a class="externalDFN" href="https://heycam.github.io/webidl/#dfn-throw">throw</a></dfn>
         a <dfn><a class="externalDFN" href="https://heycam.github.io/webidl/#idl-DOMException">DOMexception</a></dfn>
         and the <dfn><a class="externalDFN" href="https://heycam.github.io/webidl/#idl-exceptions">exceptions</a></dfn>
-        named "SyntaxError" and "SecurityError" are defined in [[!WEBIDL]].
+        named "InvalidStateError", "SecurityError", and "SyntaxError" are
+        defined in [[!WEBIDL]].
       </p>
       <p>
         <dfn><a class="externalDFN" href="https://tc39.github.io/ecma262/#sec-promise-objects">Promise objects</a></dfn>
@@ -1065,7 +1066,7 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
           <dd>When defined and not null or an empty string,
             <a data-link-for="TrackingExData">details</a> is a URI
             reference at which further information about the granted
-            exception can be found.</dd>
+            exception can be found [[!RFC3986]].</dd>
           <dt><code><dfn>maxAge</dfn></code></dt>
           <dd>When defined and not null,
             <a data-link-for="TrackingExData">maxAge</a> is a positive
@@ -1870,7 +1871,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
           in <a href="#status-caching" class="sectionRef"></a>.
         </p>
         <p>
-          See <a href="#using-tracking-status" class="sectionRef"></a> for
+          See <a href="#use-cases" class="sectionRef"></a> for
           examples of how tracking status resources can be used to discover
           support for this protocol.
         </p>
