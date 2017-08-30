@@ -790,7 +790,7 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
       <h3>Site-specific or Web-wide</h3>
 
       <p>
-        There are two primary domain concepts involved
+        There are three domain concepts involved
         in the processing of user-granted exceptions:
       </p>
       <dl>
@@ -803,6 +803,10 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
         <dt><dfn>target domain</dfn></dt>
         <dd>the <a>uri-host</a> subcomponent of the <a>authority</a> component
           of a referenced "http" or "https" URI [[!RFC7230]].</dd>
+        <dt><dfn>script domain</dfn></dt>
+        <dd>the effective domain of a script when it uses the exception API:
+          specifically, the current <a>document.domain</a> of the script's
+          <a>responsible document</a> [[!HTML5]].</dd>
       </dl>
       <p>
         A user-granted exception is <dfn>site-specific</dfn> if the exception
@@ -822,8 +826,9 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
         (For example, consider the dilemma of a site that has trusted
         advertisers and analytics providers, along with some less trusted
         mashed-up content that might reference other sites). For this reason,
-        <a>site-specific</a> exceptions can either be limited to a named set of
-        target domains or be applicable to any target domain ("*").
+        <a>site-specific</a> exceptions can be limited to the script domain,
+        limited to a named set of target domains, or be applicable to any
+        target domain ("*").
       </p>
     </section>
 
@@ -869,9 +874,6 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
         Alternatively, a third party might encourage the user to visit their
         own site directly in order to engage in a consent dialog and make use
         of the API to store a <a>web-wide</a> exception.
-        A <a>web-wide</a> exception can only be stored via the API when
-        interacting with the web-wide target domain directly as a
-        <a>first party</a>.
       </p>
       <p>
         A site can request an exception be stored even when the user's
@@ -899,10 +901,10 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
 
       <p>
         A site can promise-call the <a>Navigator.trackingExceptionExists</a>
-        API to enquire whether an exception has been granted and stands in
-        the user agent. If it resolves to false (the exception has expired,
-        been deleted, or has not yet been stored), the user can be asked
-        again for consent.
+        API to enquire whether a set of exceptions has been granted and stands
+        in the user agent. If the promise resolves to false (indicating the
+        exception set has expired, been deleted, or has not yet been stored),
+        the user can be asked again for consent.
       </p>
       <p>
         A user agent is expected to query the exceptions database at the
@@ -1019,7 +1021,7 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
               <li>If
                 <a data-link-for="TrackingExData">site</a> is
                 undefined, null, or the empty string, the exception's referring
-                domain scope defaults to the <a>site domain</a>.</li>
+                domain scope defaults to the <a>script domain</a>.</li>
               <li>If
                 <a data-link-for="TrackingExData">site</a> is
                 defined and equal to "<code>*</code>", the exception is
@@ -1043,13 +1045,18 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
           <dd>An array of target domains for which the exception applies:
             <ul>
               <li>If <a data-link-for="TrackingExData">targets</a>
-                is undefined, null, or an empty array, the user-granted
+                is undefined or null, the user-granted
                 exception to be stored is <code>[site,&nbsp;*]</code>, meaning
                 that the exception applies to all domains referenced by the
                 site.</li>
+              <li>If <a data-link-for="TrackingExData">targets</a>
+                is an empty array, the user-granted exception to be stored is
+                <code>[site,&nbsp;script&nbsp;domain]</code>, meaning that
+                the exception applies only to resources that share the same
+                domain as the <a>effective script origin</a>.</li>
               <li>Otherwise, for each domain string in the
                 <a data-link-for="TrackingExData">targets</a>
-                array, the user-granted exception to be stored is the duplet
+                array, a user-granted exception to be stored is the duplet
                 <code>[site,&nbsp;domain]</code>.</li>
             </ul></dd>
           <dt><code><dfn>name</dfn></code></dt>
@@ -1099,12 +1106,12 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
           resources.
         </p>
         <p>
-          The calling site MUST have a
+          The calling <a>script domain</a> MUST have a
           <a>site-wide tracking status resource</a> with a valid
           <a href="#status-representation">tracking status representation</a>
           that includes a <a>policy</a> property.
           This allows a user agent to obtain and possibly store additional
-          information about the calling site’s controller and tracking
+          information about the caller’s controller and tracking
           policies at the time an exception is granted.
         </p>
         <p>
@@ -1116,12 +1123,11 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
           <a href="#status-representation">tracking status representation</a>.
         </p>
         <p>
-          For a <a>site-specific</a> exception,
+          For each <a>site-specific</a> exception being stored,
           a user agent MUST NOT store the duplets and MUST reject the
           promise with a <a>DOMException</a> named "SecurityError"
-          if the script's <a>site domain</a> would not be able to set a
-          cookie on the <a data-link-for="TrackingExData">site</a>
-          following the cookie domain rules [[!RFC6265]],
+          if the script would not be able to set a cookie on that duplet's
+          referring domain scope following the cookie domain rules [[!RFC6265]].
         </p>
         <p class="example">
           For example, a script on <em>www.foo.bar.example.com</em> can set
@@ -1131,15 +1137,14 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
           <code>"something.else.example.com"</code> or <code>"com"</code>.
         </p>
         <p>
-          For each of the <a data-link-for="TrackingExData">targets</a> in a
-          <a>web-wide</a> exception, a user agent MUST NOT store the duplets
-          and MUST reject the promise with a <a>DOMException</a> named
-          "SecurityError" unless the target domain matches both the
-          <a>document.domain</a> of the script's <a>responsible document</a>
-          and the
-          <a>document.domain</a> of the <a>top-level browsing context</a>'s
-          <a>active document</a> [[!HTML5]]. This effectively limits the API
-          for web-wide exceptions to the single target domain of the caller.
+          For each <a>web-wide</a> exception being stored,
+          a user agent MUST NOT store the duplets and MUST reject the
+          promise with a <a>DOMException</a> named "SecurityError"
+          if the script would not be able to set a cookie on that target
+          domain following the cookie domain rules [[!RFC6265]].
+          This limits storing of a web-wide exception to scripts that share
+          the same domain scope as the exception targets, but allows such
+          scripts to be embedded within iframes of a common consent portal.
         </p>
         <p>
           For any other failure, such as an incorrectly formatted parameter in
@@ -1163,9 +1168,8 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
         </dl>
         <p>
           When a list of <a data-link-for="TrackingExData">targets</a>
-          is supplied for a <a>site-specific</a> exception (i.e., a
-          <a data-link-for="TrackingExData">site</a> other
-          than "*"), the user agent MAY ignore that list, choosing instead to
+          is supplied for a <a>site-specific</a> exception,
+          the user agent MAY ignore that list, choosing instead to
           store a <a>site-specific</a> exception for all domains
           (<code>[site,&nbsp;*]</code>), if it also indicates that result by
           setting the returned promise's
@@ -1180,23 +1184,29 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
         </p>
         <p class="note" id="api-security">
           There are some security concerns here regarding the ability of a
-          script with an <a>effective script origin</a> different from the
-          site being able to set site-specific exceptions that might impact
-          the behavior of that site. Likewise, it might be unwise for a script
-          to be able to impact the DNT values received by target domains when
-          the <a>effective script origin</a> differs from those targets.
-          However, a solution to these concerns would require additional
-          requests to verify that the <a>effective script origin</a> has the
-          right to set DNT for the given duplets, which is overkill given how
-          little value is obtained by setting the field without a legitimate
-          record of consent having been received.<br />
+          script with an <a>effective script origin</a> matching one site
+          being able to persist the DNT value received by resources on other
+          (target) sites. In particular, this feature could be abused to
+          set/unset an array of exceptions, similar to an array of bit values,
+          and be "read" as a persistent identifier by embedding requests to
+          those domains (which might all point to the same Internet host).
+          However, we expect that would leave an obvious trail on the
+          user agent, unlike other sources of fingerprinting.<br />
+          <br />
+          Likewise, allowing an exception to be stored within an iframe of
+          another site's page could be ripe for abuse unless the calling
+          script ensures that it is being run within a page where it expects
+          to be collecting user consent and where the context of that consent
+          is consistent with the exceptions being stored.<br />
           <br />
           This design is consistent with the fact that there is no technical
           restraint from sites calling the API without having first obtained
-          an informed consent from the user. What we are assuming is that the
-          surrounding regulatory environment will be sufficient to punish
+          an informed consent from the user. We are assuming that the social
+          and regulatory environment will be sufficient to punish
           those who might misuse the API or abuse the scope of stored
-          exceptions.
+          exceptions. A user agent might further limit such risks by checking
+          for a <a>site-wide tracking status resource</a> when its presence is
+          required by the API.
         </p>
       </section>
 
@@ -1235,9 +1245,10 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
             <ul>
               <li>If
                 <a data-link-for="TrackingExData">site</a> is
-                undefined, null, or the empty string, the calling script's
-                <a>site domain</a> is used by default. All stored exceptions
-                matching that domain, regardless of target, are to be removed.
+                undefined, null, or the empty string, the exception's
+                referring domain scope defaults to the <a>script domain</a>.
+                All stored exceptions matching that domain, regardless of
+                target, are to be removed.
               </li>
               <li>If
                 <a data-link-for="TrackingExData">site</a> is
@@ -1250,41 +1261,38 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
                 that is treated in the same way as the domain parameter to
                 cookies [[!RFC6265]], allowing subdomains to be included with
                 the prefix "<code>*.</code>". All stored exceptions matching
-                that domain, regardless of target, are to be removed.
+                that domain scope, regardless of target, are to be removed.
               </li>
             </ul></dd>
           <dt><a data-link-for="TrackingExData">targets</a></dt>
           <dd>An array of target domains for which the exception applies:
             <ul>
-              <li>If <a data-link-for="TrackingExData">site</a> is
-                defined and equal to "<code>*</code>", then for each domain
-                string in the
-                <a data-link-for="TrackingExData">targets</a>
-                array, a <a>web-wide</a> exception to be removed is the duplet
+              <li>If <a data-link-for="TrackingExData">site</a> is not
+                defined or not equal to "<code>*</code>", then
+                <a data-link-for="TrackingExData">targets</a> is ignored
+                (it is only used for removing web-wide exceptions).</li>
+              <li>If <a data-link-for="TrackingExData">targets</a> is an
+                empty array, the <a>web-wide</a> exception to be removed is
+                the duplet <code>[*,&nbsp;script&nbsp;domain]</code>.</li>
+              <li>Otherwise, for each domain string in the
+                <a data-link-for="TrackingExData">targets</a> array,
+                a <a>web-wide</a> exception to be removed is the duplet
                 <code>[*,&nbsp;domain]</code>.</li>
-              <li>Otherwise,
-                <a data-link-for="TrackingExData">targets</a>
-                is ignored.</li>
             </ul></dd>
         </dl>
         <p>
-          For a <a>site-specific</a> exception,
+          For each <a>site-specific</a> exception being removed,
           a user agent MUST NOT remove the duplets and MUST reject the
           promise with a <a>DOMException</a> named "SecurityError"
-          if the script's <a>site domain</a> would not be able to set a
-          cookie on the <a data-link-for="TrackingExData">site</a>
-          following the cookie domain rules [[!RFC6265]],
+          if the script would not be able to set a cookie on that duplet's
+          referring domain scope following the cookie domain rules [[!RFC6265]].
         </p>
         <p>
-          For each of the <a data-link-for="TrackingExData">targets</a> in a
-          <a>web-wide</a> exception, a user agent MUST NOT remove the duplets
-          and MUST reject the promise with a <a>DOMException</a> named
-          "SecurityError" unless the target domain matches both the
-          <a>document.domain</a> of the script's <a>responsible document</a>
-          and the
-          <a>document.domain</a> of the <a>top-level browsing context</a>'s
-          <a>active document</a> [[!HTML5]]. This effectively limits the API
-          for web-wide exceptions to the single target domain of the caller.
+          For each <a>web-wide</a> exception being removed,
+          a user agent MUST NOT remove the duplets and MUST reject the
+          promise with a <a>DOMException</a> named "SecurityError"
+          if the script would not be able to set a cookie on that target
+          domain following the cookie domain rules [[!RFC6265]].
         </p>
         <p>
           Any processing failure, such as an incorrectly formatted parameter
@@ -1314,7 +1322,7 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
           <a>nested browsing context</a> of that site can <a>promise-call</a>
           <code><dfn>Navigator.trackingExceptionExists</dfn></code> with a
           <a>TrackingExData</a> object supplied as a parameter that identifies
-          targets for which to confirm an exception exists.
+          the set of exceptions to confirm.
           The call returns a promise which either resolves to true or
           false or is rejected with a <a>DOMException</a>
           identifying the reason for the failure.
@@ -1333,31 +1341,57 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
           extensibility). The following OPTIONAL properties are defined:
         </p>
         <dl>
-          <dt><a data-link-for="TrackingExData">site</a></dt>
-          <dd>The referring domain scope:
+          <dd>The referring domain scope for which the exception applies:
             <ul>
-              <li>To avoid revealing too much information about other sites,
-                any value for
-                <a data-link-for="TrackingExData">site</a> is ignored and
-                the calling script's <a>site domain</a> is used instead for
-                matching with stored exceptions.
-              </li>
+              <li>If
+                <a data-link-for="TrackingExData">site</a> is
+                undefined, null, or the empty string, the set of exceptions
+                to be confirmed have a referring domain scope equal to the
+                <a>script domain</a>.</li>
+              <li>If
+                <a data-link-for="TrackingExData">site</a> is
+                defined and equal to "<code>*</code>", the set of exceptions
+                to be confirmed is <a>web-wide</a> for the set of
+                <a data-link-for="TrackingExData">targets</a>.</li>
+              <li>Otherwise, the set of exceptions to be confirmed have a
+                referring domain scope matching the string found
+                in <a data-link-for="TrackingExData">site</a>, which is
+                treated in the same way as the domain parameter to
+                cookies [[!RFC6265]], allowing subdomains to be included with
+                the prefix "<code>*.</code>".</li>
             </ul></dd>
-          <dt><a data-link-for="TrackingExData">targets</a></dt>
-          <dd>An array of target domains:
+          <dt><code><dfn>targets</dfn></code></dt>
+          <dd>An array of target domains for which the exception applies:
             <ul>
               <li>If <a data-link-for="TrackingExData">targets</a>
-                is undefined, null, or an empty array, the duplet
-                <code>[site,&nbsp;*]</code> (an exception applicable to all
-                domains referenced by the site) is identified for matching
-                against the database of stored user-granted exceptions.</li>
+                is undefined or null, the user-granted exception to be
+                confirmed is <code>[site,&nbsp;*]</code>, meaning that the
+                exception applies to all domains referenced by the site.</li>
+              <li>If <a data-link-for="TrackingExData">targets</a>
+                is an empty array, the user-granted exception to be confirmed
+                is <code>[site,&nbsp;script&nbsp;domain]</code>, meaning that
+                the exception applies only to resources that share the same
+                domain as the <a>effective script origin</a>.</li>
               <li>Otherwise, for each domain string in the
-                <a data-link-for="TrackingExData">targets</a> array, the
-                duplet <code>[site,&nbsp;domain]</code> is identified for
-                matching against the database of stored
-                user-granted exceptions.</li>
+                <a data-link-for="TrackingExData">targets</a>
+                array, a user-granted exception to be confirmed is the
+                duplet <code>[site,&nbsp;domain]</code>.</li>
             </ul></dd>
         </dl>
+        <p>
+          For each <a>site-specific</a> exception being confirmed,
+          a user agent MUST reject the
+          promise with a <a>DOMException</a> named "SecurityError"
+          if the script would not be able to set a cookie on that duplet's
+          referring domain scope following the cookie domain rules [[!RFC6265]].
+        </p>
+        <p>
+          For each <a>web-wide</a> exception being confirmed,
+          a user agent MUST reject the
+          promise with a <a>DOMException</a> named "SecurityError"
+          if the script would not be able to set a cookie on that target
+          domain following the cookie domain rules [[!RFC6265]].
+        </p>
         <p>
           Any processing failure, such as an incorrectly formatted parameter
           in the <a>TrackingExData</a>, will result in the
@@ -1375,16 +1409,6 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
           Because the database might be changed at any time (via other windows
           or additional user interfaces), a particular response to the API
           might only be accurate at the time the promise is fulfilled.
-        </p>
-        <p class="note">
-          This API does not allow a script to directly confirm that a
-          <a>web-wide</a> exception (<code>[*,&nbsp;target]</code>) exists, since
-          that would allow too much of the user's personal configuration,
-          including exceptions set while on other sites, to be visible to
-          arbitrary scripts on the active site. However, it might be
-          reasonable (in the future) to add an API that allows a script
-          to check for a <a>web-wide</a> exception targeting its own domain
-          (i.e., matching the domain in its <a>effective script origin</a>).
         </p>
       </section>
     </section>
