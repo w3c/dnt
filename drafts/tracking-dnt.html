@@ -6,9 +6,15 @@
   <script src='https://www.w3.org/Tools/respec/respec-w3c-common' class='remove' async></script>
   <script class='remove'>
     var respecConfig = {
-      specStatus:          "ED",
       shortName:           "tracking-dnt",
-      // publishDate:         "2017-03-13",
+      // status section for ED
+      // specStatus:          "ED",
+      // status section for CR
+      specStatus:          "CR",
+      publishDate:         "2017-09-07",
+      crEnd:               "2017-12-07",
+      implementationReportURI: "https://www.w3.org/wiki/Privacy/TPWG/TPE_Implementation_Report",
+      // end status
       previousPublishDate: "2015-08-20",
       previousMaturity:    "CR",
       edDraftURI:          "https://w3c.github.io/dnt/drafts/tracking-dnt.html",
@@ -147,6 +153,7 @@
   </section>
 
   <section id='sotd'>
+    <!--
     <p>
       This document is an editors' straw man reflecting a snapshot of live
       discussions within the
@@ -160,6 +167,7 @@
       <a href="https://www.w3.org/2011/tracking-protection/track/issues/">issue
       tracking system</a> for working group decisions prior to 2017.
     </p>
+    -->
   </section>
 
   <section>
@@ -863,7 +871,7 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
       </p>
       <p>
         A first party site's page (the <a>top-level browsing context</a>)
-        might be used to obtain <a>site-specific</a> consent for multiple
+        might be used to obtain consent for multiple
         parties;
         e.g., using multiple iframe elements containing scripts that can
         convey information about each party's policies and obtain specific
