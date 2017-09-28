@@ -272,7 +272,7 @@
     <section id='terminology.html'>
       <h3>HTML</h3>
       <p>
-        The following terms are used as defined by HTML [[!HTML5]]:
+        The following terms are used as defined by HTML [[!HTML51]]:
         <dfn><a class="externalDFN" href="https://www.w3.org/TR/html5/single-page.html#active-document">active document</a></dfn>,
         <dfn><a class="externalDFN" href="https://www.w3.org/TR/html5/single-page.html#dom-document-domain">document.domain</a></dfn>,
         <dfn><a class="externalDFN" href="https://www.w3.org/TR/html5/single-page.html#effective-script-origin">effective script origin</a></dfn>,
@@ -702,8 +702,8 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
       <p>
         The <code><dfn>Navigator.doNotTrack</dfn></code> property enables
         a client-side script with read access to the
-        <code><dfn data-cite="!HTML5#navigator">Navigator</dfn></code> object
-        [[!HTML5]] to determine what <a>DNT</a> header field value would be
+        <code><dfn data-cite="!HTML51#navigator">Navigator</dfn></code> object
+        [[!HTML51]] to determine what <a>DNT</a> header field value would be
         sent to the <a>effective script origin</a>, taking into account the
         user's general preference (if any) and user-granted exceptions
         applicable to the <a>target domain</a> when referenced by the
@@ -777,7 +777,7 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
         Both site and target are scoped by domain, similar to the existing
         domain scope of cookies
         (<a href="https://www.w3.org/TR/html5/single-page.html#relaxing-the-same-origin-restriction">Section 5.3.1</a>
-        of [[!HTML5]]), to avoid prompting the user for every subdomain of a
+        of [[!HTML51]]), to avoid prompting the user for every subdomain of a
         site and every target resource that might be referenced.
       </p>
       <p>
@@ -805,14 +805,14 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
           might be found and for which the user-granted
           exceptions API might be queried: specifically, the current
           <a>document.domain</a> of the <a>top-level browsing context</a>'s
-          <a>active document</a> [[!HTML5]].</dd>
+          <a>active document</a> [[!HTML51]].</dd>
         <dt><dfn>target domain</dfn></dt>
         <dd>the <a>uri-host</a> subcomponent of the <a>authority</a> component
           of a referenced "http" or "https" URI [[!RFC7230]].</dd>
         <dt><dfn>script domain</dfn></dt>
         <dd>the effective domain of a script when it uses the exception API:
           specifically, the current <a>document.domain</a> of the script's
-          <a>responsible document</a> [[!HTML5]].</dd>
+          <a>responsible document</a> [[!HTML51]].</dd>
       </dl>
       <p>
         A user-granted exception is <dfn>site-specific</dfn> if the exception
