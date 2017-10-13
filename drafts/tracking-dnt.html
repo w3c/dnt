@@ -165,6 +165,8 @@
       However, see the previous
       <a href="https://www.w3.org/2011/tracking-protection/track/issues/">issue
       tracking system</a> for working group decisions prior to 2017.
+      See <a href="#changes" class="sectionRef"></a> for a summary of changes
+      since the first Candidate Recommendation.
     </p>
   </section>
 
@@ -2543,6 +2545,30 @@ object {
       <dt>Author(s):</dt><dd>Roy T. Fielding and David Singer</dd>
       <dt>Change controller:</dt><dd>W3C</dd>
     </dl>
+  </section>
+
+  <section id="changes" class='appendix'>
+    <h2>Changes since first CR</h2>
+
+    <p>
+      The client-side scripting API has been rewritten to use fewer
+      functions and to return Promises. The API names have also been changed
+      to prevent confusion with potential deployments of the prior API.
+    </p>
+    <p>
+      The terminology for browsing context, top-level origin, and domain
+      has been updated to use terms from HTML5.
+    </p>
+    <p>
+      The specification now defines how to extend the Tk header field (e.g.,
+      to comply with possible future legal requirements). No such extensions
+      are currently known.
+    </p>
+    <p>
+      The ability to add extensions to the DNT header field is no longer
+      marked “at risk” because the group considers that this feature cannot
+      be removed.
+    </p>
   </section>
 </body>
 </html>
