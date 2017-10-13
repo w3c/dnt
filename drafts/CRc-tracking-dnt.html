@@ -1002,7 +1002,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
       Tk response header field for confirming tracking status.">
 </head>
 
-<body aria-busy="false" class="h-entry" id="respecDocument">
+<body aria-busy="false" class="h-entry toc-inline" id="respecDocument">
     <div class="head" role="contentinfo" id="respecHeader">
         <p>
             <a class="logo" href="https://www.w3.org/"><img src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" alt="W3C" width="72" height="48"></a>
@@ -1314,7 +1314,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
         <section id="terminology.html">
             <h3 id="x2.2-html"><span class="secno">2.2 </span>HTML</h3>
             <p>
-                The following terms are used as defined by HTML [<cite><a class="bibref" href="#bib-HTML5">HTML5</a></cite>]:
+                The following terms are used as defined by HTML [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>]:
                 <dfn data-dfn-type="dfn" id="dfn-active-document"><a class="externalDFN" href="https://www.w3.org/TR/html5/single-page.html#active-document">active document</a></dfn>,
                 <dfn data-dfn-type="dfn" id="dfn-document.domain"><a class="externalDFN" href="https://www.w3.org/TR/html5/single-page.html#dom-document-domain">document.domain</a></dfn>,
                 <dfn data-dfn-type="dfn" id="dfn-effective-script-origin"><a class="externalDFN" href="https://www.w3.org/TR/html5/single-page.html#effective-script-origin">effective script origin</a></dfn>,
@@ -1624,12 +1624,12 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
             <p>
                 The <code><dfn data-dfn-for="navigator" data-dfn-type="dfn" data-lt="donottrack" id="dom-navigator-donottrack" data-idl="" data-title="Navigator.doNotTrack">Navigator.doNotTrack</dfn></code> property enables a client-side script with read
                 access to the
-                <code><dfn data-dfn-for="" data-dfn-type="dfn" id="dom-navigator" data-idl="" data-title="Navigator"><a href="https://www.w3.org/TR/html5/#navigator">Navigator</a></dfn></code> object [
-                <cite><a class="bibref" href="#bib-HTML5">HTML5</a></cite>] to determine what <a href="#dfn-dnt" class="internalDFN" data-link-type="dfn"><code>DNT</code></a> header field value would be sent to the <a href="#dfn-effective-script-origin"
+                <code><dfn data-dfn-for="" data-dfn-type="dfn" id="dom-navigator" data-idl="" data-title="Navigator"><a href="https://www.w3.org/TR/html51/#navigator">Navigator</a></dfn></code> object [
+                <cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] to determine what <a href="#dfn-dnt" class="internalDFN" data-link-type="dfn"><code>DNT</code></a> header field value would be sent to the <a href="#dfn-effective-script-origin"
                     class="internalDFN" data-link-type="dfn">effective script origin</a>, taking into account the user's general preference (if any) and user-granted exceptions applicable to the <a href="#dfn-target-domain" class="internalDFN" data-link-type="dfn">target domain</a>                when referenced by the active document's <a href="#dfn-top-level-browsing-context" class="internalDFN" data-link-type="dfn">top-level browsing context</a>.
             </p>
             <div>
-                <pre class="def idl"><span class="idlInterface" id="idl-def-navigator-partial-1" data-idl="" data-title="Navigator">partial interface <span class="idlInterfaceID"><a data-lt="Navigator" data-link-type="dfn" href="https://www.w3.org/TR/html5/#navigator" data-for=""><code>Navigator</code></a></span> {
+                <pre class="def idl"><span class="idlInterface" id="idl-def-navigator-partial-1" data-idl="" data-title="Navigator">partial interface <span class="idlInterfaceID"><a data-lt="Navigator" data-link-type="dfn" href="https://www.w3.org/TR/html51/#navigator" data-for=""><code>Navigator</code></a></span> {
 <span class="idlAttribute" id="idl-def-navigator-donottrack" data-idl="" data-title="doNotTrack" data-dfn-for="navigator">    readonly attribute <span class="idlAttrType"><a href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a>?</span> <span class="idlAttrName"><a data-lt="Navigator.doNotTrack|donottrack" data-lt-nodefault="" href="#dom-navigator-donottrack" class="internalDFN" data-link-type="dfn" data-for="Navigator">doNotTrack</a></span>;</span>
 };</span></pre>
             </div>
@@ -1677,7 +1677,7 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
             </p>
             <p>
                 A <dfn data-dfn-type="dfn" id="dfn-user-granted-exception">user-granted exception</dfn> is the record of a decision by the user to grant consent for tracking (<a href="#dfn-dnt%3A0" class="internalDFN" data-link-type="dfn"><code>DNT:0</code></a>)
-                on future requests from a given site to a set of target domains. Both site and target are scoped by domain, similar to the existing domain scope of cookies (<a href="https://www.w3.org/TR/html5/single-page.html#relaxing-the-same-origin-restriction">Section 5.3.1</a>                of [<cite><a class="bibref" href="#bib-HTML5">HTML5</a></cite>]), to avoid prompting the user for every subdomain of a site and every target resource that might be referenced.
+                on future requests from a given site to a set of target domains. Both site and target are scoped by domain, similar to the existing domain scope of cookies (<a href="https://www.w3.org/TR/html5/single-page.html#relaxing-the-same-origin-restriction">Section 5.3.1</a>                of [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>]), to avoid prompting the user for every subdomain of a site and every target resource that might be referenced.
             </p>
             <p>
                 A client-side database can be used for persistent storage of user-granted exceptions, such that permission to send <a href="#dfn-dnt%3A0" class="internalDFN" data-link-type="dfn"><code>DNT:0</code></a> is obtained by a site and stored
@@ -1696,12 +1696,12 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
                 <dt><dfn data-dfn-type="dfn" id="dfn-site-domain">site domain</dfn></dt>
                 <dd>the domain associated with a site on which a given reference might be found and for which the user-granted exceptions API might be queried: specifically, the current
                     <a href="#dfn-document.domain" class="internalDFN" data-link-type="dfn">document.domain</a> of the <a href="#dfn-top-level-browsing-context" class="internalDFN" data-link-type="dfn">top-level browsing context</a>'s
-                    <a href="#dfn-active-document" class="internalDFN" data-link-type="dfn">active document</a> [<cite><a class="bibref" href="#bib-HTML5">HTML5</a></cite>].</dd>
+                    <a href="#dfn-active-document" class="internalDFN" data-link-type="dfn">active document</a> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>].</dd>
                 <dt><dfn data-dfn-type="dfn" id="dfn-target-domain">target domain</dfn></dt>
                 <dd>the <a href="#dfn-uri-host" class="internalDFN" data-link-type="dfn">uri-host</a> subcomponent of the <a href="#dfn-authority" class="internalDFN" data-link-type="dfn">authority</a> component of a referenced "http" or "https" URI [<cite><a class="bibref" href="#bib-RFC7230">RFC7230</a></cite>].</dd>
                 <dt><dfn data-dfn-type="dfn" id="dfn-script-domain">script domain</dfn></dt>
                 <dd>the effective domain of a script when it uses the exception API: specifically, the current <a href="#dfn-document.domain" class="internalDFN" data-link-type="dfn">document.domain</a> of the script's
-                    <a href="#dfn-responsible-document" class="internalDFN" data-link-type="dfn">responsible document</a> [<cite><a class="bibref" href="#bib-HTML5">HTML5</a></cite>].</dd>
+                    <a href="#dfn-responsible-document" class="internalDFN" data-link-type="dfn">responsible document</a> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>].</dd>
             </dl>
             <p>
                 A user-granted exception is <dfn data-dfn-type="dfn" id="dfn-site-specific">site-specific</dfn> if the exception is limited to requests embedded in, or referred by, a given
@@ -1819,7 +1819,7 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
                     <code><dfn data-dfn-for="" data-dfn-type="dfn" id="dom-trackingexresult" data-idl="" data-title="TrackingExResult">TrackingExResult</dfn></code> or is rejected with a <code>DOMException</code> identifying the reason for the failure.
                 </p>
                 <div>
-                    <pre class="def idl"><span class="idlInterface" id="idl-def-navigator-partial-2" data-idl="" data-title="Navigator">partial interface <span class="idlInterfaceID"><a data-lt="Navigator" data-link-type="dfn" href="https://www.w3.org/TR/html5/#navigator" data-for=""><code>Navigator</code></a></span> {
+                    <pre class="def idl"><span class="idlInterface" id="idl-def-navigator-partial-2" data-idl="" data-title="Navigator">partial interface <span class="idlInterfaceID"><a data-lt="Navigator" data-link-type="dfn" href="https://www.w3.org/TR/html51/#navigator" data-for=""><code>Navigator</code></a></span> {
 <span class="idlMethod" id="idl-def-navigator-storetrackingexception(properties)" data-idl="" data-title="storeTrackingException" data-dfn-for="navigator">    <span class="idlMethType"><a href="https://heycam.github.io/webidl/#idl-promise">Promise</a>&lt;<a href="#dom-trackingexresult" class="internalDFN" data-link-type="dfn"><code>TrackingExResult</code></a>&gt;</span> <span class="idlMethName"><a data-lt="Navigator.storeTrackingException|storetrackingexception|storetrackingexception()|storeTrackingException" data-lt-nodefault="" href="#dom-navigator-storetrackingexception" class="internalDFN" data-link-type="dfn" data-for="Navigator">storeTrackingException</a></span>(<span class="idlParam"><span class="idlParamType"><a href="#dom-trackingexdata" class="internalDFN" data-link-type="dfn"><code>TrackingExData</code></a></span> <span class="idlParamName">properties</span></span>);</span>
 };</span>
 
@@ -1983,7 +1983,7 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
                     call returns a promise which either resolves to indicate success or is rejected with a <a href="#dfn-domexception" class="internalDFN" data-link-type="dfn">DOMException</a> identifying the reason for the failure.
                 </p>
                 <div>
-                    <pre class="def idl"><span class="idlInterface" id="idl-def-navigator-partial-3" data-idl="" data-title="Navigator">partial interface <span class="idlInterfaceID"><a data-lt="Navigator" data-link-type="dfn" href="https://www.w3.org/TR/html5/#navigator" data-for=""><code>Navigator</code></a></span> {
+                    <pre class="def idl"><span class="idlInterface" id="idl-def-navigator-partial-3" data-idl="" data-title="Navigator">partial interface <span class="idlInterfaceID"><a data-lt="Navigator" data-link-type="dfn" href="https://www.w3.org/TR/html51/#navigator" data-for=""><code>Navigator</code></a></span> {
 <span class="idlMethod" id="idl-def-navigator-removetrackingexception(properties)" data-idl="" data-title="removeTrackingException" data-dfn-for="navigator">    <span class="idlMethType"><a href="https://heycam.github.io/webidl/#idl-promise">Promise</a>&lt;void&gt;</span> <span class="idlMethName"><a data-lt="Navigator.removeTrackingException|removetrackingexception|removetrackingexception()|removeTrackingException" data-lt-nodefault="" href="#dom-navigator-removetrackingexception" class="internalDFN" data-link-type="dfn" data-for="Navigator">removeTrackingException</a></span>(<span class="idlParam"><span class="idlParamType"><a href="#dom-trackingexdata" class="internalDFN" data-link-type="dfn"><code>TrackingExData</code></a></span> <span class="idlParamName">properties</span></span>);</span>
 };</span></pre>
                 </div>
@@ -2055,7 +2055,7 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
                     to true or false or is rejected with a <a href="#dfn-domexception" class="internalDFN" data-link-type="dfn">DOMException</a> identifying the reason for the failure.
                 </p>
                 <div>
-                    <pre class="def idl"><span class="idlInterface" id="idl-def-navigator-partial-4" data-idl="" data-title="Navigator">partial interface <span class="idlInterfaceID"><a data-lt="Navigator" data-link-type="dfn" href="https://www.w3.org/TR/html5/#navigator" data-for=""><code>Navigator</code></a></span> {
+                    <pre class="def idl"><span class="idlInterface" id="idl-def-navigator-partial-4" data-idl="" data-title="Navigator">partial interface <span class="idlInterfaceID"><a data-lt="Navigator" data-link-type="dfn" href="https://www.w3.org/TR/html51/#navigator" data-for=""><code>Navigator</code></a></span> {
 <span class="idlMethod" id="idl-def-navigator-trackingexceptionexists(properties)" data-idl="" data-title="trackingExceptionExists" data-dfn-for="navigator">    <span class="idlMethType"><a href="https://heycam.github.io/webidl/#idl-promise">Promise</a>&lt;<a href="https://heycam.github.io/webidl/#idl-boolean">boolean</a>&gt;</span> <span class="idlMethName"><a data-lt="Navigator.trackingExceptionExists|trackingexceptionexists|trackingexceptionexists()|trackingExceptionExists" data-lt-nodefault="" href="#dom-navigator-trackingexceptionexists" class="internalDFN" data-link-type="dfn" data-for="Navigator">trackingExceptionExists</a></span>(<span class="idlParam"><span class="idlParamType"><a href="#dom-trackingexdata" class="internalDFN" data-link-type="dfn"><code>TrackingExData</code></a></span> <span class="idlParamName">properties</span></span>);</span>
 };</span></pre>
                 </div>
@@ -2910,8 +2910,8 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
         <h2 id="c.-references"><span class="secno">C. </span>References</h2>
         <section id="normative-references">
             <h3 id="c.1-normative-references"><span class="secno">C.1 </span>Normative references</h3>
-            <dl class="bibliography"><dt id="bib-HTML5">[HTML5]</dt>
-                <dd><a href="https://www.w3.org/TR/html5/"><cite>HTML5</cite></a>. Ian Hickson; Robin Berjon; Steve Faulkner; Travis Leithead; Erika Doyle Navara; Theresa O'Connor; Silvia Pfeiffer. W3C. 28 October 2014. W3C Recommendation. URL: <a href="https://www.w3.org/TR/html5/">https://www.w3.org/TR/html5/</a>
+            <dl class="bibliography"><dt id="bib-HTML51">[HTML51]</dt>
+                <dd><a href="https://www.w3.org/TR/html51/"><cite>HTML 5.1 2nd Edition</cite></a>. Steve Faulkner; Arron Eicholz; Travis Leithead; Alex Danilo. W3C. 3 August 2017. W3C Proposed Recommendation. URL: <a href="https://www.w3.org/TR/html51/">https://www.w3.org/TR/html51/</a>
                 </dd><dt id="bib-RFC2119">[RFC2119]</dt>
                 <dd><a href="https://tools.ietf.org/html/rfc2119"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. S. Bradner. IETF. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119">https://tools.ietf.org/html/rfc2119</a>
                 </dd><dt id="bib-RFC3986">[RFC3986]</dt>
