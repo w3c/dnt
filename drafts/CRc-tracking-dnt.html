@@ -621,12 +621,6 @@
         }
         /* --- INLINES --- */
 
-        em.rfc2119 {
-            text-transform: lowercase;
-            font-style: normal;
-            color: #900;
-        }
-
         h1 abbr,
         h2 abbr,
         h3 abbr,
@@ -895,8 +889,8 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
         {
             "shortName": "tracking-dnt",
             "specStatus": "CR",
-            "publishDate": "2017-09-07",
-            "crEnd": "2017-12-07",
+            "publishDate": "2017-10-17",
+            "crEnd": "2017-12-18",
             "implementationReportURI": "https://www.w3.org/wiki/Privacy/TPWG/TPE_Implementation_Report",
             "previousPublishDate": "2015-08-20",
             "previousMaturity": "CR",
@@ -986,11 +980,11 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
             },
             "noIDLSectionTitle": true,
             "noLegacyStyle": true,
-            "publishISODate": "2017-09-07T00:00:00.000Z",
-            "generatedSubtitle": "Candidate Recommendation 07 September 2017"
+            "publishISODate": "2017-10-17T00:00:00.000Z",
+            "generatedSubtitle": "Candidate Recommendation 17 October 2017"
         }
     </script>
-    <meta name="generator" content="ReSpec 16.2.2">
+    <meta name="generator" content="ReSpec 17.0.0">
     <meta name="description" content="This specification defines the DNT request header field as an
       HTTP mechanism for expressing a user's preference regarding tracking,
       an HTML DOM property to make that expression readable by scripts, and
@@ -1002,17 +996,17 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
       Tk response header field for confirming tracking status.">
 </head>
 
-<body aria-busy="false" class="h-entry toc-inline" id="respecDocument">
+<body aria-busy="false" class="h-entry" id="respecDocument">
     <div class="head" role="contentinfo" id="respecHeader">
         <p>
             <a class="logo" href="https://www.w3.org/"><img src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" alt="W3C" width="72" height="48"></a>
         </p>
         <p></p>
         <h1 class="title p-name" id="title">Tracking Preference Expression (DNT)</h1>
-        <h2 id="w3c-candidate-recommendation-07-september-2017"><abbr title="World Wide Web Consortium">W3C</abbr> Candidate Recommendation <time class="dt-published" datetime="2017-09-07">07 September 2017</time></h2>
+        <h2 id="w3c-candidate-recommendation-17-october-2017"><abbr title="World Wide Web Consortium">W3C</abbr> Candidate Recommendation <time class="dt-published" datetime="2017-10-17">17 October 2017</time></h2>
         <dl>
             <dt>This version:</dt>
-            <dd><a class="u-url" href="https://www.w3.org/TR/2017/CR-tracking-dnt-20170907/">https://www.w3.org/TR/2017/CR-tracking-dnt-20170907/</a></dd>
+            <dd><a class="u-url" href="https://www.w3.org/TR/2017/CR-tracking-dnt-20171017/">https://www.w3.org/TR/2017/CR-tracking-dnt-20171017/</a></dd>
             <dt>Latest published version:</dt>
             <dd><a href="https://www.w3.org/TR/tracking-dnt/">https://www.w3.org/TR/tracking-dnt/</a></dd>
             <dt>Latest editor's draft:</dt>
@@ -1070,29 +1064,15 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
             <em>This section describes the status of this document at the time of its publication. Other documents may supersede this document. A list of current <abbr title="World Wide Web Consortium">W3C</abbr> publications and the latest revision of this technical report can be found in the <a href="https://www.w3.org/TR/"><abbr title="World Wide Web Consortium">W3C</abbr> technical reports index</a> at https://www.w3.org/TR/.</em>
         </p>
 
-        <!--
-    <p>
-      This document is an editors' straw man reflecting a snapshot of live
-      discussions within the
-      <a href="https://www.w3.org/2011/tracking-protection/">Tracking
-      Protection Working Group</a>.  It does not necessarily constitute
-      working group consensus.
-      This draft has been prepared using the
-      <a href="https://github.com/w3c/dnt/">DNT github repository</a> and its
-      associated <a href="https://github.com/w3c/dnt/issues">issues list</a>.
-      However, see the previous
-      <a href="https://www.w3.org/2011/tracking-protection/track/issues/">issue
-      tracking system</a> for working group decisions prior to 2017.
-    </p>
-    -->
-
         <p>
             This document was published by the <a href="https://www.w3.org/2011/tracking-protection/">Tracking Protection Working Group</a> as a Candidate Recommendation. This document is intended to become a <abbr title="World Wide Web Consortium">W3C</abbr>            Recommendation. Comments regarding this document are welcome. Please send them to
             <a href="mailto:public-tracking@w3.org">public-tracking@w3.org</a> (<a href="mailto:public-tracking-request@w3.org?subject=subscribe">subscribe</a>,
             <a href="https://lists.w3.org/Archives/Public/public-tracking/">archives</a>).
             <abbr title="World Wide Web Consortium">W3C</abbr> publishes a Candidate Recommendation to indicate that the document is believed to be stable and to encourage implementation by the developer community. This Candidate Recommendation is expected
-            to advance to Proposed Recommendation no earlier than 07 December 2017.
+            to advance to Proposed Recommendation no earlier than 18 December 2017.
+            See <a href="#changes" class="sectionRef sec-ref">section <span class="secno">C.</span> <span class="sec-title">Changes since first CR</span></a> for a summary of changes since the first Candidate Recommendation.
         </p>
+
         <p>
             Please see the Working Group's <a href="https://www.w3.org/wiki/Privacy/TPWG/TPE_Implementation_Report">implementation
             report</a>.
@@ -1232,10 +1212,11 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
             </li>
             <li class="tocline"><a href="#acks" class="tocxref"><span class="secno">A. </span>Acknowledgements</a></li>
             <li class="tocline"><a href="#registrations" class="tocxref"><span class="secno">B. </span>Registrations</a></li>
-            <li class="tocline"><a href="#references" class="tocxref"><span class="secno">C. </span>References</a>
+            <li class="tocline"><a href="#changes" class="tocxref"><span class="secno">C. </span>Changes since first CR</a></li>
+            <li class="tocline"><a href="#references" class="tocxref"><span class="secno">D. </span>References</a>
                 <ol class="toc">
-                    <li class="tocline"><a href="#normative-references" class="tocxref"><span class="secno">C.1 </span>Normative references</a></li>
-                    <li class="tocline"><a href="#informative-references" class="tocxref"><span class="secno">C.2 </span>Informative references</a></li>
+                    <li class="tocline"><a href="#normative-references" class="tocxref"><span class="secno">D.1 </span>Normative references</a></li>
+                    <li class="tocline"><a href="#informative-references" class="tocxref"><span class="secno">D.2 </span>Informative references</a></li>
                 </ol>
             </li>
         </ol>
@@ -1243,7 +1224,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 
     <section id="introduction">
         <!--OddPage-->
-        <h2 id="x1.-introduction"><span class="secno">1. </span>Introduction</h2>
+        <h2 id="x1-introduction"><span class="secno">1. </span>Introduction</h2>
 
         <p>
             The World Wide Web consists of billions of resources interconnected through the use of hypertext. Hypertext provides a simple, page-oriented view of the information provided by those resources, which can be traversed by selecting links, manipulating controls,
@@ -1284,10 +1265,10 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 
     <section id="terminology">
         <!--OddPage-->
-        <h2 id="x2.-terminology"><span class="secno">2. </span>Terminology</h2>
+        <h2 id="x2-terminology"><span class="secno">2. </span>Terminology</h2>
 
         <section id="terminology.http">
-            <h3 id="x2.1-http"><span class="secno">2.1 </span>HTTP</h3>
+            <h3 id="x2-1-http"><span class="secno">2.1 </span>HTTP</h3>
             <p>
                 The following terms are used as defined by HTTP/1.1 syntax [<cite><a class="bibref" href="#bib-RFC7230">RFC7230</a></cite>] and semantics [<cite><a class="bibref" href="#bib-RFC7231">RFC7231</a></cite>]:
                 <dfn data-dfn-type="dfn" id="dfn-client"><a class="externalDFN" href="https://tools.ietf.org/html/rfc7230#section-2.1">client</a></dfn>,
@@ -1312,11 +1293,11 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
         </section>
 
         <section id="terminology.html">
-            <h3 id="x2.2-html"><span class="secno">2.2 </span>HTML</h3>
+            <h3 id="x2-2-html"><span class="secno">2.2 </span>HTML</h3>
             <p>
                 The following terms are used as defined by HTML [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>]:
                 <dfn data-dfn-type="dfn" id="dfn-active-document"><a class="externalDFN" href="https://www.w3.org/TR/html5/single-page.html#active-document">active document</a></dfn>,
-                <dfn data-dfn-type="dfn" id="dfn-document.domain"><a class="externalDFN" href="https://www.w3.org/TR/html5/single-page.html#dom-document-domain">document.domain</a></dfn>,
+                <dfn data-dfn-type="dfn" id="dfn-document-domain"><a class="externalDFN" href="https://www.w3.org/TR/html5/single-page.html#dom-document-domain">document.domain</a></dfn>,
                 <dfn data-dfn-type="dfn" id="dfn-effective-script-origin"><a class="externalDFN" href="https://www.w3.org/TR/html5/single-page.html#effective-script-origin">effective script origin</a></dfn>,
                 <dfn data-dfn-type="dfn" id="dfn-responsible-document"><a class="externalDFN" href="https://www.w3.org/TR/html5/single-page.html#responsible-document">responsible document</a></dfn>,
                 <dfn data-dfn-type="dfn" id="dfn-browsing-context"><a class="externalDFN" href="https://www.w3.org/TR/html5/single-page.html#browsing-context">browsing context</a></dfn>,
@@ -1326,7 +1307,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
         </section>
 
         <section id="terminology.activity">
-            <h3 id="x2.3-activity"><span class="secno">2.3 </span>Activity</h3>
+            <h3 id="x2-3-activity"><span class="secno">2.3 </span>Activity</h3>
 
             <p>
                 <dfn data-dfn-type="dfn" id="dfn-tracking">Tracking</dfn> is the collection of data regarding a particular user's activity across multiple distinct contexts and the retention, use, or sharing of data derived from that activity outside
@@ -1343,7 +1324,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
         </section>
 
         <section id="terminology.participants">
-            <h3 id="x2.4-participants"><span class="secno">2.4 </span>Participants</h3>
+            <h3 id="x2-4-participants"><span class="secno">2.4 </span>Participants</h3>
 
             <p>
                 A <dfn data-dfn-type="dfn" id="dfn-user">user</dfn> is a natural person who is making, or has made, use of the Web.
@@ -1383,7 +1364,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
         </section>
 
         <section id="terminology.data">
-            <h3 id="x2.5-data"><span class="secno">2.5 </span>Data</h3>
+            <h3 id="x2-5-data"><span class="secno">2.5 </span>Data</h3>
 
             <p>
                 A party <dfn data-dfn-type="dfn" id="dfn-collects">collects</dfn> data received in a network interaction if that data remains within the party’s control after the network interaction is complete.
@@ -1403,10 +1384,10 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 
     <section id="notational">
         <!--OddPage-->
-        <h2 id="x3.-notational-conventions"><span class="secno">3. </span>Notational Conventions</h2>
+        <h2 id="x3-notational-conventions"><span class="secno">3. </span>Notational Conventions</h2>
 
         <section id="requirements">
-            <h3 id="x3.1-requirements"><span class="secno">3.1 </span>Requirements</h3>
+            <h3 id="x3-1-requirements"><span class="secno">3.1 </span>Requirements</h3>
 
             <p>The key words <em title="must" class="rfc2119">must</em>,
                 <em title="must not" class="rfc2119">must not</em>,
@@ -1420,14 +1401,15 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
         </section>
 
         <section id="notation">
-            <h3 id="x3.2-formal-syntax"><span class="secno">3.2 </span>Formal Syntax</h3>
+            <h3 id="x3-2-formal-syntax"><span class="secno">3.2 </span>Formal Syntax</h3>
 
             <p>
-                This specification uses the Augmented Backus-Naur Form (ABNF) notation of [<cite><a class="bibref" href="#bib-RFC5234">RFC5234</a></cite>] to define network protocol syntax and WebIDL [<cite><a class="bibref" href="#bib-WEBIDL">WEBIDL</a></cite>]
+                This specification uses the Augmented Backus-Naur Form (ABNF) notation of [<cite><a class="bibref" href="#bib-RFC5234">RFC5234</a></cite>] to define network protocol syntax and WebIDL [<cite><a class="bibref" href="#bib-WebIDL-20161215">WebIDL-20161215</a></cite>]
                 to define scripting APIs. Conformance criteria and considerations regarding error handling are defined in Section 2.5 of [RFC7230].
             </p>
             <p>
-                How to <dfn data-dfn-type="dfn" id="dfn-throw"><a class="externalDFN" href="https://heycam.github.io/webidl/#dfn-throw">throw</a></dfn> a <dfn data-dfn-type="dfn" id="dfn-domexception"><a class="externalDFN" href="https://heycam.github.io/webidl/#idl-DOMException">DOMexception</a></dfn>                and the <dfn data-dfn-type="dfn" id="dfn-exceptions"><a class="externalDFN" href="https://heycam.github.io/webidl/#idl-exceptions">exceptions</a></dfn> named "InvalidStateError", "SecurityError", and "SyntaxError" are defined in [<cite><a class="bibref" href="#bib-WEBIDL">WEBIDL</a></cite>].
+                How to <dfn data-dfn-type="dfn" id="dfn-throw"><a class="externalDFN" href="https://www.w3.org/TR/2016/REC-WebIDL-1-20161215/#dfn-throw">throw</a></dfn> a <dfn data-dfn-type="dfn" id="dfn-domexception"><a class="externalDFN" href="https://www.w3.org/TR/2016/REC-WebIDL-1-20161215/#idl-DOMException">DOMexception</a></dfn>                and the <dfn data-dfn-type="dfn" id="dfn-exceptions"><a class="externalDFN" href="https://www.w3.org/TR/2016/REC-WebIDL-1-20161215/#idl-exceptions">exceptions</a></dfn> named "InvalidStateError", "SecurityError", and "SyntaxError" are
+                defined in [<cite><a class="bibref" href="#bib-WebIDL-20161215">WebIDL-20161215</a></cite>].
             </p>
             <p>
                 <dfn data-dfn-type="dfn" id="dfn-promise-objects"><a class="externalDFN" href="https://tc39.github.io/ecma262/#sec-promise-objects">Promise objects</a></dfn> are defined in [<cite><a class="bibref" href="#bib-ECMASCRIPT">ECMASCRIPT</a></cite>];
@@ -1443,7 +1425,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 
     <section id="determining">
         <!--OddPage-->
-        <h2 id="x4.-determining-user-preference"><span class="secno">4. </span>Determining User Preference</h2>
+        <h2 id="x4-determining-user-preference"><span class="secno">4. </span>Determining User Preference</h2>
 
         <p>
             The goal of this protocol is to allow a user to express their personal preference regarding tracking to each server and web application that they communicate with via HTTP, thereby allowing recipients of that preference to adjust tracking behavior accordingly
@@ -1456,10 +1438,10 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
         </p>
         <p>
             A user agent <em class="rfc2119" title="MUST">MUST</em> offer users a minimum of two alternative choices for a <q>Do Not Track</q> preference: <code><dfn data-dfn-type="dfn" id="dfn-unset">unset</dfn></code> or
-            <code><dfn data-dfn-type="dfn" id="dfn-dnt:1">DNT:1</dfn></code>. A user agent <em class="rfc2119" title="MAY">MAY</em> offer a third alternative choice: <code><dfn data-dfn-type="dfn" id="dfn-dnt:0">DNT:0</dfn></code>.
+            <code><dfn data-dfn-type="dfn" id="dfn-dnt-1">DNT:1</dfn></code>. A user agent <em class="rfc2119" title="MAY">MAY</em> offer a third alternative choice: <code><dfn data-dfn-type="dfn" id="dfn-dnt-0">DNT:0</dfn></code>.
         </p>
         <p>
-            If the user's choice is <a href="#dfn-dnt%3A1" class="internalDFN" data-link-type="dfn"><code>DNT:1</code></a> or <a href="#dfn-dnt%3A0" class="internalDFN" data-link-type="dfn"><code>DNT:0</code></a>, the tracking preference is <dfn data-dfn-type="dfn"
+            If the user's choice is <a href="#dfn-dnt-1" class="internalDFN" data-link-type="dfn"><code>DNT:1</code></a> or <a href="#dfn-dnt-0" class="internalDFN" data-link-type="dfn"><code>DNT:0</code></a>, the tracking preference is <dfn data-dfn-type="dfn"
                 id="dfn-enabled">enabled</dfn>; otherwise, the tracking preference is <dfn data-dfn-type="dfn" id="dfn-not-enabled">not enabled</dfn>.
         </p>
         <p>
@@ -1477,7 +1459,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
         </p>
         <p>
             An HTTP intermediary <em class="rfc2119" title="MUST NOT">MUST NOT</em> add, delete, or modify a tracking preference expression in a request forwarded through that intermediary unless the intermediary has been specifically installed or configured
-            to do so by the user making the request. For example, an Internet Service Provider <em class="rfc2119" title="MUST NOT">MUST NOT</em> inject <a href="#dfn-dnt%3A1" class="internalDFN" data-link-type="dfn"><code>DNT:1</code></a> on behalf of
+            to do so by the user making the request. For example, an Internet Service Provider <em class="rfc2119" title="MUST NOT">MUST NOT</em> inject <a href="#dfn-dnt-1" class="internalDFN" data-link-type="dfn"><code>DNT:1</code></a> on behalf of
             all users who have not expressed a preference.
         </p>
         <p>
@@ -1507,10 +1489,10 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 
     <section id="expressing">
         <!--OddPage-->
-        <h2 id="x5.-expressing-a-tracking-preference"><span class="secno">5. </span>Expressing a Tracking Preference</h2>
+        <h2 id="x5-expressing-a-tracking-preference"><span class="secno">5. </span>Expressing a Tracking Preference</h2>
 
         <section id="expression-format">
-            <h3 id="x5.1-expression-format"><span class="secno">5.1 </span>Expression Format</h3>
+            <h3 id="x5-1-expression-format"><span class="secno">5.1 </span>Expression Format</h3>
             <p>
                 When a user has <a href="#dfn-enabled" class="internalDFN" data-link-type="dfn">enabled</a> a tracking preference, that preference needs to be expressed to all mechanisms that might perform or initiate <a href="#dfn-tracking" class="internalDFN"
                     data-link-type="dfn">tracking</a>.
@@ -1553,7 +1535,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
         </section>
 
         <section id="dnt-header-field">
-            <h3 id="x5.2-dnt-header-field-for-http-requests"><span class="secno">5.2 </span>DNT Header Field for HTTP Requests</h3>
+            <h3 id="x5-2-dnt-header-field-for-http-requests"><span class="secno">5.2 </span>DNT Header Field for HTTP Requests</h3>
 
             <p>
                 The <code><dfn data-dfn-type="dfn" id="dfn-dnt">DNT</dfn></code> header field is a mechanism for expressing the user's tracking preference in an HTTP request ([<cite><a class="bibref" href="#bib-RFC7230">RFC7230</a></cite>]). At most one
@@ -1568,12 +1550,12 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
             <p>
                 A user agent <em class="rfc2119" title="MUST">MUST</em> generate a <code>DNT</code> header field with a field-value that begins with the numeric character "1" if the user's tracking preference is <a href="#dfn-enabled" class="internalDFN"
                     data-link-type="dfn">enabled</a>, their preference is for
-                <a href="#dfn-dnt%3A1" class="internalDFN" data-link-type="dfn"><code>DNT:1</code></a>, and no exception has been granted for the target resource (see <a href="#exceptions" class="sectionRef sec-ref">section <span class="secno">6.</span> <span class="sec-title">User-Granted Exceptions</span></a>).
+                <a href="#dfn-dnt-1" class="internalDFN" data-link-type="dfn"><code>DNT:1</code></a>, and no exception has been granted for the target resource (see <a href="#exceptions" class="sectionRef sec-ref">section <span class="secno">6.</span> <span class="sec-title">User-Granted Exceptions</span></a>).
             </p>
             <p>
                 A user agent <em class="rfc2119" title="MUST">MUST</em> generate a <code>DNT</code> header field with a field-value that begins with the numeric character "0" if the user's tracking preference is <a href="#dfn-enabled" class="internalDFN"
                     data-link-type="dfn">enabled</a> and their preference is for
-                <a href="#dfn-dnt%3A0" class="internalDFN" data-link-type="dfn"><code>DNT:0</code></a>, or if an exception has been granted for the target resource.
+                <a href="#dfn-dnt-0" class="internalDFN" data-link-type="dfn"><code>DNT:0</code></a>, or if an exception has been granted for the target resource.
             </p>
             <p>
                 A proxy <em class="rfc2119" title="MUST NOT">MUST NOT</em> generate a <code>DNT</code> header field unless it has been specifically installed or configured to do so by the user making the request and adheres to the above requirements as
@@ -1587,7 +1569,7 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
             </div>
 
             <section id="dnt-extensions">
-                <h4 id="x5.2.1-extensions-to-the-dnt-field-value"><span class="secno">5.2.1 </span>Extensions to the DNT Field Value</h4>
+                <h4 id="x5-2-1-extensions-to-the-dnt-field-value"><span class="secno">5.2.1 </span>Extensions to the DNT Field Value</h4>
 
                 <p>
                     The remainder of the <a href="#dfn-dnt" class="internalDFN" data-link-type="dfn"><code>DNT</code></a> field-value, after the initial character, is reserved for future extensions. DNT extensions can only be transmitted when a tracking
@@ -1619,18 +1601,18 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
         </section>
 
         <section id="js-dom">
-            <h3 id="x5.3-javascript-property-to-detect-preference"><span class="secno">5.3 </span>JavaScript Property to Detect Preference</h3>
+            <h3 id="x5-3-javascript-property-to-detect-preference"><span class="secno">5.3 </span>JavaScript Property to Detect Preference</h3>
 
             <p>
-                The <code><dfn data-dfn-for="navigator" data-dfn-type="dfn" data-lt="donottrack" id="dom-navigator-donottrack" data-idl="" data-title="Navigator.doNotTrack">Navigator.doNotTrack</dfn></code> property enables a client-side script with read
+                The <code><dfn data-dfn-type="dfn" data-dfn-for="navigator" data-lt="donottrack" id="dom-navigator-donottrack" data-idl="" data-title="Navigator.doNotTrack">Navigator.doNotTrack</dfn></code> property enables a client-side script with read
                 access to the
-                <code><dfn data-dfn-for="" data-dfn-type="dfn" id="dom-navigator" data-idl="" data-title="Navigator"><a href="https://www.w3.org/TR/html51/#navigator">Navigator</a></dfn></code> object [
+                <code><dfn data-dfn-type="dfn" id="dom-navigator" data-idl="" data-title="Navigator" data-dfn-for=""><a href="https://www.w3.org/TR/html51/#navigator">Navigator</a></dfn></code> object [
                 <cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] to determine what <a href="#dfn-dnt" class="internalDFN" data-link-type="dfn"><code>DNT</code></a> header field value would be sent to the <a href="#dfn-effective-script-origin"
                     class="internalDFN" data-link-type="dfn">effective script origin</a>, taking into account the user's general preference (if any) and user-granted exceptions applicable to the <a href="#dfn-target-domain" class="internalDFN" data-link-type="dfn">target domain</a>                when referenced by the active document's <a href="#dfn-top-level-browsing-context" class="internalDFN" data-link-type="dfn">top-level browsing context</a>.
             </p>
             <div>
-                <pre class="def idl"><span class="idlInterface" id="idl-def-navigator-partial-1" data-idl="" data-title="Navigator">partial interface <span class="idlInterfaceID"><a data-lt="Navigator" data-link-type="dfn" href="https://www.w3.org/TR/html51/#navigator" data-for=""><code>Navigator</code></a></span> {
-<span class="idlAttribute" id="idl-def-navigator-donottrack" data-idl="" data-title="doNotTrack" data-dfn-for="navigator">    readonly attribute <span class="idlAttrType"><a href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a>?</span> <span class="idlAttrName"><a data-lt="Navigator.doNotTrack|donottrack" data-lt-nodefault="" href="#dom-navigator-donottrack" class="internalDFN" data-link-type="dfn" data-for="Navigator">doNotTrack</a></span>;</span>
+                <pre class="def idl"><span class="idlInterface" id="idl-def-navigator-partial-1" data-idl="" data-title="Navigator">partial interface <span class="idlInterfaceID"><a data-no-default="" data-link-for="" data-lt="" data-link-type="dfn" href="https://www.w3.org/TR/html51/#navigator"><code>Navigator</code></a></span> {
+<span class="idlAttribute" id="idl-def-navigator-donottrack" data-idl="" data-title="doNotTrack" data-dfn-for="navigator">    readonly attribute <span class="idlAttrType"><a href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a>?</span> <span class="idlAttrName"><a data-no-default="" data-link-for="navigator" data-lt="donottrack" href="#dom-navigator-donottrack" class="internalDFN" data-link-type="dfn">doNotTrack</a></span>;</span>
 };</span></pre>
             </div>
             <p>
@@ -1642,9 +1624,9 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
                 <a
                     href="#dfn-dnt" class="internalDFN" data-link-type="dfn"><code>DNT</code></a> field-value (<a href="#dnt-header-field" class="sectionRef sec-ref">section <span class="secno">5.2</span> <span class="sec-title">DNT Header Field for HTTP Requests</span></a>) in a request to a <a href="#dfn-target-resource"
                         class="internalDFN" data-link-type="dfn">target resource</a> at the
-                    <a href="#dfn-effective-script-origin" class="internalDFN" data-link-type="dfn">effective script origin</a> (the current <a href="#dfn-document.domain" class="internalDFN" data-link-type="dfn">document.domain</a> of the script's
+                    <a href="#dfn-effective-script-origin" class="internalDFN" data-link-type="dfn">effective script origin</a> (the current <a href="#dfn-document-domain" class="internalDFN" data-link-type="dfn">document.domain</a> of the script's
                     <a
-                        href="#dfn-responsible-document" class="internalDFN" data-link-type="dfn">responsible document</a>) when that request is due to an embedded reference from this site (the <a href="#dfn-document.domain" class="internalDFN" data-link-type="dfn">document.domain</a> of the <a href="#dfn-top-level-browsing-context"
+                        href="#dfn-responsible-document" class="internalDFN" data-link-type="dfn">responsible document</a>) when that request is due to an embedded reference from this site (the <a href="#dfn-document-domain" class="internalDFN" data-link-type="dfn">document.domain</a> of the <a href="#dfn-top-level-browsing-context"
                             class="internalDFN" data-link-type="dfn">top-level browsing context</a>'s <a href="#dfn-active-document" class="internalDFN" data-link-type="dfn">active document</a>).
             </p>
             <p>
@@ -1654,7 +1636,7 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
         </section>
 
         <section id="other-protocols">
-            <h3 id="x5.4-tracking-preference-expressed-in-other-protocols"><span class="secno">5.4 </span>Tracking Preference Expressed in Other Protocols</h3>
+            <h3 id="x5-4-tracking-preference-expressed-in-other-protocols"><span class="secno">5.4 </span>Tracking Preference Expressed in Other Protocols</h3>
 
             <p>
                 A user's tracking preference is intended to apply in general, regardless of the protocols being used for Internet communication. However, it is beyond the scope of this specification to define how a user's tracking preference might be communicated via
@@ -1665,10 +1647,10 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
 
     <section id="exceptions">
         <!--OddPage-->
-        <h2 id="x6.-user-granted-exceptions"><span class="secno">6. </span>User-Granted Exceptions</h2>
+        <h2 id="x6-user-granted-exceptions"><span class="secno">6. </span>User-Granted Exceptions</h2>
 
         <section id="exception-overview">
-            <h3 id="x6.1-overview"><span class="secno">6.1 </span>Overview</h3>
+            <h3 id="x6-1-overview"><span class="secno">6.1 </span>Overview</h3>
 
             <p>
                 Content providers might wish to prompt visitors to <q>opt in</q> to tracking for behavioral advertising or similar purposes when they arrive with the Do Not Track setting enabled. However, granting an exception in one context (e.g., while
@@ -1676,18 +1658,18 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
                 interface, rather than managing preferences in a different way on every content provider or tracker's privacy page.
             </p>
             <p>
-                A <dfn data-dfn-type="dfn" id="dfn-user-granted-exception">user-granted exception</dfn> is the record of a decision by the user to grant consent for tracking (<a href="#dfn-dnt%3A0" class="internalDFN" data-link-type="dfn"><code>DNT:0</code></a>)
+                A <dfn data-dfn-type="dfn" id="dfn-user-granted-exception">user-granted exception</dfn> is the record of a decision by the user to grant consent for tracking (<a href="#dfn-dnt-0" class="internalDFN" data-link-type="dfn"><code>DNT:0</code></a>)
                 on future requests from a given site to a set of target domains. Both site and target are scoped by domain, similar to the existing domain scope of cookies (<a href="https://www.w3.org/TR/html5/single-page.html#relaxing-the-same-origin-restriction">Section 5.3.1</a>                of [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>]), to avoid prompting the user for every subdomain of a site and every target resource that might be referenced.
             </p>
             <p>
-                A client-side database can be used for persistent storage of user-granted exceptions, such that permission to send <a href="#dfn-dnt%3A0" class="internalDFN" data-link-type="dfn"><code>DNT:0</code></a> is obtained by a site and stored
-                via a JavaScript API. However, we only define the API (below); the choice of storage mechanism is left to each implementation. In comparison to the use of cookies to manage consent, an exception database and APIs provide more transparency
+                A client-side database can be used for persistent storage of user-granted exceptions, such that permission to send <a href="#dfn-dnt-0" class="internalDFN" data-link-type="dfn"><code>DNT:0</code></a> is obtained by a site and stored via
+                a JavaScript API. However, we only define the API (below); the choice of storage mechanism is left to each implementation. In comparison to the use of cookies to manage consent, an exception database and APIs provide more transparency
                 and better user control, while also providing better persistence of those exceptions for sites.
             </p>
         </section>
 
         <section id="exception-scope">
-            <h3 id="x6.2-site-specific-or-web-wide"><span class="secno">6.2 </span>Site-specific or Web-wide</h3>
+            <h3 id="x6-2-site-specific-or-web-wide"><span class="secno">6.2 </span>Site-specific or Web-wide</h3>
 
             <p>
                 There are three domain concepts involved in the processing of user-granted exceptions:
@@ -1695,12 +1677,12 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
             <dl>
                 <dt><dfn data-dfn-type="dfn" id="dfn-site-domain">site domain</dfn></dt>
                 <dd>the domain associated with a site on which a given reference might be found and for which the user-granted exceptions API might be queried: specifically, the current
-                    <a href="#dfn-document.domain" class="internalDFN" data-link-type="dfn">document.domain</a> of the <a href="#dfn-top-level-browsing-context" class="internalDFN" data-link-type="dfn">top-level browsing context</a>'s
+                    <a href="#dfn-document-domain" class="internalDFN" data-link-type="dfn">document.domain</a> of the <a href="#dfn-top-level-browsing-context" class="internalDFN" data-link-type="dfn">top-level browsing context</a>'s
                     <a href="#dfn-active-document" class="internalDFN" data-link-type="dfn">active document</a> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>].</dd>
                 <dt><dfn data-dfn-type="dfn" id="dfn-target-domain">target domain</dfn></dt>
                 <dd>the <a href="#dfn-uri-host" class="internalDFN" data-link-type="dfn">uri-host</a> subcomponent of the <a href="#dfn-authority" class="internalDFN" data-link-type="dfn">authority</a> component of a referenced "http" or "https" URI [<cite><a class="bibref" href="#bib-RFC7230">RFC7230</a></cite>].</dd>
                 <dt><dfn data-dfn-type="dfn" id="dfn-script-domain">script domain</dfn></dt>
-                <dd>the effective domain of a script when it uses the exception API: specifically, the current <a href="#dfn-document.domain" class="internalDFN" data-link-type="dfn">document.domain</a> of the script's
+                <dd>the effective domain of a script when it uses the exception API: specifically, the current <a href="#dfn-document-domain" class="internalDFN" data-link-type="dfn">document.domain</a> of the script's
                     <a href="#dfn-responsible-document" class="internalDFN" data-link-type="dfn">responsible document</a> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>].</dd>
             </dl>
             <p>
@@ -1717,7 +1699,7 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
         </section>
 
         <section id="exception-granting">
-            <h3 id="x6.3-granting-an-exception"><span class="secno">6.3 </span>Granting an Exception</h3>
+            <h3 id="x6-3-granting-an-exception"><span class="secno">6.3 </span>Granting an Exception</h3>
 
             <p>
                 It is expected that a site will explain to the user, in its online content, the need for an exception and the consequences of granting or denying that exception. Upon receipt of an informed consent from the user, a script operating on the site's page
@@ -1753,7 +1735,7 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
         </section>
 
         <section id="exception-checking">
-            <h3 id="x6.4-checking-for-an-exception"><span class="secno">6.4 </span>Checking for an Exception</h3>
+            <h3 id="x6-4-checking-for-an-exception"><span class="secno">6.4 </span>Checking for an Exception</h3>
 
             <p>
                 A site can promise-call the <a href="#dom-navigator-trackingexceptionexists" class="internalDFN" data-link-type="dfn"><code>Navigator.trackingExceptionExists</code></a> API to enquire whether a set of exceptions has been granted and stands
@@ -1764,7 +1746,7 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
             </p>
             <ul>
                 <li>While the user is browsing a given site, if the duplet [<a href="#dfn-site-domain" class="internalDFN" data-link-type="dfn">site domain</a>, <a href="#dfn-target-domain" class="internalDFN" data-link-type="dfn">target domain</a>] matches
-                    any duplet in the database, then a <a href="#dfn-dnt%3A0" class="internalDFN" data-link-type="dfn"><code>DNT:0</code></a> preference is sent, otherwise the user’s general preference is sent (if any).</li>
+                    any duplet in the database, then a <a href="#dfn-dnt-0" class="internalDFN" data-link-type="dfn"><code>DNT:0</code></a> preference is sent, otherwise the user’s general preference is sent (if any).</li>
             </ul>
             <p>
                 A pair of duplets [A,B] and [X,Y] match if A matches X and B matches Y. A pair of values A and X match if and only if one of the following is true:
@@ -1790,7 +1772,7 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
         </section>
 
         <section id="exception-revoking">
-            <h3 id="x6.5-revoking-an-exception"><span class="secno">6.5 </span>Revoking an Exception</h3>
+            <h3 id="x6-5-revoking-an-exception"><span class="secno">6.5 </span>Revoking an Exception</h3>
 
             <p>
                 A site that stores exceptions is also expected to enable revocation of those exceptions. The <a href="#dom-navigator-removetrackingexception" class="internalDFN" data-link-type="dfn"><code>Navigator.removeTrackingException</code></a> API
@@ -1804,36 +1786,36 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
         </section>
 
         <section id="exception-javascript-api">
-            <h3 id="x6.6-client-side-scripting-api"><span class="secno">6.6 </span>Client-side Scripting API</h3>
+            <h3 id="x6-6-client-side-scripting-api"><span class="secno">6.6 </span>Client-side Scripting API</h3>
 
             <section id="exception-javascript-api-store">
-                <h4 id="x6.6.1-api-to-store-a-tracking-exception"><span class="secno">6.6.1 </span>API to Store a Tracking Exception</h4>
+                <h4 id="x6-6-1-api-to-store-a-tracking-exception"><span class="secno">6.6.1 </span>API to Store a Tracking Exception</h4>
 
                 <p>
                     When a site has obtained consent for a
                     <a href="#dfn-user-granted-exception" class="internalDFN" data-link-type="dfn">user-granted exception</a>, a script running within an active
                     <a href="#dfn-browsing-context" class="internalDFN" data-link-type="dfn">browsing context</a> or <a href="#dfn-nested-browsing-context" class="internalDFN" data-link-type="dfn">nested browsing context</a> of that site can <a href="#dfn-promise-call"
                         class="internalDFN" data-link-type="dfn">promise-call</a>
-                    <code><dfn data-dfn-for="navigator" data-dfn-type="dfn" data-lt="storetrackingexception|storetrackingexception()|storeTrackingException" id="dom-navigator-storetrackingexception" data-idl="" data-title="Navigator.storeTrackingException">Navigator.storeTrackingException</dfn></code>                    to store one or more tracking exceptions. A <code><dfn data-dfn-for="" data-dfn-type="dfn" id="dom-trackingexdata" data-idl="" data-title="TrackingExData">TrackingExData</dfn></code> object is supplied as a parameter to define the
+                    <code><dfn data-dfn-type="dfn" data-dfn-for="navigator" data-lt="storeTrackingException|storetrackingexception()|storetrackingexception" id="dom-navigator-storetrackingexception" data-idl="" data-title="Navigator.storeTrackingException">Navigator.storeTrackingException</dfn></code>                    to store one or more tracking exceptions. A <code><dfn data-dfn-type="dfn" id="dom-trackingexdata" data-idl="" data-title="TrackingExData" data-dfn-for="">TrackingExData</dfn></code> object is supplied as a parameter to define the
                     exception's scope (the set of [site, target] duplets that encompass the granted exception) and optional information to be stored for that exception. The call returns a promise which either resolves to a
-                    <code><dfn data-dfn-for="" data-dfn-type="dfn" id="dom-trackingexresult" data-idl="" data-title="TrackingExResult">TrackingExResult</dfn></code> or is rejected with a <code>DOMException</code> identifying the reason for the failure.
+                    <code><dfn data-dfn-type="dfn" id="dom-trackingexresult" data-idl="" data-title="TrackingExResult" data-dfn-for="">TrackingExResult</dfn></code> or is rejected with a <code>DOMException</code> identifying the reason for the failure.
                 </p>
                 <div>
-                    <pre class="def idl"><span class="idlInterface" id="idl-def-navigator-partial-2" data-idl="" data-title="Navigator">partial interface <span class="idlInterfaceID"><a data-lt="Navigator" data-link-type="dfn" href="https://www.w3.org/TR/html51/#navigator" data-for=""><code>Navigator</code></a></span> {
-<span class="idlMethod" id="idl-def-navigator-storetrackingexception(properties)" data-idl="" data-title="storeTrackingException" data-dfn-for="navigator">    <span class="idlMethType"><a href="https://heycam.github.io/webidl/#idl-promise">Promise</a>&lt;<a href="#dom-trackingexresult" class="internalDFN" data-link-type="dfn"><code>TrackingExResult</code></a>&gt;</span> <span class="idlMethName"><a data-lt="Navigator.storeTrackingException|storetrackingexception|storetrackingexception()|storeTrackingException" data-lt-nodefault="" href="#dom-navigator-storetrackingexception" class="internalDFN" data-link-type="dfn" data-for="Navigator">storeTrackingException</a></span>(<span class="idlParam"><span class="idlParamType"><a href="#dom-trackingexdata" class="internalDFN" data-link-type="dfn"><code>TrackingExData</code></a></span> <span class="idlParamName">properties</span></span>);</span>
+                    <pre class="def idl"><span class="idlInterface" id="idl-def-navigator-partial-2" data-idl="" data-title="Navigator">partial interface <span class="idlInterfaceID"><a data-no-default="" data-link-for="" data-lt="" data-link-type="dfn" href="https://www.w3.org/TR/html51/#navigator"><code>Navigator</code></a></span> {
+<span class="idlMethod" id="idl-def-navigator-storetrackingexception-properties" data-idl="" data-title="storeTrackingException" data-dfn-for="navigator">    <span class="idlMethType"><a href="https://heycam.github.io/webidl/#idl-promise">Promise</a>&lt;<a href="#dom-trackingexresult" class="internalDFN" data-link-type="dfn"><code>TrackingExResult</code></a>&gt;</span> <span class="idlMethName"><a data-no-default="" data-link-for="navigator" data-lt="storeTrackingException|storetrackingexception()|storetrackingexception" href="#dom-navigator-storetrackingexception" class="internalDFN" data-link-type="dfn">storeTrackingException</a></span>(<span class="idlParam"><span class="idlParamType"><a href="#dom-trackingexdata" class="internalDFN" data-link-type="dfn"><code>TrackingExData</code></a></span> <span class="idlParamName">properties</span></span>);</span>
 };</span>
 
-<span class="idlDictionary" id="idl-def-trackingexdata" data-idl="" data-title="TrackingExData">dictionary <span class="idlDictionaryID"><a data-lt="TrackingExData" href="#dom-trackingexdata" class="internalDFN" data-link-type="dfn" data-for=""><code>TrackingExData</code></a></span> {
-<span class="idlMember" id="idl-def-trackingexdata-site" data-idl="" data-title="site" data-dfn-for="trackingexdata">    <span class="idlMemberType"><a href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a>?</span>           <span class="idlMemberName"><a data-lt="site" href="#dom-trackingexdata-site" class="internalDFN" data-link-type="dfn" data-for="TrackingExData"><code>site</code></a></span>;</span>
-<span class="idlMember" id="idl-def-trackingexdata-targets" data-idl="" data-title="targets" data-dfn-for="trackingexdata">    <span class="idlMemberType"><a href="https://heycam.github.io/webidl/#idl-sequence">sequence</a>&lt;<a href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a>&gt;?</span> <span class="idlMemberName"><a data-lt="targets" href="#dom-trackingexdata-targets" class="internalDFN" data-link-type="dfn" data-for="TrackingExData"><code>targets</code></a></span>;</span>
-<span class="idlMember" id="idl-def-trackingexdata-name" data-idl="" data-title="name" data-dfn-for="trackingexdata">    <span class="idlMemberType"><a href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a>?</span>           <span class="idlMemberName"><a data-lt="name" href="#dom-trackingexdata-name" class="internalDFN" data-link-type="dfn" data-for="TrackingExData"><code>name</code></a></span>;</span>
-<span class="idlMember" id="idl-def-trackingexdata-explanation" data-idl="" data-title="explanation" data-dfn-for="trackingexdata">    <span class="idlMemberType"><a href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a>?</span>           <span class="idlMemberName"><a data-lt="explanation" href="#dom-trackingexdata-explanation" class="internalDFN" data-link-type="dfn" data-for="TrackingExData"><code>explanation</code></a></span>;</span>
-<span class="idlMember" id="idl-def-trackingexdata-details" data-idl="" data-title="details" data-dfn-for="trackingexdata">    <span class="idlMemberType"><a href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a>?</span>           <span class="idlMemberName"><a data-lt="details" href="#dom-trackingexdata-details" class="internalDFN" data-link-type="dfn" data-for="TrackingExData"><code>details</code></a></span>;</span>
-<span class="idlMember" id="idl-def-trackingexdata-maxage" data-idl="" data-title="maxAge" data-dfn-for="trackingexdata">    <span class="idlMemberType"><a href="https://heycam.github.io/webidl/#idl-long">long</a>?</span>                <span class="idlMemberName"><a data-lt="maxAge" href="#dom-trackingexdata-maxage" class="internalDFN" data-link-type="dfn" data-for="TrackingExData"><code>maxAge</code></a></span>;</span>
+<span class="idlDictionary" id="idl-def-trackingexdata" data-idl="" data-title="TrackingExData">dictionary <span class="idlDictionaryID"><a data-no-default="" data-link-for="" data-lt="" href="#dom-trackingexdata" class="internalDFN" data-link-type="dfn"><code>TrackingExData</code></a></span> {
+<span class="idlMember" id="idl-def-trackingexdata-site" data-idl="" data-title="site" data-dfn-for="trackingexdata">    <span class="idlMemberType"><a href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a>?</span>           <span class="idlMemberName"><a data-no-default="" data-link-for="trackingexdata" data-lt="" href="#dom-trackingexdata-site" class="internalDFN" data-link-type="dfn"><code>site</code></a></span>;</span>
+<span class="idlMember" id="idl-def-trackingexdata-targets" data-idl="" data-title="targets" data-dfn-for="trackingexdata">    <span class="idlMemberType"><a href="https://heycam.github.io/webidl/#idl-sequence">sequence</a>&lt;<a href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a>&gt;?</span> <span class="idlMemberName"><a data-no-default="" data-link-for="trackingexdata" data-lt="" href="#dom-trackingexdata-targets" class="internalDFN" data-link-type="dfn"><code>targets</code></a></span>;</span>
+<span class="idlMember" id="idl-def-trackingexdata-name" data-idl="" data-title="name" data-dfn-for="trackingexdata">    <span class="idlMemberType"><a href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a>?</span>           <span class="idlMemberName"><a data-no-default="" data-link-for="trackingexdata" data-lt="" href="#dom-trackingexdata-name" class="internalDFN" data-link-type="dfn"><code>name</code></a></span>;</span>
+<span class="idlMember" id="idl-def-trackingexdata-explanation" data-idl="" data-title="explanation" data-dfn-for="trackingexdata">    <span class="idlMemberType"><a href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a>?</span>           <span class="idlMemberName"><a data-no-default="" data-link-for="trackingexdata" data-lt="" href="#dom-trackingexdata-explanation" class="internalDFN" data-link-type="dfn"><code>explanation</code></a></span>;</span>
+<span class="idlMember" id="idl-def-trackingexdata-details" data-idl="" data-title="details" data-dfn-for="trackingexdata">    <span class="idlMemberType"><a href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a>?</span>           <span class="idlMemberName"><a data-no-default="" data-link-for="trackingexdata" data-lt="" href="#dom-trackingexdata-details" class="internalDFN" data-link-type="dfn"><code>details</code></a></span>;</span>
+<span class="idlMember" id="idl-def-trackingexdata-maxage" data-idl="" data-title="maxAge" data-dfn-for="trackingexdata">    <span class="idlMemberType"><a href="https://heycam.github.io/webidl/#idl-long">long</a>?</span>                <span class="idlMemberName"><a data-no-default="" data-link-for="trackingexdata" data-lt="" href="#dom-trackingexdata-maxage" class="internalDFN" data-link-type="dfn"><code>maxAge</code></a></span>;</span>
 };</span>
 
-<span class="idlDictionary" id="idl-def-trackingexresult" data-idl="" data-title="TrackingExResult">dictionary <span class="idlDictionaryID"><a data-lt="TrackingExResult" href="#dom-trackingexresult" class="internalDFN" data-link-type="dfn" data-for=""><code>TrackingExResult</code></a></span> {
-<span class="idlMember" id="idl-def-trackingexresult-issitewide" data-idl="" data-title="isSiteWide" data-dfn-for="trackingexresult">    <span class="idlMemberType"><a href="https://heycam.github.io/webidl/#idl-boolean">boolean</a></span> <span class="idlMemberName"><a data-lt="isSiteWide" href="#dom-trackingexresult-issitewide" class="internalDFN" data-link-type="dfn" data-for="TrackingExResult"><code>isSiteWide</code></a></span>;</span>
+<span class="idlDictionary" id="idl-def-trackingexresult" data-idl="" data-title="TrackingExResult">dictionary <span class="idlDictionaryID"><a data-no-default="" data-link-for="" data-lt="" href="#dom-trackingexresult" class="internalDFN" data-link-type="dfn"><code>TrackingExResult</code></a></span> {
+<span class="idlMember" id="idl-def-trackingexresult-issitewide" data-idl="" data-title="isSiteWide" data-dfn-for="trackingexresult">    <span class="idlMemberType"><a href="https://heycam.github.io/webidl/#idl-boolean">boolean</a></span> <span class="idlMemberName"><a data-no-default="" data-link-for="trackingexresult" data-lt="" href="#dom-trackingexresult-issitewide" class="internalDFN" data-link-type="dfn"><code>isSiteWide</code></a></span>;</span>
 };</span></pre>
                 </div>
                 <p>
@@ -1939,7 +1921,7 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
                     <a href="#dfn-upon-fulfillment" class="internalDFN" data-link-type="dfn">Upon fulfillment</a>, the user agent has added to its local database one or more site-pair duplets [site, target], each indicating that a request from that
                     <a
                         href="#dfn-site-domain" class="internalDFN" data-link-type="dfn">site domain</a> to the
-                        <a href="#dfn-target-domain" class="internalDFN" data-link-type="dfn">target domain</a> will include <a href="#dfn-dnt%3A0" class="internalDFN" data-link-type="dfn"><code>DNT:0</code></a> regardless of the user's general tracking
+                        <a href="#dfn-target-domain" class="internalDFN" data-link-type="dfn">target domain</a> will include <a href="#dfn-dnt-0" class="internalDFN" data-link-type="dfn"><code>DNT:0</code></a> regardless of the user's general tracking
                         preference. The fulfilled promise object contains the following <a href="#dom-trackingexresult" class="internalDFN" data-link-type="dfn"><code>TrackingExResult</code></a> attribute:
                 </p>
                 <dl data-dfn-for="TrackingExResult">
@@ -1972,19 +1954,19 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
             </section>
 
             <section id="exception-javascript-api-cancel">
-                <h4 id="x6.6.2-api-to-remove-a-tracking-exception"><span class="secno">6.6.2 </span>API to Remove a Tracking Exception</h4>
+                <h4 id="x6-6-2-api-to-remove-a-tracking-exception"><span class="secno">6.6.2 </span>API to Remove a Tracking Exception</h4>
 
                 <p>
                     When a site decides, or has been directed by the user, to revoke a
                     <a href="#dfn-user-granted-exception" class="internalDFN" data-link-type="dfn">user-granted exception</a>, a script running within an active
                     <a href="#dfn-browsing-context" class="internalDFN" data-link-type="dfn">browsing context</a> or <a href="#dfn-nested-browsing-context" class="internalDFN" data-link-type="dfn">nested browsing context</a> of that site can <a href="#dfn-promise-call"
                         class="internalDFN" data-link-type="dfn">promise-call</a>
-                    <code><dfn data-dfn-for="navigator" data-dfn-type="dfn" data-lt="removetrackingexception|removetrackingexception()|removeTrackingException" id="dom-navigator-removetrackingexception" data-idl="" data-title="Navigator.removeTrackingException">Navigator.removeTrackingException</dfn></code>                    to remove one or more tracking exceptions. A <a href="#dom-trackingexdata" class="internalDFN" data-link-type="dfn"><code>TrackingExData</code></a> object is supplied as a parameter to identify which exceptions are to be removed. The
+                    <code><dfn data-dfn-type="dfn" data-dfn-for="navigator" data-lt="removeTrackingException|removetrackingexception()|removetrackingexception" id="dom-navigator-removetrackingexception" data-idl="" data-title="Navigator.removeTrackingException">Navigator.removeTrackingException</dfn></code>                    to remove one or more tracking exceptions. A <a href="#dom-trackingexdata" class="internalDFN" data-link-type="dfn"><code>TrackingExData</code></a> object is supplied as a parameter to identify which exceptions are to be removed. The
                     call returns a promise which either resolves to indicate success or is rejected with a <a href="#dfn-domexception" class="internalDFN" data-link-type="dfn">DOMException</a> identifying the reason for the failure.
                 </p>
                 <div>
-                    <pre class="def idl"><span class="idlInterface" id="idl-def-navigator-partial-3" data-idl="" data-title="Navigator">partial interface <span class="idlInterfaceID"><a data-lt="Navigator" data-link-type="dfn" href="https://www.w3.org/TR/html51/#navigator" data-for=""><code>Navigator</code></a></span> {
-<span class="idlMethod" id="idl-def-navigator-removetrackingexception(properties)" data-idl="" data-title="removeTrackingException" data-dfn-for="navigator">    <span class="idlMethType"><a href="https://heycam.github.io/webidl/#idl-promise">Promise</a>&lt;void&gt;</span> <span class="idlMethName"><a data-lt="Navigator.removeTrackingException|removetrackingexception|removetrackingexception()|removeTrackingException" data-lt-nodefault="" href="#dom-navigator-removetrackingexception" class="internalDFN" data-link-type="dfn" data-for="Navigator">removeTrackingException</a></span>(<span class="idlParam"><span class="idlParamType"><a href="#dom-trackingexdata" class="internalDFN" data-link-type="dfn"><code>TrackingExData</code></a></span> <span class="idlParamName">properties</span></span>);</span>
+                    <pre class="def idl"><span class="idlInterface" id="idl-def-navigator-partial-3" data-idl="" data-title="Navigator">partial interface <span class="idlInterfaceID"><a data-no-default="" data-link-for="" data-lt="" data-link-type="dfn" href="https://www.w3.org/TR/html51/#navigator"><code>Navigator</code></a></span> {
+<span class="idlMethod" id="idl-def-navigator-removetrackingexception-properties" data-idl="" data-title="removeTrackingException" data-dfn-for="navigator">    <span class="idlMethType"><a href="https://heycam.github.io/webidl/#idl-promise">Promise</a>&lt;void&gt;</span> <span class="idlMethName"><a data-no-default="" data-link-for="navigator" data-lt="removeTrackingException|removetrackingexception()|removetrackingexception" href="#dom-navigator-removetrackingexception" class="internalDFN" data-link-type="dfn">removeTrackingException</a></span>(<span class="idlParam"><span class="idlParamType"><a href="#dom-trackingexdata" class="internalDFN" data-link-type="dfn"><code>TrackingExData</code></a></span> <span class="idlParamName">properties</span></span>);</span>
 };</span></pre>
                 </div>
                 <p>
@@ -2044,19 +2026,19 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
             </section>
 
             <section id="exception-javascript-api-confirm">
-                <h4 id="x6.6.3-api-to-confirm-a-tracking-exception"><span class="secno">6.6.3 </span>API to Confirm a Tracking Exception</h4>
+                <h4 id="x6-6-3-api-to-confirm-a-tracking-exception"><span class="secno">6.6.3 </span>API to Confirm a Tracking Exception</h4>
 
                 <p>
                     When a site wishes to confirm that a <a href="#dfn-user-granted-exception" class="internalDFN" data-link-type="dfn">user-granted exception</a> exists for a set of target domains potentially referenced by that site, a script running
                     within an active <a href="#dfn-browsing-context" class="internalDFN" data-link-type="dfn">browsing context</a> or
                     <a href="#dfn-nested-browsing-context" class="internalDFN" data-link-type="dfn">nested browsing context</a> of that site can <a href="#dfn-promise-call" class="internalDFN" data-link-type="dfn">promise-call</a>
-                    <code><dfn data-dfn-for="navigator" data-dfn-type="dfn" data-lt="trackingexceptionexists|trackingexceptionexists()|trackingExceptionExists" id="dom-navigator-trackingexceptionexists" data-idl="" data-title="Navigator.trackingExceptionExists">Navigator.trackingExceptionExists</dfn></code>                    with a
+                    <code><dfn data-dfn-type="dfn" data-dfn-for="navigator" data-lt="trackingExceptionExists|trackingexceptionexists()|trackingexceptionexists" id="dom-navigator-trackingexceptionexists" data-idl="" data-title="Navigator.trackingExceptionExists">Navigator.trackingExceptionExists</dfn></code>                    with a
                     <a href="#dom-trackingexdata" class="internalDFN" data-link-type="dfn"><code>TrackingExData</code></a> object supplied as a parameter that identifies the set of exceptions to confirm. The call returns a promise which either resolves
                     to true or false or is rejected with a <a href="#dfn-domexception" class="internalDFN" data-link-type="dfn">DOMException</a> identifying the reason for the failure.
                 </p>
                 <div>
-                    <pre class="def idl"><span class="idlInterface" id="idl-def-navigator-partial-4" data-idl="" data-title="Navigator">partial interface <span class="idlInterfaceID"><a data-lt="Navigator" data-link-type="dfn" href="https://www.w3.org/TR/html51/#navigator" data-for=""><code>Navigator</code></a></span> {
-<span class="idlMethod" id="idl-def-navigator-trackingexceptionexists(properties)" data-idl="" data-title="trackingExceptionExists" data-dfn-for="navigator">    <span class="idlMethType"><a href="https://heycam.github.io/webidl/#idl-promise">Promise</a>&lt;<a href="https://heycam.github.io/webidl/#idl-boolean">boolean</a>&gt;</span> <span class="idlMethName"><a data-lt="Navigator.trackingExceptionExists|trackingexceptionexists|trackingexceptionexists()|trackingExceptionExists" data-lt-nodefault="" href="#dom-navigator-trackingexceptionexists" class="internalDFN" data-link-type="dfn" data-for="Navigator">trackingExceptionExists</a></span>(<span class="idlParam"><span class="idlParamType"><a href="#dom-trackingexdata" class="internalDFN" data-link-type="dfn"><code>TrackingExData</code></a></span> <span class="idlParamName">properties</span></span>);</span>
+                    <pre class="def idl"><span class="idlInterface" id="idl-def-navigator-partial-4" data-idl="" data-title="Navigator">partial interface <span class="idlInterfaceID"><a data-no-default="" data-link-for="" data-lt="" data-link-type="dfn" href="https://www.w3.org/TR/html51/#navigator"><code>Navigator</code></a></span> {
+<span class="idlMethod" id="idl-def-navigator-trackingexceptionexists-properties" data-idl="" data-title="trackingExceptionExists" data-dfn-for="navigator">    <span class="idlMethType"><a href="https://heycam.github.io/webidl/#idl-promise">Promise</a>&lt;<a href="https://heycam.github.io/webidl/#idl-boolean">boolean</a>&gt;</span> <span class="idlMethName"><a data-no-default="" data-link-for="navigator" data-lt="trackingExceptionExists|trackingexceptionexists()|trackingexceptionexists" href="#dom-navigator-trackingexceptionexists" class="internalDFN" data-link-type="dfn">trackingExceptionExists</a></span>(<span class="idlParam"><span class="idlParamType"><a href="#dom-trackingexdata" class="internalDFN" data-link-type="dfn"><code>TrackingExData</code></a></span> <span class="idlParamName">properties</span></span>);</span>
 };</span></pre>
                 </div>
                 <p>
@@ -2117,7 +2099,7 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
         </section>
 
         <section id="exception-management">
-            <h3 id="x6.7-user-agent-management-of-exceptions"><span class="secno">6.7 </span>User Agent Management of Exceptions</h3>
+            <h3 id="x6-7-user-agent-management-of-exceptions"><span class="secno">6.7 </span>User Agent Management of Exceptions</h3>
 
             <p>
                 There is no required user interface for a user agent regarding the granting of exceptions; a user agent <em class="rfc2119" title="MAY">MAY</em> choose to provide none. Alternatively, a user agent <em class="rfc2119" title="MAY">MAY</em>:
@@ -2155,10 +2137,10 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
 
     <section id="responding">
         <!--OddPage-->
-        <h2 id="x7.-communicating-a-tracking-status"><span class="secno">7. </span>Communicating a Tracking Status</h2>
+        <h2 id="x7-communicating-a-tracking-status"><span class="secno">7. </span>Communicating a Tracking Status</h2>
 
         <section id="response-overview">
-            <h3 id="x7.1-overview"><span class="secno">7.1 </span>Overview</h3>
+            <h3 id="x7-1-overview"><span class="secno">7.1 </span>Overview</h3>
 
             <p>
                 In addition to expressing the user's preference regarding tracking, this protocol enables servers to communicate machine-readable claims regarding their own tracking behavior. Since a personalized tracking status on every response would disable caching,
@@ -2167,10 +2149,10 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
         </section>
 
         <section id="tracking-status-value">
-            <h3 id="x7.2-tracking-status-value"><span class="secno">7.2 </span>Tracking Status Value</h3>
+            <h3 id="x7-2-tracking-status-value"><span class="secno">7.2 </span>Tracking Status Value</h3>
 
             <section id="TSV-defn">
-                <h4 id="x7.2.1-definition"><span class="secno">7.2.1 </span>Definition</h4>
+                <h4 id="x7-2-1-definition"><span class="secno">7.2.1 </span>Definition</h4>
                 <p>
                     A <dfn data-dfn-type="dfn" id="dfn-tracking-status-value">tracking status value</dfn> (<dfn data-dfn-type="dfn" id="dfn-tsv">TSV</dfn>) is a single character response to the user's tracking preference with regard to data collected
                     via the <dfn data-dfn-type="dfn" id="dfn-designated-resource">designated resource</dfn>. For a site-wide tracking status resource, the designated resource is any resource on the same origin server. For a <a href="#dfn-tk" class="internalDFN"
@@ -2194,18 +2176,18 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
             </section>
 
             <section id="TSV-!">
-                <h4 id="x7.2.2-under-construction-(!)"><span class="secno">7.2.2 </span>Under Construction (!)</h4>
+                <h4 id="x7-2-2-under-construction"><span class="secno">7.2.2 </span>Under Construction (!)</h4>
                 <p>
-                    A tracking status value of <code><dfn data-dfn-type="dfn" id="dfn-x!">!</dfn></code> means that the origin server is currently testing its communication of tracking status. The <code>!</code> value has been provided to ease testing
-                    and deployment on production systems during the initial periods of testing compliance and during adjustment periods due to future protocol changes or shifting regulatory constraints. Note that this value does not indicate that the
-                    user's preference will be ignored, nor that tracking will occur as a result of accessing the designated resource.
+                    A tracking status value of <code><dfn data-dfn-type="dfn" id="dfn-generatedID">!</dfn></code> means that the origin server is currently testing its communication of tracking status. The <code>!</code> value has been provided to ease
+                    testing and deployment on production systems during the initial periods of testing compliance and during adjustment periods due to future protocol changes or shifting regulatory constraints. Note that this value does not indicate that
+                    the user's preference will be ignored, nor that tracking will occur as a result of accessing the designated resource.
                 </p>
             </section>
 
             <section id="TSV-?">
-                <h4 id="x7.2.3-dynamic-(?)"><span class="secno">7.2.3 </span>Dynamic (?)</h4>
+                <h4 id="x7-2-3-dynamic"><span class="secno">7.2.3 </span>Dynamic (?)</h4>
                 <p>
-                    A tracking status value of <code><dfn data-dfn-type="dfn" id="dfn-x?">?</dfn></code> means the origin server needs more information to determine tracking status, usually because the <a href="#dfn-designated-resource" class="internalDFN"
+                    A tracking status value of <code><dfn data-dfn-type="dfn" id="dfn-generatedID-0">?</dfn></code> means the origin server needs more information to determine tracking status, usually because the <a href="#dfn-designated-resource" class="internalDFN"
                         data-link-type="dfn">designated resource</a> dynamically adjusts behavior based on information in a request.
                 </p>
                 <p>
@@ -2217,12 +2199,12 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
             </section>
 
             <section id="TSV-G">
-                <h4 id="x7.2.4-gateway-(g)"><span class="secno">7.2.4 </span>Gateway (G)</h4>
+                <h4 id="x7-2-4-gateway-g"><span class="secno">7.2.4 </span>Gateway (G)</h4>
                 <p>
                     A tracking status value of <code><dfn data-dfn-type="dfn" id="dfn-g">G</dfn></code> means the server is acting as a gateway to an exchange involving multiple parties. This might occur if a response to the <a href="#dfn-designated-resource"
                         class="internalDFN" data-link-type="dfn">designated resource</a> involves an automated selection process, such as dynamic bidding, where the party that is selected determines how the request data will be treated with respect to an
-                    expressed tracking preference. Similar to the <a href="#dfn-x%3F" class="internalDFN" data-link-type="dfn"><code>?</code></a> value, the <code>G</code> TSV indicates that the actual tracking status is dynamic and will be provided in
-                    the response message's <a href="#dfn-tk" class="internalDFN" data-link-type="dfn"><code>Tk</code></a> header field, presumably using information forwarded from the selected party.
+                    expressed tracking preference. Similar to the <a href="#dfn-generatedID-0" class="internalDFN" data-link-type="dfn"><code>?</code></a> value, the <code>G</code> TSV indicates that the actual tracking status is dynamic and will be provided
+                    in the response message's <a href="#dfn-tk" class="internalDFN" data-link-type="dfn"><code>Tk</code></a> header field, presumably using information forwarded from the selected party.
                 </p>
                 <p>
                     This tracking status value is only valid as a site-wide status. A server <em class="rfc2119" title="MUST NOT">MUST NOT</em> send <code>G</code> as the tracking status value in a <a href="#dfn-tk" class="internalDFN" data-link-type="dfn"><code>Tk</code></a>                    header field or within the representation of a request-specific tracking status resource.
@@ -2235,7 +2217,7 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
                     <li>the gateway <em class="rfc2119" title="MUST">MUST</em> forward any expressed tracking preference in the request to each party that receives data from that request;</li>
                     <li>the gateway <em class="rfc2119" title="MUST">MUST</em> have a contract in place with each of the parties to whom it provides request data such that only the selected party is allowed to retain tracking data from a request with an expressed
                         tracking preference of
-                        <a href="#dfn-dnt%3A1" class="internalDFN" data-link-type="dfn"><code>DNT:1</code></a>; and,</li>
+                        <a href="#dfn-dnt-1" class="internalDFN" data-link-type="dfn"><code>DNT:1</code></a>; and,</li>
                     <li>the gateway <em class="rfc2119" title="MUST">MUST</em> send a <a href="#dfn-tk" class="internalDFN" data-link-type="dfn"><code>Tk</code></a> header field in responses to requests on the designated resource and include within that field's
                         value a <a href="#dfn-status-id" class="internalDFN" data-link-type="dfn"><code>status-id</code></a> specific to the selected party, such that information about the selected party can be obtained via the request-specific tracking
                         status resource (see
@@ -2249,14 +2231,14 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
             </section>
 
             <section id="TSV-N">
-                <h4 id="x7.2.5-not-tracking-(n)"><span class="secno">7.2.5 </span>Not Tracking (N)</h4>
+                <h4 id="x7-2-5-not-tracking-n"><span class="secno">7.2.5 </span>Not Tracking (N)</h4>
                 <p>
                     A tracking status value of <code><dfn data-dfn-type="dfn" id="dfn-n">N</dfn></code> means the origin server claims that data collected via the <a href="#dfn-designated-resource" class="internalDFN" data-link-type="dfn">designated resource</a>                    is not used for tracking and will not be combined with other data in a form that would enable tracking.
                 </p>
             </section>
 
             <section id="TSV-T">
-                <h4 id="x7.2.6-tracking-(t)"><span class="secno">7.2.6 </span>Tracking (T)</h4>
+                <h4 id="x7-2-6-tracking-t"><span class="secno">7.2.6 </span>Tracking (T)</h4>
                 <p>
                     A tracking status value of <code><dfn data-dfn-type="dfn" id="dfn-t">T</dfn></code> means the origin server might perform or enable tracking using data collected via the
                     <a href="#dfn-designated-resource" class="internalDFN" data-link-type="dfn">designated resource</a>. Information provided in the tracking status representation might indicate whether such tracking is limited to a set of commonly accepted
@@ -2265,7 +2247,7 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
             </section>
 
             <section id="TSV-C">
-                <h4 id="x7.2.7-consent-(c)"><span class="secno">7.2.7 </span>Consent (C)</h4>
+                <h4 id="x7-2-7-consent-c"><span class="secno">7.2.7 </span>Consent (C)</h4>
                 <p>
                     A tracking status value of <code><dfn data-dfn-type="dfn" id="dfn-c">C</dfn></code> means that the origin server believes it has received prior consent for tracking this user, user agent, or device, perhaps via some mechanism not defined
                     by this specification, and that prior consent overrides the tracking preference expressed by this protocol. An origin server that sends the <code>C</code> tracking status value for a <a href="#dfn-designated-resource" class="internalDFN"
@@ -2275,10 +2257,10 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
             </section>
 
             <section id="TSV-P">
-                <h4 id="x7.2.8-potential-consent-(p)"><span class="secno">7.2.8 </span>Potential Consent (P)</h4>
+                <h4 id="x7-2-8-potential-consent-p"><span class="secno">7.2.8 </span>Potential Consent (P)</h4>
                 <p>
                     A tracking status value of <code><dfn data-dfn-type="dfn" id="dfn-p">P</dfn></code> means that the origin server does not know, in real-time, whether it has received prior consent for tracking this user, user agent, or device, but
-                    promises not to use or share any <a href="#dfn-dnt%3A1" class="internalDFN" data-link-type="dfn"><code>DNT:1</code></a> data until such consent has been determined, and further promises to delete or <a href="#dfn-permanently-de-identified">permanently de-identify</a>                    within forty-eight hours any <a href="#dfn-dnt%3A1" class="internalDFN" data-link-type="dfn"><code>DNT:1</code></a> data received for which such consent has not been received.
+                    promises not to use or share any <a href="#dfn-dnt-1" class="internalDFN" data-link-type="dfn"><code>DNT:1</code></a> data until such consent has been determined, and further promises to delete or <a href="#dfn-permanently-de-identified">permanently de-identify</a>                    within forty-eight hours any <a href="#dfn-dnt-1" class="internalDFN" data-link-type="dfn"><code>DNT:1</code></a> data received for which such consent has not been received.
                 </p>
                 <p>
                     Since this status value does not itself indicate whether a specific request is tracked, an origin server that sends a
@@ -2294,7 +2276,7 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
             </section>
 
             <section id="TSV-D">
-                <h4 id="x7.2.9-disregarding-(d)"><span class="secno">7.2.9 </span>Disregarding (D)</h4>
+                <h4 id="x7-2-9-disregarding-d"><span class="secno">7.2.9 </span>Disregarding (D)</h4>
                 <p>
                     A tracking status value of <code><dfn data-dfn-type="dfn" id="dfn-d">D</dfn></code> means that the origin server is unable or unwilling to respect a tracking preference received from the requesting user agent. An origin server that
                     sends the <code>D</code> tracking status value <em class="rfc2119" title="MUST">MUST</em> detail within the server's corresponding privacy policy the conditions under which a tracking preference might be disregarded.
@@ -2314,7 +2296,7 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
             </section>
 
             <section id="TSV-U">
-                <h4 id="x7.2.10-updated-(u)"><span class="secno">7.2.10 </span>Updated (U)</h4>
+                <h4 id="x7-2-10-updated-u"><span class="secno">7.2.10 </span>Updated (U)</h4>
                 <p>
                     A tracking status value of <code><dfn data-dfn-type="dfn" id="dfn-u">U</dfn></code> means that the request resulted in a potential change to the tracking status applicable to this user, user agent, or device. A user agent that relies
                     on a cached tracking status <em class="rfc2119" title="SHOULD">SHOULD</em> update the cache entry with the current status by making a new request on the applicable tracking status resource.
@@ -2326,7 +2308,7 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
             </section>
 
             <section id="TSV.extension">
-                <h4 id="x7.2.11-extensions-to-the-tracking-status-value"><span class="secno">7.2.11 </span>Extensions to the Tracking Status Value</h4>
+                <h4 id="x7-2-11-extensions-to-the-tracking-status-value"><span class="secno">7.2.11 </span>Extensions to the Tracking Status Value</h4>
                 <p>
                     Extensibility of the <a href="#dfn-tsv" class="internalDFN" data-link-type="dfn">TSV</a> set ensures that this protocol will continue to be usable as regional laws and regulatory environments evolve over time and compliance specifications
                     are developed accordingly.
@@ -2352,13 +2334,13 @@ DNT-field-value = ( "0" / "1" ) *DNT-extension
         </section>
 
         <section id="response-header-field">
-            <h3 id="x7.3-tk-header-field-for-http-responses"><span class="secno">7.3 </span>Tk Header Field for HTTP Responses</h3>
+            <h3 id="x7-3-tk-header-field-for-http-responses"><span class="secno">7.3 </span>Tk Header Field for HTTP Responses</h3>
 
             <section id="Tk-header-defn">
-                <h4 id="x7.3.1-definition"><span class="secno">7.3.1 </span>Definition</h4>
+                <h4 id="x7-3-1-definition"><span class="secno">7.3.1 </span>Definition</h4>
 
                 <p>
-                    The <code><dfn data-dfn-type="dfn" id="dfn-tk">Tk</dfn></code> response header field is a means for indicating the tracking status that applied to the corresponding request. An origin server is <em class="rfc2119" title="REQUIRED">REQUIRED</em>                    to send a <code>Tk</code> header field if its site-wide tracking status value is <a href="#dfn-x%3F" class="internalDFN" data-link-type="dfn"><code>?</code></a> (dynamic) or <a href="#dfn-g" class="internalDFN" data-link-type="dfn"><code>G</code></a>                    (gateway), or when an interactive change is made to the tracking status and indicated by <a href="#dfn-u" class="internalDFN" data-link-type="dfn"><code>U</code></a> (updated).
+                    The <code><dfn data-dfn-type="dfn" id="dfn-tk">Tk</dfn></code> response header field is a means for indicating the tracking status that applied to the corresponding request. An origin server is <em class="rfc2119" title="REQUIRED">REQUIRED</em>                    to send a <code>Tk</code> header field if its site-wide tracking status value is <a href="#dfn-generatedID-0" class="internalDFN" data-link-type="dfn"><code>?</code></a> (dynamic) or <a href="#dfn-g" class="internalDFN" data-link-type="dfn"><code>G</code></a>                    (gateway), or when an interactive change is made to the tracking status and indicated by <a href="#dfn-u" class="internalDFN" data-link-type="dfn"><code>U</code></a> (updated).
                 </p>
                 <pre class="abnf hljs" aria-busy="false" aria-live="polite">Tk-field-name   =  "Tk"
 Tk-field-value  =  TSV [ ";" status-id ]
@@ -2377,7 +2359,7 @@ Tk-field-value  =  TSV [ ";" status-id ]
             </section>
 
             <section id="referring-status-id">
-                <h4 id="x7.3.2-referring-to-a-request-specific-tracking-status-resource"><span class="secno">7.3.2 </span>Referring to a Request-specific Tracking Status Resource</h4>
+                <h4 id="x7-3-2-referring-to-a-request-specific-tracking-status-resource"><span class="secno">7.3.2 </span>Referring to a Request-specific Tracking Status Resource</h4>
                 <p>
                     If an origin server has multiple, request-specific tracking policies, such that the tracking status might differ depending on some aspect of the request (e.g., method, <a href="#dfn-target-resource" class="internalDFN" data-link-type="dfn">target resource</a>,
                     header fields, data, etc.), the origin server can provide an additional subtree of well-known resources corresponding to each of those distinct tracking statuses. The <code><dfn data-dfn-type="dfn" id="dfn-status-id">status-id</dfn></code>                    portion of the <code>Tk</code> field-value indicates which specific tracking status resource applies to the current request. The <code>status-id</code> is case-sensitive.
@@ -2402,12 +2384,12 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
                 </p>
                 <p>
                     If a Tk field-value has a tracking status value of
-                    <a href="#dfn-x%3F" class="internalDFN" data-link-type="dfn"><code>?</code></a> (dynamic), the origin server <em class="rfc2119" title="MUST">MUST</em> send a <code>status-id</code> in the field-value.
+                    <a href="#dfn-generatedID-0" class="internalDFN" data-link-type="dfn"><code>?</code></a> (dynamic), the origin server <em class="rfc2119" title="MUST">MUST</em> send a <code>status-id</code> in the field-value.
                 </p>
             </section>
 
             <section id="interactive-status-change">
-                <h4 id="x7.3.3-indicating-an-interactive-status-change"><span class="secno">7.3.3 </span>Indicating an Interactive Status Change</h4>
+                <h4 id="x7-3-3-indicating-an-interactive-status-change"><span class="secno">7.3.3 </span>Indicating an Interactive Status Change</h4>
                 <p>
                     Interactive mechanisms might be used, beyond the scope of this specification, that have the effect of asking for and obtaining prior consent for tracking, or for modifying prior indications of consent. For example, the tracking status resource's status
                     object defines a <a href="#dfn-config" class="internalDFN" data-link-type="dfn"><code>config</code></a> property that can refer to such a mechanism. Although such out-of-band mechanisms are not defined by this specification,
@@ -2426,10 +2408,10 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
         </section>
 
         <section id="status-resource">
-            <h3 id="x7.4-tracking-status-resource"><span class="secno">7.4 </span>Tracking Status Resource</h3>
+            <h3 id="x7-4-tracking-status-resource"><span class="secno">7.4 </span>Tracking Status Resource</h3>
 
             <section id="site-wide-status-resource">
-                <h4 id="x7.4.1-site-wide-tracking-status"><span class="secno">7.4.1 </span>Site-wide Tracking Status</h4>
+                <h4 id="x7-4-1-site-wide-tracking-status"><span class="secno">7.4.1 </span>Site-wide Tracking Status</h4>
                 <p>
                     A <dfn data-dfn-type="dfn" id="dfn-site-wide-tracking-status-resource">site-wide tracking status resource</dfn> provides information about the potential tracking behavior of resources located at that origin server. A site-wide tracking
                     status resource has the well-known identifier
@@ -2449,7 +2431,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
             </section>
 
             <section id="request-specific-status-resource">
-                <h4 id="x7.4.2-request-specific-tracking-status"><span class="secno">7.4.2 </span>Request-specific Tracking Status</h4>
+                <h4 id="x7-4-2-request-specific-tracking-status"><span class="secno">7.4.2 </span>Request-specific Tracking Status</h4>
                 <p>
                     If an origin server has multiple, request-specific tracking policies, such that the tracking status might differ depending on some aspect of the request (e.g., method, target resource, header fields, data, etc.), the origin server can provide an additional
                     subtree of well-known resources corresponding to each of those distinct tracking statuses. The <a href="#dfn-tk" class="internalDFN" data-link-type="dfn"><code>Tk</code></a> response header field (<a href="#response-header-field"
@@ -2476,7 +2458,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
             </section>
 
             <section id="status-checks-not-tracked">
-                <h4 id="x7.4.3-status-checks-are-not-tracked"><span class="secno">7.4.3 </span>Status Checks are Not Tracked</h4>
+                <h4 id="x7-4-3-status-checks-are-not-tracked"><span class="secno">7.4.3 </span>Status Checks are Not Tracked</h4>
                 <p>
                     When sending a request for the tracking status, a user agent
                     <em class="rfc2119" title="SHOULD">SHOULD</em> include any cookie data [<cite><a class="bibref" href="#bib-RFC6265">RFC6265</a></cite>] (set prior to the request) that would be sent in a normal request to that origin server, since
@@ -2491,7 +2473,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
             </section>
 
             <section id="status-caching">
-                <h4 id="x7.4.4-caching"><span class="secno">7.4.4 </span>Caching</h4>
+                <h4 id="x7-4-4-caching"><span class="secno">7.4.4 </span>Caching</h4>
                 <p>
                     If the tracking status is applicable to all users, regardless of the received <a href="#dfn-dnt" class="internalDFN" data-link-type="dfn"><code>DNT</code></a> field-value and other data received via the request, then the origin server
                     <em class="rfc2119" title="SHOULD">SHOULD</em> mark the response as cacheable [<cite><a class="bibref" href="#bib-RFC7234">RFC7234</a></cite>] and assign a time-to-live (expiration or max-use) that is sufficient to enable shared caching
@@ -2525,15 +2507,15 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
         </section>
 
         <section id="status-representation">
-            <h3 id="x7.5-tracking-status-representation"><span class="secno">7.5 </span>Tracking Status Representation</h3>
+            <h3 id="x7-5-tracking-status-representation"><span class="secno">7.5 </span>Tracking Status Representation</h3>
             <p>
                 For each tracking status resource, an origin server <em class="rfc2119" title="MUST">MUST</em> provide a valid representation using the
-                <code><dfn data-dfn-type="dfn" id="dfn-application/tracking-status+json">application/tracking-status+json</dfn></code> media type. This media type consists of a <a href="#dfn-status-object" class="internalDFN" data-link-type="dfn">status object</a>                serialized as JSON [<cite><a class="bibref" href="#bib-RFC7159">RFC7159</a></cite>]. More information about the
+                <code><dfn data-dfn-type="dfn" id="dfn-application-tracking-status-json">application/tracking-status+json</dfn></code> media type. This media type consists of a <a href="#dfn-status-object" class="internalDFN" data-link-type="dfn">status object</a>                serialized as JSON [<cite><a class="bibref" href="#bib-RFC7159">RFC7159</a></cite>]. More information about the
                 <code>application/tracking-status+json</code> media type can be found in <a href="#registrations" class="sectionRef sec-ref">section <span class="secno">B.</span> <span class="sec-title">Registrations</span></a>.
             </p>
 
             <section id="rep.status-object">
-                <h4 id="x7.5.1-status-object"><span class="secno">7.5.1 </span>Status Object</h4>
+                <h4 id="x7-5-1-status-object"><span class="secno">7.5.1 </span>Status Object</h4>
                 <p>
                     A tracking status representation consists of a single
                     <dfn data-dfn-type="dfn" id="dfn-status-object">status object</dfn> containing properties that describe the tracking status applicable to the
@@ -2577,7 +2559,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
             </section>
 
             <section id="rep.tracking">
-                <h4 id="x7.5.2-tracking-property"><span class="secno">7.5.2 </span>Tracking Property</h4>
+                <h4 id="x7-5-2-tracking-property"><span class="secno">7.5.2 </span>Tracking Property</h4>
                 <p>
                     A <a href="#dfn-status-object" class="internalDFN" data-link-type="dfn">status object</a> <em class="rfc2119" title="MUST">MUST</em> have a property named
                     <code>tracking</code> with a string value containing the tracking status value (<a href="#tracking-status-value" class="sectionRef sec-ref">section <span class="secno">7.2</span> <span class="sec-title">Tracking Status Value</span></a>)
@@ -2593,7 +2575,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
             </section>
 
             <section id="rep.compliance">
-                <h4 id="x7.5.3-compliance-property"><span class="secno">7.5.3 </span>Compliance Property</h4>
+                <h4 id="x7-5-3-compliance-property"><span class="secno">7.5.3 </span>Compliance Property</h4>
                 <p>
                     An origin server <em class="rfc2119" title="MAY">MAY</em> send a property named
                     <code><dfn data-dfn-type="dfn" id="dfn-compliance">compliance</dfn></code> with an array value containing a list of URI references that identify specific regimes to which the origin server claims to comply for the designated resource.
@@ -2607,7 +2589,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
             </section>
 
             <section id="rep.qualifiers">
-                <h4 id="x7.5.4-qualifiers-property"><span class="secno">7.5.4 </span>Qualifiers Property</h4>
+                <h4 id="x7-5-4-qualifiers-property"><span class="secno">7.5.4 </span>Qualifiers Property</h4>
                 <p>
                     An origin server <em class="rfc2119" title="MAY">MAY</em> send a property named
                     <code><dfn data-dfn-type="dfn" id="dfn-qualifiers">qualifiers</dfn></code> with a string value containing a sequence of case sensitive characters corresponding to explanations or limitations on the extent of tracking. Multiple qualifiers
@@ -2617,7 +2599,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
             </section>
 
             <section id="rep.controller">
-                <h4 id="x7.5.5-controller-property"><span class="secno">7.5.5 </span>Controller Property</h4>
+                <h4 id="x7-5-5-controller-property"><span class="secno">7.5.5 </span>Controller Property</h4>
                 <p>
                     An origin server <em class="rfc2119" title="MAY">MAY</em> send a property named
                     <code><dfn data-dfn-type="dfn" id="dfn-controller">controller</dfn></code> with an array value containing a list of URI references indirectly identifying the party or set of parties that claims to be the responsible data controller
@@ -2641,7 +2623,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
             </section>
 
             <section id="rep.same-party">
-                <h4 id="x7.5.6-same-party-property"><span class="secno">7.5.6 </span>Same-party Property</h4>
+                <h4 id="x7-5-6-same-party-property"><span class="secno">7.5.6 </span>Same-party Property</h4>
                 <p>
                     Since a user's experience on a given site might be composed of resources that are assembled from multiple domains, it might be useful for a site to distinguish those domains that are subject to their own control (i.e., share the same data controller as
                     the referring site). An origin server <em class="rfc2119" title="MAY">MAY</em> send a property named
@@ -2655,7 +2637,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
             </section>
 
             <section id="rep.audit">
-                <h4 id="x7.5.7-audit-property"><span class="secno">7.5.7 </span>Audit Property</h4>
+                <h4 id="x7-5-7-audit-property"><span class="secno">7.5.7 </span>Audit Property</h4>
                 <p>
                     An origin server <em class="rfc2119" title="MAY">MAY</em> send a property named
                     <code><dfn data-dfn-type="dfn" id="dfn-audit">audit</dfn></code> with an array value containing a list of URI references to external audits of the designated resource's privacy policy and tracking behavior. Preferably, the audit references
@@ -2664,12 +2646,12 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
             </section>
 
             <section id="rep.policy">
-                <h4 id="x7.5.8-policy-property"><span class="secno">7.5.8 </span>Policy Property</h4>
+                <h4 id="x7-5-8-policy-property"><span class="secno">7.5.8 </span>Policy Property</h4>
                 <p>
                     An origin server <em class="rfc2119" title="MAY">MAY</em> send a property named
                     <code><dfn data-dfn-type="dfn" id="dfn-policy">policy</dfn></code> with a string value containing a URI reference to a human-readable document that describes the relevant privacy policy for the designated resource. This document can
-                    inform users about data that might be collected when the designated resource is accessed and how collection, use, or sharing of such data might differ based on receipt of an expressed tracking preference (<a href="#dfn-dnt%3A1" class="internalDFN"
-                        data-link-type="dfn"><code>DNT:1</code></a> or <a href="#dfn-dnt%3A0" class="internalDFN" data-link-type="dfn"><code>DNT:0</code></a>).
+                    inform users about data that might be collected when the designated resource is accessed and how collection, use, or sharing of such data might differ based on receipt of an expressed tracking preference (<a href="#dfn-dnt-1" class="internalDFN"
+                        data-link-type="dfn"><code>DNT:1</code></a> or <a href="#dfn-dnt-0" class="internalDFN" data-link-type="dfn"><code>DNT:0</code></a>).
                 </p>
                 <p>
                     An origin server <em class="rfc2119" title="MUST">MUST</em> send a <code>policy</code> property if that server is the <a href="#dfn-effective-script-origin" class="internalDFN" data-link-type="dfn">effective script origin</a> of a
@@ -2690,7 +2672,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
             </section>
 
             <section id="rep.config">
-                <h4 id="x7.5.9-config-property"><span class="secno">7.5.9 </span>Config Property</h4>
+                <h4 id="x7-5-9-config-property"><span class="secno">7.5.9 </span>Config Property</h4>
                 <p>
                     An origin server <em class="rfc2119" title="MAY">MAY</em> send a property named
                     <code><dfn data-dfn-type="dfn" id="dfn-config">config</dfn></code> with a string value containing a URI reference to a resource for giving the user control over personal data collected via the designated resource (and possibly other
@@ -2708,7 +2690,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
             </section>
 
             <section id="rep.extension">
-                <h4 id="x7.5.10-extensions-to-the-status-object"><span class="secno">7.5.10 </span>Extensions to the Status Object</h4>
+                <h4 id="x7-5-10-extensions-to-the-status-object"><span class="secno">7.5.10 </span>Extensions to the Status Object</h4>
                 <p>
                     Extensibility of the status object ensures that this protocol will continue to be usable as regional laws and regulatory environments evolve over time and compliance specifications are developed accordingly.
                 </p>
@@ -2721,10 +2703,10 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
         </section>
 
         <section id="response-error">
-            <h3 id="x7.6-status-code-for-tracking-required"><span class="secno">7.6 </span>Status Code for Tracking Required</h3>
+            <h3 id="x7-6-status-code-for-tracking-required"><span class="secno">7.6 </span>Status Code for Tracking Required</h3>
 
             <p>
-                If an origin server receives a request with <a href="#dfn-dnt%3A1" class="internalDFN" data-link-type="dfn"><code>DNT:1</code></a>, does not have out-of-band consent for tracking this user, and wishes to deny access to the requested resource
+                If an origin server receives a request with <a href="#dfn-dnt-1" class="internalDFN" data-link-type="dfn"><code>DNT:1</code></a>, does not have out-of-band consent for tracking this user, and wishes to deny access to the requested resource
                 until the user provides some form of user-granted exception or consent for tracking, then the origin server <em class="rfc2119" title="SHOULD">SHOULD</em> send a 409 (Conflict) response with a message payload that describes why the request
                 has been refused and how one might supply the required consent or exception to avoid this conflict [<cite><a class="bibref" href="#bib-RFC7231">RFC7231</a></cite>].
             </p>
@@ -2736,7 +2718,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
 
     <section id="use-cases" class="informative">
         <!--OddPage-->
-        <h2 id="x8.-use-cases"><span class="secno">8. </span>Use Cases</h2>
+        <h2 id="x8-use-cases"><span class="secno">8. </span>Use Cases</h2>
         <p><em>This section is non-normative.</em></p>
 
         <div class="ednote">
@@ -2747,7 +2729,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
         </div>
 
         <section id="using-deployment">
-            <h3 id="x8.1-discovering-deployment"><span class="secno">8.1 </span>Discovering Deployment</h3>
+            <h3 id="x8-1-discovering-deployment"><span class="secno">8.1 </span>Discovering Deployment</h3>
             <p>
                 Deployment of this protocol for a given service can be discovered by making a retrieval request on the site-wide tracking resource <q><code>/.well-known/dnt/</code></q> relative to the service URI.
             </p>
@@ -2758,7 +2740,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
         </section>
 
         <section id="using-preflight">
-            <h3 id="x8.2-preflight-checks"><span class="secno">8.2 </span>Preflight Checks</h3>
+            <h3 id="x8-2-preflight-checks"><span class="secno">8.2 </span>Preflight Checks</h3>
             <p>
                 A key advantage of providing the tracking status at a resource separate from the site's normal services is that the status can be accessed and reviewed prior to making use of those services.
             </p>
@@ -2785,12 +2767,12 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
 
     <section id="security">
         <!--OddPage-->
-        <h2 id="x9.-security-considerations"><span class="secno">9. </span>Security Considerations</h2>
+        <h2 id="x9-security-considerations"><span class="secno">9. </span>Security Considerations</h2>
 
         <p>
             Information communicated via the DNT header field is minimized to avoid abuse of the field for fingerprinting or as a side-channel. However, future DNT-extensions might allow for the sending of additional information when signaling consent for tracking
-            via <a href="#dfn-dnt%3A0" class="internalDFN" data-link-type="dfn"><code>DNT:0</code></a>, since this consent mechanism is intended to be more persistent than cookies and could be used to convey a pseudonymous identifier as a
-            user-preferred alternative to allowing a cookie to be set.
+            via <a href="#dfn-dnt-0" class="internalDFN" data-link-type="dfn"><code>DNT:0</code></a>, since this consent mechanism is intended to be more persistent than cookies and could be used to convey a pseudonymous identifier as a user-preferred
+            alternative to allowing a cookie to be set.
         </p>
         <p>
             Use of client-side storage is always a security concern. Although the information being stored for each <a href="#dfn-user-granted-exception" class="internalDFN" data-link-type="dfn">user-granted exception</a> is limited and cannot be directly
@@ -2804,13 +2786,13 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
 
     <section id="privacy">
         <!--OddPage-->
-        <h2 id="x10.-privacy-considerations"><span class="secno">10. </span>Privacy Considerations</h2>
+        <h2 id="x10-privacy-considerations"><span class="secno">10. </span>Privacy Considerations</h2>
 
         <section id="privacy.not-preconfigured">
-            <h3 id="x10.1-why-dnt:1-is-not-preconfigured-by-default"><span class="secno">10.1 </span>Why DNT:1 is Not Preconfigured by Default</h3>
+            <h3 id="x10-1-why-dnt-1-is-not-preconfigured-by-default"><span class="secno">10.1 </span>Why DNT:1 is Not Preconfigured by Default</h3>
 
             <p>
-                This specification defines a protocol for communicating the user's tracking preference, not a protocol that prevents tracking on its own. It might be tempting to assume that <q>design for privacy</q> would justify calling for <a href="#dfn-dnt%3A1"
+                This specification defines a protocol for communicating the user's tracking preference, not a protocol that prevents tracking on its own. It might be tempting to assume that <q>design for privacy</q> would justify calling for <a href="#dfn-dnt-1"
                     class="internalDFN" data-link-type="dfn"><code>DNT:1</code></a> to be preconfigured as the default for all user agents. However, that would violate the field's semantics, make its presence in a request meaningless, and add eight extra
                 bytes to every HTTP request (with no effect).
             </p>
@@ -2821,7 +2803,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
         </section>
 
         <section id="privacy.fingerprinting">
-            <h3 id="x10.2-fingerprinting"><span class="secno">10.2 </span>Fingerprinting</h3>
+            <h3 id="x10-2-fingerprinting"><span class="secno">10.2 </span>Fingerprinting</h3>
 
             <p>
                 User-granted exceptions introduce a privacy risk. By storing client-side configurable state and providing functionality to learn about it later, the user-granted exceptions API might facilitate user fingerprinting and tracking. User agent developers ought
@@ -2830,7 +2812,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
         </section>
 
         <section id="privacy.history">
-            <h3 id="x10.3-stored-exceptions-are-stored-history"><span class="secno">10.3 </span>Stored Exceptions are Stored History</h3>
+            <h3 id="x10-3-stored-exceptions-are-stored-history"><span class="secno">10.3 </span>Stored Exceptions are Stored History</h3>
 
             <p>
                 A database of stored exceptions is effectively storing a local history of the sites browsed by the user over time. Separate databases are needed per user profile (and per incognito session) and ought to be protected from observation. A user might wish
@@ -2841,7 +2823,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
 
     <section id="acks" class="appendix">
         <!--OddPage-->
-        <h2 id="a.-acknowledgements"><span class="secno">A. </span>Acknowledgements</h2>
+        <h2 id="a-acknowledgements"><span class="secno">A. </span>Acknowledgements</h2>
 
         <p>
             This specification consists of input from many discussions within and around the <abbr title="World Wide Web Consortium">W3C</abbr> Tracking Protection Working Group, along with written contributions from Adrian&nbsp;Bateman (Microsoft), Justin&nbsp;Brookman
@@ -2858,10 +2840,10 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
 
     <section id="registrations" class="appendix">
         <!--OddPage-->
-        <h2 id="b.-registrations"><span class="secno">B. </span>Registrations</h2>
+        <h2 id="b-registrations"><span class="secno">B. </span>Registrations</h2>
 
         <p>
-            The Internet media type <a href="#dfn-application%2Ftracking-status%2Bjson" class="internalDFN" data-link-type="dfn"><code>application/tracking-status+json</code></a> is used for tracking status representations (<a href="#status-representation"
+            The Internet media type <a href="#dfn-application-tracking-status-json" class="internalDFN" data-link-type="dfn"><code>application/tracking-status+json</code></a> is used for tracking status representations (<a href="#status-representation"
                 class="sectionRef sec-ref">section <span class="secno">7.5</span> <span class="sec-title">Tracking Status Representation</span></a>).
         </p>
         <dl>
@@ -2904,14 +2886,32 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
         </dl>
     </section>
 
+    <section id="changes" class="appendix">
+        <!--OddPage-->
+        <h2 id="c-changes-since-first-cr"><span class="secno">C. </span>Changes since first CR</h2>
+
+        <p>
+            The client-side scripting API has been rewritten to use fewer functions and to return Promises. The API names have also been changed to prevent confusion with potential deployments of the prior API.
+        </p>
+        <p>
+            The terminology for browsing context, top-level origin, and domain has been updated to use terms from HTML5.
+        </p>
+        <p>
+            The specification now defines how to extend the Tk header field (e.g., to comply with possible future legal requirements). No such extensions are currently known.
+        </p>
+        <p>
+            The ability to add extensions to the DNT header field is no longer marked “at risk” because the group considers that this feature cannot be removed.
+        </p>
+    </section>
+
 
     <section id="references" class="appendix">
         <!--OddPage-->
-        <h2 id="c.-references"><span class="secno">C. </span>References</h2>
+        <h2 id="d-references"><span class="secno">D. </span>References</h2>
         <section id="normative-references">
-            <h3 id="c.1-normative-references"><span class="secno">C.1 </span>Normative references</h3>
+            <h3 id="d-1-normative-references"><span class="secno">D.1 </span>Normative references</h3>
             <dl class="bibliography"><dt id="bib-HTML51">[HTML51]</dt>
-                <dd><a href="https://www.w3.org/TR/html51/"><cite>HTML 5.1 2nd Edition</cite></a>. Steve Faulkner; Arron Eicholz; Travis Leithead; Alex Danilo. W3C. 3 August 2017. W3C Proposed Recommendation. URL: <a href="https://www.w3.org/TR/html51/">https://www.w3.org/TR/html51/</a>
+                <dd><a href="https://www.w3.org/TR/html51/"><cite>HTML 5.1 2nd Edition</cite></a>. Steve Faulkner; Arron Eicholz; Travis Leithead; Alex Danilo. W3C. 3 October 2017. W3C Recommendation. URL: <a href="https://www.w3.org/TR/html51/">https://www.w3.org/TR/html51/</a>
                 </dd><dt id="bib-RFC2119">[RFC2119]</dt>
                 <dd><a href="https://tools.ietf.org/html/rfc2119"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. S. Bradner. IETF. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119">https://tools.ietf.org/html/rfc2119</a>
                 </dd><dt id="bib-RFC3986">[RFC3986]</dt>
@@ -2928,13 +2928,13 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
                 <dd><a href="https://tools.ietf.org/html/rfc7231"><cite>Hypertext Transfer Protocol (HTTP/1.1): Semantics and Content</cite></a>. R. Fielding, Ed.; J. Reschke, Ed.. IETF. June 2014. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc7231">https://tools.ietf.org/html/rfc7231</a>
                 </dd><dt id="bib-RFC7234">[RFC7234]</dt>
                 <dd><a href="https://tools.ietf.org/html/rfc7234"><cite>Hypertext Transfer Protocol (HTTP/1.1): Caching</cite></a>. R. Fielding, Ed.; M. Nottingham, Ed.; J. Reschke, Ed.. IETF. June 2014. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc7234">https://tools.ietf.org/html/rfc7234</a>
-                </dd><dt id="bib-WEBIDL">[WEBIDL]</dt>
-                <dd><a href="https://heycam.github.io/webidl/"><cite>Web IDL</cite></a>. Cameron McCormack; Boris Zbarsky; Tobie Langel. W3C. 15 December 2016. W3C Editor's Draft. URL: <a href="https://heycam.github.io/webidl/">https://heycam.github.io/webidl/</a>
+                </dd><dt id="bib-WebIDL-20161215">[WebIDL-20161215]</dt>
+                <dd><a href="https://www.w3.org/TR/2016/REC-WebIDL-1-20161215/"><cite>WebIDL Level 1</cite></a>. Cameron McCormack. W3C. 15 December 2016. W3C Recommendation. URL: <a href="https://www.w3.org/TR/2016/REC-WebIDL-1-20161215/">https://www.w3.org/TR/2016/REC-WebIDL-1-20161215/</a>
                 </dd>
             </dl>
         </section>
         <section id="informative-references">
-            <h3 id="c.2-informative-references"><span class="secno">C.2 </span>Informative references</h3>
+            <h3 id="d-2-informative-references"><span class="secno">D.2 </span>Informative references</h3>
             <dl class="bibliography"><dt id="bib-ECMASCRIPT">[ECMASCRIPT]</dt>
                 <dd><a href="https://tc39.github.io/ecma262/"><cite>ECMAScript Language Specification</cite></a>. Ecma International. URL: <a href="https://tc39.github.io/ecma262/">https://tc39.github.io/ecma262/</a>
                 </dd><dt id="bib-KnowPrivacy">[KnowPrivacy]</dt>
@@ -2949,6 +2949,8 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
                 <dd><a href="https://tools.ietf.org/html/rfc6570"><cite>URI Template</cite></a>. J. Gregorio; R. Fielding; M. Hadley; M. Nottingham; D. Orchard. IETF. March 2012. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc6570">https://tools.ietf.org/html/rfc6570</a>
                 </dd><dt id="bib-TCS">[TCS]</dt>
                 <dd><a href="https://www.w3.org/TR/tracking-compliance/"><cite>Tracking Compliance and Scope</cite></a>. Nick Doty; Heather West; Justin Brookman; Sean Harvey; Erica Newland. W3C. 31 March 2015. W3C Working Draft. URL: <a href="https://www.w3.org/TR/tracking-compliance/">https://www.w3.org/TR/tracking-compliance/</a>
+                </dd><dt id="bib-WEBIDL">[WEBIDL]</dt>
+                <dd><a href="https://heycam.github.io/webidl/"><cite>Web IDL</cite></a>. Cameron McCormack; Boris Zbarsky; Tobie Langel. W3C. 15 December 2016. W3C Editor's Draft. URL: <a href="https://heycam.github.io/webidl/">https://heycam.github.io/webidl/</a>
                 </dd>
             </dl>
         </section>
