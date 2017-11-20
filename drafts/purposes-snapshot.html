@@ -1534,72 +1534,104 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
             </p>
         </section>
 
-        <section id="dnt-header-field">
-            <h3 id="x5-2-dnt-header-field-for-http-requests"><span class="secno">5.2 </span>DNT Header Field for HTTP Requests</h3>
+              <section id='dnt-header-field'>
+          <h3>DNT Header Field for HTTP Requests</h3>
 
-            <p>
-                The <code><dfn data-dfn-type="dfn" id="dfn-dnt">DNT</dfn></code> header field is a mechanism for expressing the user's tracking preference in an HTTP request ([<cite><a class="bibref" href="#bib-RFC7230">RFC7230</a></cite>]). At most one
-                <code>DNT</code> header field can be present in a valid request.
-            </p>
-            <pre class="abnf hljs" aria-busy="false" aria-live="polite">DNT-field-name  = "DNT"
-DNT-field-value = ( "0" / "1" ) *DNT-extension
+          <p>
+              The <code><dfn>DNT</dfn></code> header field is a mechanism for expressing the
+              user's tracking preference in an HTTP request ([[!RFC7230]]).
+              At most one <code>DNT</code> header field can be present in a valid request.
+          </p>
+<pre class="abnf">
+<dfn>DNT-field-name</dfn> = "DNT"
+<dfn>DNT-field-value</dfn> = ("0" *( LWSP DNT-qualifiers "&") ) / "1" 
+<dfn>DNT-qualifiers</dfn> = (DNT-purpose-qualifier / *DNT-extension)) 
+<dfn>DNT-purposes-qualifier</dfn> = "p=" DNT-purposes-selector
+<dfn>DNT-purposes-selector</dfn> = 1*(%x21 %x23-25 / %x27-2B / %x2D-3A / %x3C-5B / %x5D-7E) 
+        ;A string which excludes "&", ";", CTL, SP, DQUOTE, comma, and backslash
+<dfn>DNT-extension</dfn> = ALPHA "=" *(%x21 %x23-25 / %x27-2B / %x2D-3A / %x3C-5B / %x5D-7E) 
+    ;An alphanumeric qualifier followed by "=" and a string which excludes "&", ";", CTL, SP, DQUOTE, comma, and backslash
 </pre>
-            <p>
-                A user agent <em class="rfc2119" title="MUST NOT">MUST NOT</em> generate a <code>DNT</code> header field if the user's tracking preference is <a href="#dfn-not-enabled" class="internalDFN" data-link-type="dfn">not enabled</a>.
-            </p>
-            <p>
-                A user agent <em class="rfc2119" title="MUST">MUST</em> generate a <code>DNT</code> header field with a field-value that begins with the numeric character "1" if the user's tracking preference is <a href="#dfn-enabled" class="internalDFN"
-                    data-link-type="dfn">enabled</a>, their preference is for
-                <a href="#dfn-dnt-1" class="internalDFN" data-link-type="dfn"><code>DNT:1</code></a>, and no exception has been granted for the target resource (see <a href="#exceptions" class="sectionRef sec-ref">section <span class="secno">6.</span> <span class="sec-title">User-Granted Exceptions</span></a>).
-            </p>
-            <p>
-                A user agent <em class="rfc2119" title="MUST">MUST</em> generate a <code>DNT</code> header field with a field-value that begins with the numeric character "0" if the user's tracking preference is <a href="#dfn-enabled" class="internalDFN"
-                    data-link-type="dfn">enabled</a> and their preference is for
-                <a href="#dfn-dnt-0" class="internalDFN" data-link-type="dfn"><code>DNT:0</code></a>, or if an exception has been granted for the target resource.
-            </p>
-            <p>
-                A proxy <em class="rfc2119" title="MUST NOT">MUST NOT</em> generate a <code>DNT</code> header field unless it has been specifically installed or configured to do so by the user making the request and adheres to the above requirements as
-                if it were a user agent.
-            </p>
-            <div class="example">
-                <div class="example-title marker"><span>Example 1</span></div>
-                <pre class="hljs http" aria-busy="false" aria-live="polite"><span class="hljs-keyword">GET</span> <span class="hljs-string">/something/here</span> HTTP/1.1
-<span class="hljs-attribute">Host</span>: example.com
-<span class="hljs-attribute">DNT</span>: 1</pre>
-            </div>
-
-            <section id="dnt-extensions">
-                <h4 id="x5-2-1-extensions-to-the-dnt-field-value"><span class="secno">5.2.1 </span>Extensions to the DNT Field Value</h4>
-
-                <p>
-                    The remainder of the <a href="#dfn-dnt" class="internalDFN" data-link-type="dfn"><code>DNT</code></a> field-value, after the initial character, is reserved for future extensions. DNT extensions can only be transmitted when a tracking
-                    preference is <a href="#dfn-enabled" class="internalDFN" data-link-type="dfn">enabled</a>. The extension syntax is restricted to visible ASCII characters that can be parsed as a single word in HTTP and safely embedded in a JSON string
-                    without further encoding (<a href="#status-representation" class="sectionRef sec-ref">section <span class="secno">7.5</span> <span class="sec-title">Tracking Status Representation</span></a>).
-                </p>
-                <pre class="abnf hljs" aria-busy="false" aria-live="polite">DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
-                ; excludes CTL, SP, DQUOTE, comma, backslash
+          <p>
+              There can be 0 or more <a>DNT-qualifiers</a>, each separated by a "&" character.
+              A user agent MUST NOT send any <a>DNT-qualifiers</a> if the first character of the
+              <a>DNT-field-value</a> is any character other than "0".
+          </p>
+          <p>
+              A user agent MUST NOT generate a <code>DNT</code> header field if the
+              user's tracking preference is <a>not enabled</a>,
+              or the JavaScript <a href="#exception-javascript-api-store" class="sectionRef">storeTrackingException API</a>
+              has not been called.
+          </p>
+          <p>
+              A user agent MUST generate a <code>DNT</code> header field with a
+              field-value that equals the numeric character "1" if the user's
+              tracking preference is <a>enabled</a>, their preference is for
+              <a>DNT:1</a>, and no exception has been granted for the
+              target resource (see <a href="#exceptions" class="sectionRef"></a>).
+          </p>
+          <p>
+              A user agent MUST generate a <code>DNT</code> header field with a
+              field-value that begins with the numeric character "0" if the user's
+              tracking preference is <a>enabled</a> and their general preference is for
+              <a>DNT:0</a>, or if a <code>DNT: 0</code> exception has been granted for
+              the target resource in which the <a data-link-for="TrackingExData">fieldValue</a>
+              was null, absent or an empty string, or had a
+              <a data-link-for="TrackingExData">fieldValue</a> property in which the first character was "0".
+          </p>
+          <p>
+              User agents that do not implement <a>DNT-qualifiers</a> MUST NOT send
+              <a>DNT-qualifiers</a> in the <a>DNT</a> field-value.
+              Servers that do not implement <a>DNT-qualifiers</a> SHOULD ignore
+              anything beyond the first character.
+          </p>
+          <p>
+              A proxy MUST NOT generate a <code>DNT</code> header field unless it has
+              been specifically installed or configured to do so by the user
+              making the request and adheres to the above requirements as if it
+              were a user agent.
+          </p>
+<pre class="example">
+GET /something/here HTTP/1.1
+Host: example.com
+DNT: 1
 </pre>
-                <p>
-                    For example, additional characters might indicate modifiers to the main preference expressed by the first digit, such that the main preference will be understood if the recipient does not understand the extension. Hence, a field-value of "1xyz" can be
-                    thought of as <q>do not track, but if you understand the refinements defined
-          by x, y, or z, then adjust my preferences according to those
-          refinements.</q>
-                </p>
-                <p>
-                    User agents that do not implement DNT extensions <em class="rfc2119" title="MUST NOT">MUST NOT</em> send DNT-extension characters in the <a href="#dfn-dnt" class="internalDFN" data-link-type="dfn"><code>DNT</code></a> field-value.
-                    Servers that do not implement DNT extensions <em class="rfc2119" title="SHOULD">SHOULD</em> ignore anything beyond the first character.
-                </p>
-                <div class="note">
-                    <div class="note-title marker" aria-level="5" role="heading" id="h-note1"><span>Note</span></div>
-                    <p class="">
-                        This DNT-extension feature is speculative because no known extensions have been defined; implementers that do not read this specification are likely to assume that DNT only has the fixed values of "0" or "1". Furthermore, the potential benefits of this
-                        mechanism are unclear given that extension information could be supplied using separate request header fields. Inappropriate extensions to the "1" value might cause the user's requests to be more easily
-                        <a href="#privacy.fingerprinting">fingerprinted</a>.
-                    </p>
-                </div>
-            </section>
-        </section>
-
+          <section id='dnt-purposes'>
+              <h4>The <dfn data-dfn-type="dfn">DNT Purposes</dfn> qualifier</h4>
+              <p>
+                  When a particular domain originimplements tracking for multiple distinct purposes, described to the user before they
+                  are given the option to agree to one or more of them, the subset of purposes the user has selected must be communicated to the relevent domain origins.
+                  While cookies may be used for this, they may not be available to nested browsing contexts or other embedded sub-resources,
+                  and in any case the Same Origin Policy would stop them being set by an embedding domain origin,  e.g. by a parent or a first-party domain.
+              </p>
+              <p>
+                  The <a>DNT Purposes</a> qualifier allows an arbitrarily encoded purpose indication string to be communicated to servers solely in
+                  circumstances where the user has given their informed consent.
+                  It is denoted by "p=" followed by one or more alphanumeric characters (excluding "&", ";", CTL, SP, DQUOTE, comma or backslash).
+                  The JavaScript <a href="#exception-javascript-api-store" class="sectionRef">storeTrackingException API</a> can be used to specify
+                  a DNT field-value containing the <a>DNT Purposes</a> qualifier,
+                  which can be encoded in any way that the relevent server that receives it can decode,
+                  as long as the user can always easily ascertain what purposes they have agreed to.
+              </p>
+              <p>
+                  If an origin server implements the <a>DNT Purposes</a> qualifier it must only enable the tracking procedures it has described and to which the user has agreed, and
+                  MUST implement a <a>site-wide tracking status resource</a> with a valid <a>Purposes</a> property. The <a>Purposes</a> property is a dynamically determined HTML resource
+                  containing a human-readable explanation of all the purposes for tracking that a domain origin implements, as well as the specific purposes a particular user has agreed
+                  to as communicated in the the DNT header of the request to the <a>site-wide tracking status resource</a>.
+              </p>
+              <p>
+                  For example, a request containing  <pre>DNT:0 p=an,ad</pre>
+                  would indicate that the user had given consent for tracking, but solely for the purposes of analytics and advertising.
+              </p>
+          </section>
+          <section id='dnt-extensions'>
+              <h4>Extensions to the DNT Field Value</h4>
+              <p>
+                  Future extensions to the <a>DNT</a> header should be encoded as a name-value pair that corresponds to
+                  the ABNF <a>DNT-extension</a>, where the name is a single alphanumeric character and the value any string.
+              </p>
+          </section>
+      </section>
         <section id="js-dom">
             <h3 id="x5-3-javascript-property-to-detect-preference"><span class="secno">5.3 </span>JavaScript Property to Detect Preference</h3>
 
