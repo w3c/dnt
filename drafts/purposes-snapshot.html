@@ -1823,15 +1823,26 @@ DNT: 1
             <section id="exception-javascript-api-store">
                 <h4 id="x6-6-1-api-to-store-a-tracking-exception"><span class="secno">6.6.1 </span>API to Store a Tracking Exception</h4>
 
-                <p>
-                    When a site has obtained consent for a
-                    <a href="#dfn-user-granted-exception" class="internalDFN" data-link-type="dfn">user-granted exception</a>, a script running within an active
-                    <a href="#dfn-browsing-context" class="internalDFN" data-link-type="dfn">browsing context</a> or <a href="#dfn-nested-browsing-context" class="internalDFN" data-link-type="dfn">nested browsing context</a> of that site can <a href="#dfn-promise-call"
-                        class="internalDFN" data-link-type="dfn">promise-call</a>
-                    <code><dfn data-dfn-type="dfn" data-dfn-for="navigator" data-lt="storeTrackingException|storetrackingexception()|storetrackingexception" id="dom-navigator-storetrackingexception" data-idl="" data-title="Navigator.storeTrackingException">Navigator.storeTrackingException</dfn></code>                    to store one or more tracking exceptions. A <code><dfn data-dfn-type="dfn" id="dom-trackingexdata" data-idl="" data-title="TrackingExData" data-dfn-for="">TrackingExData</dfn></code> object is supplied as a parameter to define the
-                    exception's scope (the set of [site, target] duplets that encompass the granted exception) and optional information to be stored for that exception. The call returns a promise which either resolves to a
-                    <code><dfn data-dfn-type="dfn" id="dom-trackingexresult" data-idl="" data-title="TrackingExResult" data-dfn-for="">TrackingExResult</dfn></code> or is rejected with a <code>DOMException</code> identifying the reason for the failure.
-                </p>
+            <p>
+                When a site has obtained consent for a <a>user-granted exception</a>,
+                or a user has indicated their objection to lawfully exempted tracking
+                when their tracking preference is <dfn>not enabled</dfn>,
+                a script running within an active
+                <a>browsing context</a> or <a>nested browsing context</a> of that
+                site can <a>promise-call</a>
+                <code><dfn>Navigator.storeTrackingException</dfn></code>
+                to store one or more tracking exceptions. A script running within an active
+                <a>browsing context</a> or <a>nested browsing context</a> can <a>promise-call</a>
+                <code><dfn>Navigator.storeTrackingException</dfn></code>
+                to store one or more tracking exceptions.
+                A <code><dfn>TrackingExData</dfn></code> object is
+                supplied as a parameter to define the exception's scope (the set of
+                [site, target] duplets that encompass the granted exception)
+                and optional information to be stored for that exception.
+                The call returns a promise which either resolves to a
+                <code><dfn>TrackingExResult</dfn></code> or is rejected with
+                a <code>DOMException</code> identifying the reason for the failure.
+            </p>
                 <div>
                     <pre class="def idl"><span class="idlInterface" id="idl-def-navigator-partial-2" data-idl="" data-title="Navigator">partial interface <span class="idlInterfaceID"><a data-no-default="" data-link-for="" data-lt="" data-link-type="dfn" href="https://www.w3.org/TR/html51/webappapis.html#the-navigator-object"><code>Navigator</code></a></span> {
 <span class="idlMethod" id="idl-def-navigator-storetrackingexception-properties" data-idl="" data-title="storeTrackingException" data-dfn-for="navigator">    <span class="idlMethType"><a href="https://heycam.github.io/webidl/#idl-promise">Promise</a>&lt;<a href="#dom-trackingexresult" class="internalDFN" data-link-type="dfn"><code>TrackingExResult</code></a>&gt;</span> <span class="idlMethName"><a data-no-default="" data-link-for="navigator" data-lt="storeTrackingException|storetrackingexception()|storetrackingexception" href="#dom-navigator-storetrackingexception" class="internalDFN" data-link-type="dfn">storeTrackingException</a></span>(<span class="idlParam"><span class="idlParamType"><a href="#dom-trackingexdata" class="internalDFN" data-link-type="dfn"><code>TrackingExData</code></a></span> <span class="idlParamName">properties</span></span>);</span>
@@ -1844,6 +1855,7 @@ DNT: 1
 <span class="idlMember" id="idl-def-trackingexdata-explanation" data-idl="" data-title="explanation" data-dfn-for="trackingexdata">    <span class="idlMemberType"><a href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a>?</span>           <span class="idlMemberName"><a data-no-default="" data-link-for="trackingexdata" data-lt="" href="#dom-trackingexdata-explanation" class="internalDFN" data-link-type="dfn"><code>explanation</code></a></span>;</span>
 <span class="idlMember" id="idl-def-trackingexdata-details" data-idl="" data-title="details" data-dfn-for="trackingexdata">    <span class="idlMemberType"><a href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a>?</span>           <span class="idlMemberName"><a data-no-default="" data-link-for="trackingexdata" data-lt="" href="#dom-trackingexdata-details" class="internalDFN" data-link-type="dfn"><code>details</code></a></span>;</span>
 <span class="idlMember" id="idl-def-trackingexdata-maxage" data-idl="" data-title="maxAge" data-dfn-for="trackingexdata">    <span class="idlMemberType"><a href="https://heycam.github.io/webidl/#idl-long">long</a>?</span>                <span class="idlMemberName"><a data-no-default="" data-link-for="trackingexdata" data-lt="" href="#dom-trackingexdata-maxage" class="internalDFN" data-link-type="dfn"><code>maxAge</code></a></span>;</span>
+<span class="idlMember" id="idl-def-trackingexdata-fieldValue" data-idl="" data-title="fieldValue" data-dfn-for="trackingexdata">    <span class="idlMemberType"><a href="https://heycam.github.io/webidl/#idl-long">DOMString</a>?</span>                <span class="idlMemberName"><a data-no-default="" data-link-for="trackingexdata" data-lt="" href="#dom-trackingexdata-fieldvalue" class="internalDFN" data-link-type="dfn"><code>fieldValue</code></a></span>;</span>
 };</span>
 
 <span class="idlDictionary" id="idl-def-trackingexresult" data-idl="" data-title="TrackingExResult">dictionary <span class="idlDictionaryID"><a data-no-default="" data-link-for="" data-lt="" href="#dom-trackingexresult" class="internalDFN" data-link-type="dfn"><code>TrackingExResult</code></a></span> {
@@ -1908,6 +1920,39 @@ DNT: 1
                                 <em class="rfc2119" title="MAY">MAY</em> retain the stored grant indefinitely.</li>
                         </ul>
                     </dd>
+                    <dt><code><dfn data-dfn-for="trackingexdata" data-dfn-type="dfn" id="dom-trackingexdata-fieldvalue" data-idl="" data-title="maxAge">fieldValue</dfn></code></dt>
+                                    <dd>
+                    When defined and not null or an empty string,
+                    <a data-link-for="TrackingExData">fieldValue</a> indicates the field-value
+                    of the DNT header to be sent to all domains for which this exception applies.
+                    Only a field-value consisting of either the single character "1",
+                    or a string whose first character is "0" and which complies with the definition of a <a>DNT-field-value</a>,  is valid. A string whose first character is "0" can only be supplied
+                    in circumstances where the user has given their informed consent.
+                    For all other string values the user agent MUST NOT store the exception, and MUST reject the promise with a
+                    <a>DOMException</a> named "SyntaxError".
+                    <ul>
+                        <li>
+                            If <a data-link-for="TrackingExData">fieldValue</a> is equal to "1"
+                            the user agent must send a <code>DNT</code> header with the field-value set to "1" for all
+                            requests to domains for which this exception applies; or
+                        </li>
+                        <li>
+                            If the first character of <a data-link-for="TrackingExData">fieldValue</a> is "0", and
+                            the rest of the string is a valid <a>DNT-extension</a>, the user agent MUST send a <code>DNT</code>
+                            header with the field-value set to <a data-link-for="TrackingExData">fieldValue</a> for all requests
+                            to domains for which this exception applies ; or
+                        </li>
+                        <li>
+                            If <a data-link-for="TrackingExData">fieldValue</a> is not defined, null or the empty string
+                            the user agent MUST send a <code>DNT</code> header with the field-value set to "0" for all
+                            requests to domains for which this exception applies; or
+                        </li>
+                        <li>
+                            If <a data-link-for="TrackingExData">fieldValue</a> is any other value then the user agent
+                            MUST NOT store an exception and MUST reject the promise with a <a>DOMException</a> named "SyntaxError".
+                        </li>
+                    </ul>
+                </dd>
                 </dl>
                 <p>
                     The properties <a data-link-for="TrackingExData" href="#dom-trackingexdata-name" class="internalDFN" data-link-type="dfn"><code>name</code></a>,
