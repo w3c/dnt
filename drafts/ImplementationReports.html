@@ -96,6 +96,15 @@
                 <td></td>
             </tr>
             <tr>
+                <th>Parses TSR, shows Tk headers</th>
+                <td class="pass">Y</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td>Indicates level of DNT support by resources & subresources</td>
+            <tr>
                 <th>DNT header "0" after Web-Wide store</th>
                 <td class="pass">Y</td>
                 <td class="pass">Y</td>
@@ -306,6 +315,72 @@
             <td>but <code>Tk: C</code> header is delivered by <code>meta http-equiv</code> in content</td>
         </tr>
     </table>
+    <p>
+        
+    </p>
+    <h3 id="server">https://medium.com/</h3>
+        <table aria-labelledby="server">
+            <caption>https://medium.com/</caption>
+            <tr>
+                <th>TPE feature</th>
+                <th>Supports?</th>
+                <th>Notes</th>
+            </tr>
+            <tr>
+                <th>
+                    Signals consent using Site Specific API
+                </th>
+                <td class="fail">N</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>
+                    Indicates Consent duration using <code>maxAge</code> property
+                </th>
+                <td class="fail">N</td>
+            </tr>
+            <tr>
+                <th>
+                    Signals consent using Web Wide API
+                </th>
+                <td class="fail">N</td>
+                <td>Not applicable</td>
+            </tr>
+            <tr>
+                <th>
+                    Supports TSR at .well-known/dnt
+                </th>
+                <td class="pass">Y</td>
+            </tr>
+            <tr>
+                <th>
+                    Supports TSR at other location
+                </th>
+                <td></td>
+                <td>Not Applicable></td>
+            </tr>
+            <tr>
+                <th>
+                    removes or does not place cookies if DNT is "1"
+                </th>
+                <td class="pass">Y</td>
+                <td>does not place first-party cookies if DNT is "1" and user logged out, other than Google Analytics</td>
+            </tr>
+            <tr>
+                <th>
+                    blocks non-DNT respecting subresources if DNT is "1"
+                </th>
+                <td class="fail">n</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>
+                    Uses Tk header to signal consent
+                </th>
+                <td class="pass">Y</td>
+                <td><code>Tk: C</code> response header if logged in, otherwise <code>Tk: T</code></td>
+            </tr>
+        </table>        
     <p>
         
     </p>
