@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta content="ED" name="w3c-status">
+    <title>DNT Implementation report</title>
+
+    <link href="styles/styles-html.css" rel="stylesheet" type="text/css">
+    <link href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED" rel="stylesheet" type="text/css">
+    <style>
+        table { border-collapse: collapse;border-spacing: 0;}
+        th, td { border: 1px solid black; padding: 0.5ex; }
+        td.pass { background-color:#cfc;}
+        td.partial { background-color:#ffc;}
+        td.fail { background-color:#fcc;}
+        td.notTested { background-color:#fcf;}
+        th { background-color:#ccc;}
+    </style>
+
+</head>
+
+<body class="h-entry">
+    <div class="head">
+        <header>
+            <p data-fill-with="logo">
+                <a href="http://www.w3.org/">
+                    <img alt="W3C" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" height="48"
+                         width="72">
+                </a>
+            </p>
+            <h1>DNT Implementation report</h1>
+        </header>
+    </div>
+
+    <main>
+        <p>This report shows compliance to the TPE for various client and server implementations.</p>
+
+        <p>Implementation information is documented in the relevant Github issue, Pull Request (PR), or documentation for developers.</p>
+
+        <h2>User agent implementations</h2>
+
+        <h3 id="useragents">Clients</h3>
+        <table aria-labelledby="useragents">
+            <tr>
+                <th>API Test</th>
+                <th>Bouncer</th>
+                <th>Edge</th>
+                <th>Internet Explorer</th>
+                <th>Chrome
+                <th>Firefox</th>
+                <th>Safari</th>
+                <th>Notes</th>
+            </tr>
+            <tr>
+                <th>
+                    Generates DNT header
+                </th>
+                <td class="pass">Y</td>
+                <td class="pass">Y</td>
+                <td class="pass">Y</td>
+                <td class="pass">Y</td>
+                <td class="pass">Y</td>
+                <td class="pass">Y</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>navigator.doNotTrack</th>
+                <td class="pass">Y</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="pass">Y</td>
+                <td class="pass">Y</td>
+                <td class="pass">Y</td>
+                <td>Edge supports window.doNotTrack</td>
+            </tr>
+            <tr>
+                <th>Consent API v1 exists</th>
+                <td class="pass">Y</td>
+                <td class="pass">Y</td>
+                <td class="pass">Y</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Consent API v2 exists</th>
+                <td class="pass">Y</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>DNT header "0" after Web-Wide store</th>
+                <td class="pass">Y</td>
+                <td class="pass">Y</td>
+                <td class="pass">Y</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td>Edge & IE using API v1. Edge not working for XHR subresources</td>
+            </tr>
+            <tr>
+                <th>navigator.doNotTrack "0" after Web-Wide store</th>
+                <td class="pass">Y</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td>Edge window.doNotTrack works></td>
+            </tr>
+            <tr>
+                <th>trackingExceptionExists true after Web-Wide store</th>
+                <td class="pass">Y</td>
+                <td class="pass">Y</td>
+                <td class="pass">Y</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td>Edge & IE via v1 confirm*TrackingException after refresh</td>
+            </tr>
+            <tr>
+                <th>DNT header "1" after Web-Wide remove</th>
+                <td class="pass">Y</td>
+                <td class="pass">Y</td>
+                <td class="pass">Y</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>trackingExceptionExists false after Web-Wide remove</th>
+                <td class="pass">Y</td>
+                <td class="pass">Y</td>
+                <td class="pass">Y</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td>Edge & IE via v1 confirm*TrackingException after refresh</td>
+            </tr>
+            <tr>
+                <th>DNT header "0" to subresource after Site-Specific store</th>
+                <td class="pass">Y</td>
+                <td class="fail">N</td>
+                <td class="pass">Y</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td>Edge not working for XHR to subresources</td>
+            </tr>
+            <tr>
+                <th>navigator.doNotTrack "0" to subresource after Site-Specific store</th>
+                <td class="pass">Y</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>trackingExceptionExists true for subresource after Site-Specific store</th>
+                <td class="pass">Y</td>
+                <td class="fail">N</td>
+                <td class="fail">Y</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>DNT header "1" to subresource after Site-Specific remove</th>
+                <td class="pass">Y</td>
+                <td class="fail">N</td>
+                <td class="pass">Y</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>trackingExceptionExists false to subresource after Site-Specific remove</th>
+                <td class="pass">Y</td>
+                <td class="fail">N</td>
+                <td class="pass">Y</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>DNT header "1" to subresource before Site-Specific store</th>
+                <td class="pass">Y</td>
+                <td class="pass">Y</td>
+                <td class="pass">Y</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>DNT header "0" to subresource just after Site-Specific store with maxAge specified</th>
+                <td class="pass">Y</td>
+                <td class="fail">N</td>
+                <td class="pass">Y</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>DNT header "1" to subresource after maxAge duration</</th>
+                <td class="pass">Y</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td class="fail">N</td>
+                <td></td>
+            </tr>
+        </table>
+
+
+
+        <h2>Uncertain implementations</h2>
+        <h3>Microsoft Edge and Internet Explorer</h3>
+
+        <dl>
+            <dt><code>navigator.doNotTrack</code> not supported but value is available as <code>window.doNotTrack</code> on Edge</dt>
+            <dd>This works for all tests where a valid DNT header is sent, but on <code>window</code> rather than <code>navigator</code> on Edge</dd>
+            <dt><code>maxAge</code> consent expiry not supported</dt>
+            <dt><code>storeSiteSpecificTrackingException</code> and <code>storeWebWideTrackingException</code> only work after a page refresh</dt>
+            <dt>On Edge storeSiteSpecificTrackingException does not work for XHRs to subresources, though this works for IE</dt>
+        </dl>
+
+
+        <h2>Server implementations</h2>
+
+        <h3 id="server">https://axe.com/de</h3>
+    <table aria-labelledby="server">
+        <caption>https://axe.com/de</caption>
+        <tr>
+            <th>TPE feature</th>
+            <th>Supports?</th>
+            <th>Notes</th>
+        </tr>
+        <tr>
+            <th>
+                Signals consent using Site Specific API
+            </th>
+            <td class="pass">Y</td>
+            <td>All subresources sent DNT:0 if consent obtained & API supported</td>
+        </tr>
+        <tr>
+            <th>
+                Indicates Consent duration using <code>maxAge</code> property
+            </th>
+            <td class="pass">Y</td>
+        </tr>
+        <tr>
+            <th>
+                Signals consent using Web Wide API
+            </th>
+            <td class="fail">N</td>
+            <td>Not applicable</td>
+        </tr>
+        <tr>
+            <th>
+                Supports TSR at .well-known/dnt
+            </th>
+            <td class="fail">N</td>
+        </tr>
+        <tr>
+            <th>
+                Supports TSR at other location
+            </th>
+            <td class="pass">Y</td>
+            <td>location indicated by proprietary header delivered by <code>meta http-equiv</code></td>
+        </tr>
+        <tr>
+            <th>
+                removes or does not place cookies if DNT is "1"
+            </th>
+            <td class="pass">Y</td>
+            <td>deletes first-party cookies unless user informed they are "strictly necessary"</td>
+        </tr>
+        <tr>
+            <th>
+                blocks non-DNT respecting subresources if DNT is "1"
+            </th>
+            <td class="pass">Y</td>
+            <td>blocks domains via CSP header</td>
+        </tr>
+        <tr>
+            <th>
+                Uses Tk header to signal consent
+            </th>
+            <td class="fail">N</td>
+            <td>but <code>Tk: C</code> header is delivered by <code>meta http-equiv</code> in content</td>
+        </tr>
+    </table>
+    <p>
+        
+    </p>
+    <h3 id="server">https://baycloud.com/</h3>
+        <table aria-labelledby="server">
+            <caption>https://baycloud.com/</caption>
+            <tr>
+                <th>TPE feature</th>
+                <th>Supports?</th>
+                <th>Notes</th>
+            </tr>
+            <tr>
+                <th>
+                    Signals consent using Site Specific API
+                </th>
+                <td class="pass">Y</td>
+                <td>Specific subresources sent DNT:0 if consent obtained & API supported</td>
+            </tr>
+            <tr>
+                <th>
+                    Indicates Consent duration using <code>maxAge</code> property
+                </th>
+                <td class="pass">Y</td>
+            </tr>
+            <tr>
+                <th>
+                    Signals consent using Web Wide API
+                </th>
+                <td class="fail">N</td>
+                <td>Not applicable</td>
+            </tr>
+            <tr>
+                <th>
+                    Supports TSR at .well-known/dnt
+                </th>
+                <td class="pass">Y</td>
+            </tr>
+            <tr>
+                <th>
+                    Supports TSR at other location
+                </th>
+                <td class="pass">Y</td>
+                <td>location indicated by proprietary header delivered by <code>meta http-equiv</code></td>
+            </tr>
+            <tr>
+                <th>
+                    removes or does not place cookies if DNT is "1"
+                </th>
+                <td class="pass">Y</td>
+                <td>deletes first-party cookies unless user informed they are "strictly necessary"</td>
+            </tr>
+            <tr>
+                <th>
+                    blocks non-DNT respecting subresources if DNT is "1"
+                </th>
+                <td class="pass">Y</td>
+                <td>blocks domains via CSP header</td>
+            </tr>
+            <tr>
+                <th>
+                    Uses Tk header to signal consent
+                </th>
+                <td class="pass">Y</td>
+                <td><code>Tk: C</code> response header if consent given, otherwise <code>Tk: N</code></td>
+            </tr>
+        </table>
+
+    </main>
+</body>
+</html>
