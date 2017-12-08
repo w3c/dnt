@@ -384,6 +384,73 @@
     <p>
         
     </p>
+    <h3 id="server">https://www.natuurlijkehaarkleuring.nl/ No-tracking example with Lambda@Edge implementation of HTTP response header</h3>
+        <table aria-labelledby="server">
+            <caption>https://www.natuurlijkehaarkleuring.nl/</caption>
+            <tr>
+                <th>TPE feature</th>
+                <th>Supports?</th>
+                <th>Notes</th>
+            </tr>
+            <tr>
+                <th>
+                    Signals consent using Site Specific API
+                </th>
+                <td></td>
+                <td>Not applicable</td>
+            </tr>
+            <tr>
+                <th>
+                    Indicates Consent duration using <code>maxAge</code> property
+                </th>
+                <td></td>
+                <td>Not applicable</td>
+            </tr>
+            <tr>
+                <th>
+                    Signals consent using Web Wide API
+                </th>
+                <td></td>
+                <td>Not applicable</td>
+            </tr>
+            <tr>
+                <th>
+                    Supports TSR at .well-known/dnt
+                </th>
+                <td class="pass">Y</td>
+            </tr>
+            <tr>
+                <th>
+                    Supports TSR at other location
+                </th>
+                <td></td>
+                <td>Not applicable</td>
+            </tr>
+            <tr>
+                <th>
+                    removes or does not place cookies if DNT is "1"
+                </th>
+                <td class="pass">Y</td>
+                <td>No placement of first-party tracking cookies; 3rd party cookies are functional non-tracking cookies under a data processing agreement</td>
+            </tr>
+            <tr>
+                <th>
+                    blocks non-DNT respecting subresources if DNT is "1"
+                </th>
+                <td></td>
+                <td>Not applicable</td>
+            </tr>
+            <tr>
+                <th>
+                    Uses Tk header to signal no tracking
+                </th>
+                <td class="pass">Y</td>
+                <td>Server implementation with Lambda@Edge HTTP response header </td>
+            </tr>
+        </table>        
+    <p>
+		
+	</p>
     <h3 id="server">https://baycloud.com/</h3>
         <table aria-labelledby="server">
             <caption>https://baycloud.com/</caption>
