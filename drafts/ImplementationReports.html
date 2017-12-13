@@ -514,6 +514,72 @@
                 <td><code>Tk: C</code> response header if consent given, otherwise <code>Tk: N</code></td>
             </tr>
         </table>
+   <p>
+		
+	</p>
+    <h3 id="server">https://paulbernal.mydnt.org/</h3>
+        <table aria-labelledby="server">
+            <caption>https://paulbernal.mydnt.org/</caption>
+            <tr>
+                <th>TPE feature</th>
+                <th>Supports?</th>
+                <th>Notes</th>
+            </tr>
+            <tr>
+                <th>
+                    Signals consent using Site Specific API
+                </th>
+                <td class="pass">Y</td>
+                <td>Specific subresources sent DNT:0 if consent obtained & API supported</td>
+            </tr>
+            <tr>
+                <th>
+                    Indicates Consent duration using <code>maxAge</code> property
+                </th>
+                <td class="pass">Y</td>
+            </tr>
+            <tr>
+                <th>
+                    Signals consent using Web Wide API
+                </th>
+                <td></td>
+                <td>Not applicable</td>
+            </tr>
+            <tr>
+                <th>
+                    Supports TSR at .well-known/dnt
+                </th>
+                <td class="pass">Y</td>
+            </tr>
+            <tr>
+                <th>
+                    Supports TSR at other location
+                </th>
+                <td></td>
+                <td>Not applicable</td>
+            </tr>
+            <tr>
+                <th>
+                    removes or does not place cookies if DNT is "1"
+                </th>
+                <td class="pass">Y</td>
+                <td>deletes first-party cookies unless user informed they are "strictly necessary"</td>
+            </tr>
+            <tr>
+                <th>
+                    blocks non-DNT respecting subresources if DNT is "1"
+                </th>
+                <td class="pass">Y</td>
+                <td>blocks domains via CSP header</td>
+            </tr>
+            <tr>
+                <th>
+                    Uses Tk header to signal consent
+                </th>
+                <td class="pass">Y</td>
+                <td><code>Tk: C</code> response header if consent given, otherwise <code>Tk: N</code></td>
+            </tr>
+        </table>
 
     </main>
 </body>
