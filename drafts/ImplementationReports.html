@@ -46,6 +46,7 @@
             <tr>
                 <th>API Test</th>
                 <th>Bouncer</th>
+		<th>Dt. Telekom</th>
                 <th>Edge</th>
                 <th>Internet Explorer</th>
                 <th>Chrome
@@ -58,6 +59,7 @@
                     Generates DNT header
                 </th>
                 <td class="pass">Y</td>
+	        <td class="pass">Y</td>	    
                 <td class="pass">Y</td>
                 <td class="pass">Y</td>
                 <td class="pass">Y</td>
@@ -66,7 +68,8 @@
                 <td></td>
             </tr>
             <tr>
-                <th>navigator.doNotTrack</th>
+		<th>navigator.doNotTrack</th>
+		<td class="pass">Y</td>
                 <td class="pass">Y</td>
                 <td class="fail">N</td>
                 <td class="fail">N</td>
@@ -77,6 +80,7 @@
             </tr>
             <tr>
                 <th>Consent API v1 exists</th>
+	        <td class="pass">Y</td>	    
                 <td class="pass">Y</td>
                 <td class="pass">Y</td>
                 <td class="pass">Y</td>
@@ -87,6 +91,7 @@
             </tr>
             <tr>
                 <th>Consent API v2 exists</th>
+		<td class="pass">Y</td>    
                 <td class="pass">Y</td>
                 <td class="fail">N</td>
                 <td class="fail">N</td>
@@ -97,6 +102,7 @@
             </tr>
             <tr>
                 <th>Parses TSR, shows Tk headers</th>
+		<td class="pass">Y</td>    
                 <td class="pass">Y</td>
                 <td class="fail">N</td>
                 <td class="fail">N</td>
@@ -107,6 +113,7 @@
             <tr>
                 <th>DNT header "0" after Web-Wide store</th>
                 <td class="pass">Y</td>
+	        <td class="pass">Y</td>	    
                 <td class="pass">Y</td>
                 <td class="pass">Y</td>
                 <td class="fail">N</td>
@@ -117,6 +124,7 @@
             <tr>
                 <th>navigator.doNotTrack "0" after Web-Wide store</th>
                 <td class="pass">Y</td>
+		<td class="pass">Y</td>    
                 <td class="fail">N</td>
                 <td class="fail">N</td>
                 <td class="fail">N</td>
@@ -127,6 +135,7 @@
             <tr>
                 <th>trackingExceptionExists true after Web-Wide store</th>
                 <td class="pass">Y</td>
+	        <td class="pass">Y</td>	    
                 <td class="pass">Y</td>
                 <td class="pass">Y</td>
                 <td class="fail">N</td>
@@ -137,6 +146,7 @@
             <tr>
                 <th>DNT header "1" after Web-Wide remove</th>
                 <td class="pass">Y</td>
+	        <td class="pass">Y</td>	    
                 <td class="pass">Y</td>
                 <td class="pass">Y</td>
                 <td class="fail">N</td>
@@ -147,6 +157,7 @@
             <tr>
                 <th>trackingExceptionExists false after Web-Wide remove</th>
                 <td class="pass">Y</td>
+	        <td class="pass">Y</td>	    
                 <td class="pass">Y</td>
                 <td class="pass">Y</td>
                 <td class="fail">N</td>
@@ -157,6 +168,7 @@
             <tr>
                 <th>DNT header "0" to subresource after Site-Specific store</th>
                 <td class="pass">Y</td>
+	        <td class="pass">Y</td>	    
                 <td class="fail">N</td>
                 <td class="pass">Y</td>
                 <td class="fail">N</td>
@@ -166,7 +178,8 @@
             </tr>
             <tr>
                 <th>navigator.doNotTrack "0" to subresource after Site-Specific store</th>
-                <td class="pass">Y</td>
+		<td class="pass">Y</td>
+	        <td class="pass">Y</td>	    
                 <td class="fail">N</td>
                 <td class="fail">N</td>
                 <td class="fail">N</td>
@@ -177,6 +190,7 @@
             <tr>
                 <th>trackingExceptionExists true for subresource after Site-Specific store</th>
                 <td class="pass">Y</td>
+	        <td class="pass">Y</td>	    
                 <td class="fail">N</td>
                 <td class="fail">Y</td>
                 <td class="fail">N</td>
@@ -187,6 +201,7 @@
             <tr>
                 <th>DNT header "1" to subresource after Site-Specific remove</th>
                 <td class="pass">Y</td>
+		<td class="pass">Y</td>    
                 <td class="fail">N</td>
                 <td class="pass">Y</td>
                 <td class="fail">N</td>
@@ -197,6 +212,7 @@
             <tr>
                 <th>trackingExceptionExists false to subresource after Site-Specific remove</th>
                 <td class="pass">Y</td>
+	        <td class="pass">Y</td>	    
                 <td class="fail">N</td>
                 <td class="pass">Y</td>
                 <td class="fail">N</td>
@@ -207,6 +223,7 @@
             <tr>
                 <th>DNT header "1" to subresource before Site-Specific store</th>
                 <td class="pass">Y</td>
+		<td class="pass">Y</td>    
                 <td class="pass">Y</td>
                 <td class="pass">Y</td>
                 <td class="fail">N</td>
@@ -217,6 +234,7 @@
             <tr>
                 <th>DNT header "0" to subresource just after Site-Specific store with maxAge specified</th>
                 <td class="pass">Y</td>
+		<td class="pass">Y</td>    
                 <td class="fail">N</td>
                 <td class="pass">Y</td>
                 <td class="fail">N</td>
@@ -227,6 +245,7 @@
             <tr>
                 <th>DNT header "1" to subresource after maxAge duration</</th>
                 <td class="pass">Y</td>
+	        <td class="pass">Y</td>	    
                 <td class="fail">N</td>
                 <td class="fail">N</td>
                 <td class="fail">N</td>
