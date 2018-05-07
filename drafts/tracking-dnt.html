@@ -688,8 +688,17 @@ DNT: 1
               <h4>Extensions to the DNT Field Value</h4>
               <p>
                   Future extensions to the <a>DNT</a> header should be encoded as a name-value pair that corresponds to
-                  the ABNF <a>DNT-extension</a>, where the name is a single alphanumeric character and the value any string.
+                  the following ABNF, where the name is a single alphanumeric character and the value any string.
+                
               </p>
+              <pre class="abnf">
+                 DNT-extension    = *(DNT-extension-indicator '=' DNT-extension-value)
+                 DNT-extension-indicator = DNT-purpose-indicator / 1*ALPHA 
+                 DNT-purpose-indicator = p
+                 DNT-extension-value   = %x21 / %x23-2B / %x2D-3C / %x3E-5B / %x5D-7E
+                                                     ; excludes equals, CTL, SP, DQUOTE, comma, backslash
+              </pre>
+
           </section>
     </section>
 
