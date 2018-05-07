@@ -985,7 +985,9 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
 
         <p>
           When a site has obtained consent for a
-          <a>user-granted exception</a>, a script running within an active
+          <a>user-granted exception</a>, or a user has indicated their 
+          objection to lawfully exempted tracking when their tracking
+          preference is not enabled, a script running within an active
           <a>browsing context</a> or <a>nested browsing context</a> of that
           site can <a>promise-call</a>
           <code><dfn>Navigator.storeTrackingException</dfn></code>
@@ -1011,6 +1013,7 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
            DOMString? explanation;
            DOMString? details;
            long?      maxAge;
+           DOMString  fieldValue;
         };
         dictionary TrackingExResult {
           boolean isSiteWide;
