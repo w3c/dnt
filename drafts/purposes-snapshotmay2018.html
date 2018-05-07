@@ -688,8 +688,17 @@ DNT: 1
               <h4>Extensions to the DNT Field Value</h4>
               <p>
                   Future extensions to the <a>DNT</a> header should be encoded as a name-value pair that corresponds to
-                  the ABNF <a>DNT-extension</a>, where the name is a single alphanumeric character and the value any string.
+                  the following ABNF, where the name is a single alphanumeric character and the value any string.
+                
               </p>
+              <pre class="abnf">
+                 DNT-extension    = *(DNT-extension-indicator '=' DNT-extension-value)
+                 <dfn data-dfn-type="dfn">DNT-extension-indicator</dfn> = DNT-purpose-indicator / 1*ALPHA 
+                 <dfn data-dfn-type="dfn">DNT-purpose-indicator</dfn> = p
+                 <dfn data-dfn-type="dfn">DNT-extension-value</dfn>   = %x21 / %x23-2B / %x2D-3C / %x3E-5B / %x5D-7E
+                                                     ; excludes equals, CTL, SP, DQUOTE, comma, backslash
+              </pre>
+
           </section>
     </section>
 
@@ -1099,7 +1108,7 @@ DNT: 1
               <a data-link-for="TrackingExData">fieldValue</a> indicates the field-value
               of the DNT header to be sent to all domains for which this exception applies.
               Only a field-value consisting of either the single character "1",
-              or a string whose first character is "0" and which complies with the definition of a <a>DNT-field-value</a>,  is valid. A string whose first character is "0" can only be supplied
+              or a string whose first character is "0" and which complies with the definition of a <a>DNT-extension-value</a>,  is valid. A string whose first character is "0" can only be supplied
               in circumstances where the user has given their informed consent.
               For all other string values the user agent MUST NOT store the exception, and MUST reject the promise with a
               <a>DOMException</a> named "SyntaxError".
@@ -1111,7 +1120,7 @@ DNT: 1
                   </li>
                   <li>
                      If the first character of <a data-link-for="TrackingExData">fieldValue</a> is "0", and
-                     the rest of the string is a valid <a>DNT-extension</a>, the user agent MUST send a <code>DNT</code>
+                     the rest of the string is a valid <a>DNT-extension-value</a>, the user agent MUST send a <code>DNT</code>
                      header with the field-value set to <a data-link-for="TrackingExData">fieldValue</a> for all requests
                      to domains for which this exception applies ; or
                   </li>
