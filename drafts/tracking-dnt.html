@@ -652,50 +652,45 @@ Host: example.com
 DNT: 1
 
 </pre>
-
-      <section id='dnt-extensions'>
-        <h4>Extensions to the DNT Field Value</h4>
-
-        <p>
-          The remainder of the <a>DNT</a> field-value, after the initial character,
-          is reserved for future extensions. DNT extensions can only be
-          transmitted when a tracking preference is <a>enabled</a>.
-          The extension syntax is restricted to visible ASCII characters that
-          can be parsed as a single word in HTTP and safely embedded in a
-          JSON string without further encoding
-          (<a href="#status-representation" class="sectionRef"></a>).
-        </p>
-<pre class="abnf">
-DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
-                ; excludes CTL, SP, DQUOTE, comma, backslash
-</pre>
-        <p>
-          For example, additional characters might indicate modifiers to the
-          main preference expressed by the first digit, such that the main
-          preference will be understood if the recipient does not understand
-          the extension. Hence, a field-value of "1xyz" can be thought of
-          as <q>do not track, but if you understand the refinements defined
-          by x, y, or z, then adjust my preferences according to those
-          refinements.</q>
-        </p>
-        <p>
-          User agents that do not implement DNT extensions MUST NOT send
-          DNT-extension characters in the <a>DNT</a> field-value.
-          Servers that do not implement DNT extensions SHOULD ignore
-          anything beyond the first character.
-        </p>
-        <p class="note">
-          This DNT-extension feature is speculative because no known
-          extensions have been defined; implementers that do not read this
-          specification are likely to assume that DNT only has the
-          fixed values of "0" or "1". Furthermore, the potential benefits
-          of this mechanism are unclear given that extension information
-          could be supplied using separate request header fields.
-          Inappropriate extensions to the "1" value might cause the user's
-          requests to be more easily
-          <a href="#privacy.fingerprinting">fingerprinted</a>.
-        </p>
-      </section>
+          <section id='dnt-purposes'>
+              <h4>The <dfn data-dfn-type="dfn">DNT Purposes</dfn> qualifier</h4>
+              <p>
+                  When a domain origin implements tracking for multiple distinct 
+                  purposes, and these are described to the user before they are 
+                  given the option to agree to one or more of them, the subset of
+                  purposes the user has selected must be communicated back to the
+                  origin. While cookies may be used for this, they may not be
+                  always available, and in any case an embedding parent context,
+                  e.g. a first-party origin, would not be able to set them for
+                  origins it had embedded.
+              </p>
+              <p>
+                  The <a>DNT Purposes</a> qualifier allows an arbitrarily encoded purpose indication string to be communicated to servers solely in
+                  circumstances where the user has given their informed consent.
+                  It is denoted by "p=" followed by one or more alphanumeric characters (excluding "&", ";", CTL, SP, DQUOTE, comma or backslash).
+                  The JavaScript <a href="#exception-javascript-api-store" class="sectionRef">storeTrackingException API</a> can be used to specify
+                  a DNT field-value containing the <a>DNT Purposes</a> qualifier,
+                  which can be encoded in any way that the relevent server that receives it can decode,
+                  as long as the user can always easily ascertain what purposes they have agreed to.
+              </p>
+              <p>
+                  If an origin server implements the <a>DNT Purposes</a> qualifier it must only enable the tracking procedures it has described and to which the user has agreed, and
+                  MUST implement a <a>site-wide tracking status resource</a> with a valid <a>Purposes</a> property. The <a>Purposes</a> property is a dynamically determined HTML resource
+                  containing a human-readable explanation of all the purposes for tracking that a domain origin implements, as well as the specific purposes a particular user has agreed
+                  to as communicated in the the DNT header of the request to the <a>site-wide tracking status resource</a>.
+              </p>
+              <p>
+                  For example, a request containing  <pre>DNT:0 p=an,ad</pre>
+                  would indicate that the user had given consent for tracking, but solely for the purposes of analytics and advertising.
+              </p>
+          </section>
+          <section id='dnt-extensions'>
+              <h4>Extensions to the DNT Field Value</h4>
+              <p>
+                  Future extensions to the <a>DNT</a> header should be encoded as a name-value pair that corresponds to
+                  the ABNF <a>DNT-extension</a>, where the name is a single alphanumeric character and the value any string.
+              </p>
+          </section>
     </section>
 
     <section id='js-dom'>
@@ -2094,6 +2089,7 @@ object {
     array { string; } audit?;        // hrefs
     string policy?;                  // href
     string config?;                  // href
+    string purposes?;                // href
 }*;
 </pre>
 
@@ -2319,7 +2315,22 @@ object {
           <a>controller</a> or <a>policy</a>.
         </p>
       </section>
-
+          <section id='rep.purposes'>
+              <h4>Purposes Property</h4>
+              <p>
+                  An origin server MAY send a property named
+                  <code><dfn>purposes</dfn></code> with a string
+                  value containing a URI reference to a human-readable document that
+                  describes each of the purposes for tracking implemented by this
+                  origin server.
+              </p>
+              <p>
+                  If the origin server supports the DNT Purposes qualifier then this
+                  property MUST be supported and be dynamically generated by decoding
+                  the field-value of the request's DNT header, to highlight or otherwise
+                  indicate the specific subset of purpose the user has agreed to.
+              </p>
+          </section>
       <section id='rep.extension'>
         <h4>Extensions to the Status Object</h4>
         <p>
