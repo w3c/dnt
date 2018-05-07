@@ -1098,6 +1098,39 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
                 MAY retain the stored grant indefinitely.</li>
             </ul>
           </dd>
+          <dt><code><dfn>fieldValue</dfn></code></dt>
+          <dd>
+              When defined and not null or an empty string,
+              <a data-link-for="TrackingExData">fieldValue</a> indicates the field-value
+              of the DNT header to be sent to all domains for which this exception applies.
+              Only a field-value consisting of either the single character "1",
+              or a string whose first character is "0" and which complies with the definition of a <a>DNT-field-value</a>,  is valid. A string whose first character is "0" can only be supplied
+              in circumstances where the user has given their informed consent.
+              For all other string values the user agent MUST NOT store the exception, and MUST reject the promise with a
+              <a>DOMException</a> named "SyntaxError".
+              <ul>
+                  <li>
+                     If <a data-link-for="TrackingExData">fieldValue</a> is equal to "1"
+                     the user agent must send a <code>DNT</code> header with the field-value set to "1" for all
+                     requests to domains for which this exception applies; or
+                  </li>
+                  <li>
+                     If the first character of <a data-link-for="TrackingExData">fieldValue</a> is "0", and
+                     the rest of the string is a valid <a>DNT-extension</a>, the user agent MUST send a <code>DNT</code>
+                     header with the field-value set to <a data-link-for="TrackingExData">fieldValue</a> for all requests
+                     to domains for which this exception applies ; or
+                  </li>
+                  <li>
+                     If <a data-link-for="TrackingExData">fieldValue</a> is not defined, null or the empty string
+                     the user agent MUST send a <code>DNT</code> header with the field-value set to "0" for all
+                     requests to domains for which this exception applies; or
+                  </li>
+                  <li>
+                     If <a data-link-for="TrackingExData">fieldValue</a> is any other value then the user agent
+                     MUST NOT store an exception and MUST reject the promise with a <a>DOMException</a> named "SyntaxError".
+                  </li>
+               </ul>
+            </dd>
         </dl>
         <p>
           The properties <a data-link-for="TrackingExData">name</a>,
