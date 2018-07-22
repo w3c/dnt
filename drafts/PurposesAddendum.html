@@ -291,6 +291,16 @@
             servers are legally required to support a signal to indicate the right-to-object, for example 
             under the GDPR's Article 21.5.'
         </p>
+        <p>
+            Browsers that wished to actively help to protect users by restricting the capability of servers to track them,
+            such as Firefox's Tracking Protection feature, or Safari's Intelligent Tracking Prevention [[ITP]] MAY 
+            use this extra information, i.e. that users have expressed their right to object, or have not given their explcit consent, 
+            to restrict the lifting of these protection procedures to particular domains.
+            For example, if a first-party site specifies a <code>DNT:1</code> Tracking Exception, 
+            this could be taken as a command to purge all cookies. The opposite <code>DNT:0</code>
+            resulting from a site-specific Tracking Exception could then be used to allow "partitioned" cookies to 
+            be sent to the relevent third-party domains (and made available via <code>document.cookie</code> to the associated browsing contexts).
+        </p>        
     </section>
 
 
