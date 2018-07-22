@@ -300,7 +300,7 @@
             this could be taken as a command to purge all cookies. The opposite <code>DNT:0</code>
             resulting from a site-specific Tracking Exception could then be used to allow "partitioned" cookies to 
             be sent to the relevent third-party domains (and made available via <code>document.cookie</code> to the associated browsing contexts).
-        </p>        
+        </p>
     </section>
 
 
@@ -702,7 +702,7 @@ DNT: 1
                         A string whose first character is "0" can only be registered via this call
                         when the browser is processing a user gesture in which user has given their informed consent, 
                         AND the Tracking Exception requested is site-specific (i.e. the <a data-link-for="TrackingExData">site</a> property is not "*"),
-                        AND the browsing context is secure.
+                        AND the call is being executed within a secure top-level browsing context.
                         For all other string values, or the executing browsing context is not secure,
                         or the <a data-link-for="TrackingExData">site</a> property is "*",
                         or the browser is not executing a user gesture,
@@ -715,7 +715,8 @@ DNT: 1
                                 requests to domains for which this exception applies; or
                             </li>
                             <li>
-                                If the first character of <a data-link-for="TrackingExData">fieldValue</a> is "0", and
+                                If the first character of <a data-link-for="TrackingExData">fieldValue</a> is "0", 
+                                the executing context is top-level, secure and processing a user gesture, and
                                 the rest of the string is a valid <a>DNT-Consent</a> value, the user agent MUST send a <code>DNT</code>
                                 header with the field-value set to <a data-link-for="TrackingExData">fieldValue</a> for all requests
                                 to domains for which this exception applies; or
