@@ -1,5 +1,7 @@
  {
-    "group":      ["49311"]
-,   "contacts":   ["wseltzer","bert-github"]
+    "group":      [49311]
+,   "contacts":   ["plehegar"]
 ,   "shortName":  "dnt"
+,   "policy": "open"
+,   "repo-type": "note"
 }
