@@ -1072,11 +1072,14 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
             <a data-link-for="TrackingExData">name</a> is a
             user-readable string for naming the exception, usually
             descriptive of the targets or their intended purpose for this
-            site.</dd>
+            site, encoded as UTF-8 and appropriate for the natural language(s)
+            used to inform consent for the exception.</dd>
           <dt><code><dfn>explanation</dfn></code></dt>
           <dd>When defined and not null or an empty string,
             <a data-link-for="TrackingExData">explanation</a> is a
-            user-readable short explanation of the granted exception.</dd>
+            user-readable short explanation of the granted exception,
+            encoded as UTF-8 and in the same natural language(s)
+            used to inform consent for the exception.</dd>
           <dt><code><dfn>details</dfn></code></dt>
           <dd>When defined and not null or an empty string,
             <a data-link-for="TrackingExData">details</a> is a URI
