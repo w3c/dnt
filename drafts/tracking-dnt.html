@@ -2514,8 +2514,10 @@ object {
   <section id="registrations" class='appendix'>
     <h2>Registrations</h2>
 
+    <section id='reg.tracking-status.json'>
+      <h3>Registration of application/tracking-status+json</h3>
     <p>
-      The Internet media type <a>application/tracking-status+json</a> is
+      The media type <a>application/tracking-status+json</a> is
       used for tracking status representations
       (<a href="#status-representation" class="sectionRef"></a>).
     </p>
@@ -2548,9 +2550,64 @@ object {
       <dt>Author(s):</dt><dd>Roy T. Fielding and David Singer</dd>
       <dt>Change controller:</dt><dd>W3C</dd>
     </dl>
+    </section>
+
+    <section id='reg.DNT'>
+      <h3>Registration of DNT Header Field</h3>
+
+      <p>
+        The DNT header field, defined in
+        <a href="#dnt-header-field" class="sectionRef"></a>, is to be
+        registered in the Message Headers registry for the protocol "http".
+      </p>
+      <p>
+        DNT's use by this specification is limited to providing control data
+        within an HTTP request consisting of a single value that excludes the
+        comma list separator; multiple DNT header fields per message are not
+        allowed. DNT is intended to pass through intermediaries unmodified and
+        end-to-end; it is not intended to be listed in Connection.
+        Although unlikely to be used in a PUT request, the field is not part
+        of a representation and is not intended to be stored as such.
+      </p>
+      <p>
+        Both <a href="#dnt-header-field">DNT</a> and
+        <a href="#response-header-field">Tk</a> have been specifically
+        designed to avoid the need for responses that vary based on DNT
+        value. However, a server that chooses to generate different content
+        based on the received value of DNT can indicate that by including the
+        DNT field name within a Vary header field of its response.
+      </p>
+    </section>
+
+    <section id='reg.Tk'>
+      <h3>Registration of Tk Header Field</h3>
+
+      <p>
+        The Tk header field, defined in
+        <a href="#response-header-field" class="sectionRef"></a>, is to be
+        registered in the Message Headers registry for the protocol "http".
+      </p>
+      <p>
+        Tk's use by this specification is limited to providing control data
+        within an HTTP response consisting of a single value that excludes the
+        comma list separator; multiple Tk header fields per message are not
+        allowed. Tk is intended to pass through intermediaries unmodified and
+        end-to-end; it is not intended to be listed in Connection.
+      </p>
+    </section>
   </section>
 
   <section id="changes" class='appendix'>
+    <h2>Changes since second CR</h2>
+    <p>
+      The name and explanation parameters on tracking exceptions have been
+      further defined as UTF-8 and in the same natural language as used for
+      informing consent.
+    </p>
+    <p>
+      Appendices have been added for registration of DNT and Tk header fields.
+    </p>
+
     <h2>Changes since first CR</h2>
 
     <p>
