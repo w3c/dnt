@@ -2558,7 +2558,8 @@ object {
       <p>
         The DNT header field, defined in
         <a href="#dnt-header-field" class="sectionRef"></a>, is to be
-        registered in the Message Headers registry for the protocol "http".
+        registered in the Message Headers registry for the protocol "http"
+        [[?RFC3864]].
       </p>
       <p>
         DNT's use by this specification is limited to providing control data
@@ -2585,7 +2586,8 @@ object {
       <p>
         The Tk header field, defined in
         <a href="#response-header-field" class="sectionRef"></a>, is to be
-        registered in the Message Headers registry for the protocol "http".
+        registered in the Message Headers registry for the protocol "http"
+        [[?RFC3864]].
       </p>
       <p>
         Tk's use by this specification is limited to providing control data
@@ -2593,6 +2595,16 @@ object {
         comma list separator; multiple Tk header fields per message are not
         allowed. Tk is intended to pass through intermediaries unmodified and
         end-to-end; it is not intended to be listed in Connection.
+      </p>
+    </section>
+
+    <section id='reg.well-known.dnt'>
+      <h3>Registration of URI /.well-known/dnt</h3>
+
+      <p>
+        The well-known URI space for tracking status resources, defined in
+        <a href="#status-resource" class="sectionRef"></a>,
+        is to be registered in the Well-Known URIs registry [[?RFC5785]].
       </p>
     </section>
   </section>
