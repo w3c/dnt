@@ -204,7 +204,7 @@
       insertion of embedded elements on each page, resulting in a stream of
       data that connects a user's activity across multiple pages. A survey of
       these techniques and their privacy implications can be found in
-      [[KnowPrivacy]].
+      [[?KnowPrivacy]].
     </p>
     <p>
       Users need a mechanism to express their own preferences regarding
@@ -237,7 +237,7 @@
       the tracking status provides the ability to identify a set of compliance
       regimes to which the server claims to comply, with the assumption being
       that each regime defines its own requirements on compliant behavior.
-      For example, [[TCS]] is a work-in-progress that intends to define such a
+      For example, [[?TCS]] is a work-in-progress that intends to define such a
       compliance regime.
     </p>
   </section>
@@ -429,7 +429,7 @@
         notation of [[!RFC5234]] to define network protocol syntax and
         WebIDL [[!WebIDL-20161215]] to define scripting APIs.
         Conformance criteria and considerations regarding error handling are
-        defined in Section 2.5 of [RFC7230].
+        defined in Section 2.5 of [[!RFC7230]].
       </p>
       <p>
         How to <dfn><a class="externalDFN" href="https://www.w3.org/TR/2016/REC-WebIDL-1-20161215/#dfn-throw">throw</a></dfn>
@@ -440,13 +440,13 @@
       </p>
       <p>
         <dfn><a class="externalDFN" href="https://tc39.github.io/ecma262/#sec-promise-objects">Promise objects</a></dfn>
-        are defined in [[ECMASCRIPT]]; the phrases
+        are defined in [[?ECMASCRIPT]]; the phrases
         <dfn><a class="externalDFN" href="https://www.w3.org/2001/tag/doc/promises-guide#promise-calling">promise-call</a></dfn>,
         <dfn><a class="externalDFN" href="https://www.w3.org/2001/tag/doc/promises-guide#resolve-promise">resolve promise</a></dfn>,
         <dfn><a class="externalDFN" href="https://www.w3.org/2001/tag/doc/promises-guide#reject-promise">reject promise</a></dfn>,
         <dfn><a class="externalDFN" href="https://www.w3.org/2001/tag/doc/promises-guide#upon-fulfillment">upon fulfillment</a></dfn>, and
         <dfn><a class="externalDFN" href="https://www.w3.org/2001/tag/doc/promises-guide#upon-rejection">upon rejection</a></dfn>
-        are used in accordance with [[PromiseGuide]].
+        are used in accordance with [[?PromiseGuide]].
       </p>
     </section>
   </section>
@@ -1893,7 +1893,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
         </p>
         <pre>/.well-known/dnt/</pre>
         <p>
-          relative to the origin server's URI [[RFC5785]].
+          relative to the origin server's URI [[?RFC5785]].
         </p>
         <p>
           An origin server that receives a valid <code>GET</code> request
@@ -1928,7 +1928,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
         </p>
         <p>
           A <dfn>tracking status resource space</dfn> is defined by the
-          following URI Template [[RFC6570]]:
+          following URI Template [[?RFC6570]]:
         </p>
         <pre>/.well-known/dnt/{+status-id}</pre>
         <p>
@@ -1952,7 +1952,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
         <h4>Status Checks are Not Tracked</h4>
         <p>
           When sending a request for the tracking status, a user agent
-          SHOULD include any cookie data [[RFC6265]] (set prior to the
+          SHOULD include any cookie data [[!RFC6265]] (set prior to the
           request) that would be sent in a normal request to that origin
           server, since that data might be needed by the server to determine
           the current tracking status. For example, the cookie data might
@@ -2049,7 +2049,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
           describe the tracking status applicable to the
           <a>designated resource</a>.  Most of the properties are optional
           and can be <a href="#rep.extension">extended over time</a>,
-          as illustrated by the following Orderly schema [[Orderly]]:
+          as illustrated by the following Orderly schema [[?Orderly]]:
         </p>
 <pre class="orderly">
 object {
