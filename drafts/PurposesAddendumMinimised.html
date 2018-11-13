@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <title>Tracking Preference Expression (DNT)- Purposes Extension Addendum</title>
+    <meta http-equiv='Content-Type' content='text/html;charset=utf-8'>
+    <script src='https://www.w3.org/Tools/respec/respec-w3c-common' class='remove' async></script>
+    <script class='remove'>
+    var respecConfig = {
+      shortName:           "tracking-dnt-purposes",
+      // status section for ED
+      specStatus:          "ED",
+      previousPublishDate: "",
+      previousMaturity:    "CR",
+        edDraftURI:          "https://w3c.github.io/dnt/drafts/PurposesAddendum.html",
+      prevED : "",
+      editors:  [
+          {
+              name: "Mike O'Neill", url: "https://www.linkedin.com/in/mikeoneill1/",
+              company: "Baycloud Systems", companyURL: "https://baycloud.com/"
+          }
+      ],
+      wg:          "Tracking Protection Working Group",
+      wgURI:       "https://www.w3.org/2011/tracking-protection/",
+      wgPublicList: "public-tracking",
+      wgPatentURI: "https://www.w3.org/2004/01/pp-impl/49311/status",
+   // issueBase:   "https://www.w3.org/2011/tracking-protection/track/issues/",
+      issueBase:   "https://github.com/w3c/dnt/issues",
+      githubAPI:   "https://api.github.com/repos/w3c/dnt",
+      processVersion: 2017,
+      otherLinks: [{
+                  key: 'Repository and Participation',
+                  data: [
+                      {
+                          value: 'Mailing list archive',
+                          href: 'https://lists.w3.org/Archives/Public/public-tracking/'
+                      }, {
+                          value: 'Commit history',
+                          href: 'https://github.com/w3c/dnt/commits'
+                      }, {
+                          value: 'File a bug/issue',
+                          href: 'https://github.com/w3c/dnt/issues'
+                      }
+                   ]
+                }],
+      localBiblio: {
+        "TCS": {
+          "authors": ["Nick Doty","Heather West","Justin Brookman","Sean Harvey","Erica Newland"],
+          "status" : "WD",
+          "href"   : "https://www.w3.org/TR/tracking-compliance/",
+       // "status" : "ED",
+       // "href"   : "https://www.w3.org/2011/tracking-protection/drafts/tracking-compliance.html",
+          "title"  : "Tracking Compliance and Scope",
+          "date"   : "31 March 2015",
+          "publisher" : "W3C"
+          },
+        "TPE": {
+            "authors": [
+                "Roy T. Fielding",
+                "David Singer"
+            ],
+            "status": "CR",
+            "href": "http://www.w3.org/TR/tracking-dnt/",
+            "title": "Tracking Preference Expression (DNT)",
+            "date": "20 August 2015",
+            "publisher": "W3C"
+        },
+        "KnowPrivacy": {
+          "authors": ["Joshua Gomez","Travis Pinnick","Ashkan Soltani"],
+          "href"   : "http://www.knowprivacy.org/report/KnowPrivacy_Final_Report.pdf",
+          "title"  : "KnowPrivacy",
+          "date"   : "01 June 2009",
+          "publisher": "UC Berkeley, School of Information"
+        },
+        "Orderly": {
+          "authors": ["Lloyd Hilaiel"],
+          "href"   : "https://github.com/lloyd/orderly",
+          "title"  : "Orderly JSON",
+          "date"   : "22 February 2010"
+        },
+        "PromiseGuide":
+        {
+          "title": "Writing Promise-Using Specifications",
+          "href": "http://www.w3.org/2001/tag/doc/promises-guide",
+          "authors": [
+            "Domenic Denicola"
+          ],
+          "status": "Finding of the W3C TAG",
+          "publisher": "W3C",
+          "date"   : "03 January 2017"
+        },
+        "StorageAPI":
+        {
+                "title": "Proposal: Storage Access API",
+                "href": "https://github.com/whatwg/html/issues/3338",
+            "authors": [
+                "John Wilander"
+            ],
+            "publisher": "WebKit",
+            "date"   : "21 Feburary 2018"
+        },
+        "ITP":
+        {
+                "title": "Intelligent Tracking Prevention 2.0",
+                "href": "https://webkit.org/blog/8311/intelligent-tracking-prevention-2-0/",
+            "authors": [
+                "John Wilander"
+            ],
+            "publisher": "WebKit",
+            "date"   : "4 June 2018"
+        }
+      },
+      noIDLSectionTitle: true,
+      noLegacyStyle: true
+    };
+    </script>
+    <style type="text/css">
+        p, li, dd {
+            hyphens: none;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-style: hidden none;
+        }
+
+            table thead {
+                border-bottom: medium solid;
+            }
+
+            table td, table th {
+                border-bottom: thin solid;
+                border-left: medium solid;
+                border-right: medium solid;
+                padding: 0.2em;
+                vertical-align: top;
+            }
+
+            table.simple {
+                margin-left: auto;
+                margin-right: auto;
+                width: 80%;
+            }
+
+        .simple tr {
+            vertical-align: top;
+        }
+
+        .example .example .example-title {
+            display: none
+        }
+
+        .option {
+            margin: 1em 0em 0em;
+            padding: 1em;
+            border: 2px solid #E2E3FF;
+            background: #F0F0FC;
+        }
+
+            .option::before {
+                content: "Option";
+                display: block;
+                width: 150px;
+                margin: -1.5em 0 0.5em 0;
+                font-weight: bold;
+                border: 1px solid #8084FF;
+                background: #fff;
+                padding: 3px 1em;
+            }
+    </style>
+</head>
+
+<body>
+    <section id='abstract'>
+        <p>
+            This specification extends the [[TPE]] to achieve the following:
+            <ul>
+                <li>
+                    to support the ability of user agents to determine and possibly record
+                    the information presented to individuals when they are asked to give their
+                    consent for tracking, such as the reasons for why data is collected,
+                    and what it will be used for.
+                    User agents can then make this information available to users, for example whenever they request it,
+                    helping to meet the transparency requirements of European data protection/privacy law.
+                </li>
+                <li>
+                    to define a mechanism whereby persisted state information may be specified
+                    and delivered in site-specific way, i.e. restricted to a top-level context and the
+                    embedded third-parties that have obtained site-specific consent.
+                </li>
+                <li>
+                    to allow a top-level context to specify domain specific DNT:1, which
+                    can be used to express a user's right-to-object to data collection or processing in certain circumstances,
+                    as called for by Article 21 of the GDPR.
+                </li>
+            </ul>
+
+        </p>
+    </section>
+
+
+    <section id='sotd'>
+        <p>
+            This document is an editors' straw man reflecting a snapshot of live
+            discussions within the
+            <a href="https://www.w3.org/2011/tracking-protection/">
+                Tracking
+                Protection Working Group
+            </a>.  It does not necessarily constitute
+            working group consensus.
+            This draft has been prepared using the
+            <a href="https://github.com/w3c/dnt/">DNT Github repository</a> and its
+            associated <a href="https://github.com/w3c/dnt/issues">issues list</a>.
+            However, see the previous
+            <a href="https://www.w3.org/2011/tracking-protection/track/issues/">
+                issue
+                tracking system
+            </a> for working group decisions prior to 2017.
+            See <a href="#changes" class="sectionRef"></a> for a summary of changes
+            since the first Candidate Recommendation.
+        </p>
+    </section>
+
+    <section>
+        <h2>Introduction</h2>
+        <p>
+            The GDPR requires that the identity of origin server is discoverable by web users,
+            and the [[TPE]] supports this by enabling every origin server to identify
+            itself by hosting a Tracking Status Resource (TSR) at the /.well-known/dnt/ location.
+            This specification further requires that the information presented to a user
+            before they agreed to a Tracking Exception, i.e. gave their informed consent
+            for the collection and further processing of personal data derived from on-line
+            activity, is permanently determinable from the TSR.
+            As cookie headers <a href='https://www.w3.org/TR/tracking-dnt/#status-checks-not-tracked'>SHOULD be present</a>
+            in the TSR request, servers can use them, or an identifier encoded in the DNT header as
+            described in this specification, to determine
+            what purposes the user has agreed to, and present them in a human-readable
+            document pointed to by a new "purposes" TSR property. As cookies may not always be available to third-party
+            requests the DNT encoded identifier could be a more reliable way to do it.
+        </p>
+        <p>
+            As well as introducing universal mechanisms for delivering machine-readable
+            transparency information, and conveying a signal indicating individuals
+            consent or otherwise for tracking in the DNT request header,
+            the [[TPE]], via the Site-Specific Tracking Exception, introduced the ability to
+            communicate this consent signal efficiently to embedded third-parties.
+            Publishers can use this to signal immediately to third-parties
+            when users have given consent, and the reverse when consent expires or is withdrawn.
+            Under the GDPR consent must be "specific", meaning this signal must be
+            capable of being selectively delivered to those parties to which
+            the user has given their agreement, and this is supported by the API by allowing DNT:0
+            only to be sent to named embedded third-parties. Furthermore, when the user withdraws their consent,
+            or has never given it, the opted-in/opted-out indication is restricted to a particular site
+            - opting-out does not have to apply to the whole web, as it does when only
+            standard third-party HTTP cookies are available.
+        </p>
+        <p>
+            Although a single boolean, indicating consent/no-consent, can be delivered this way, i.e. site-specifically
+            via the <a href="https://www.w3.org/TR/tracking-dnt/#dnt-header-field">DNT</a> header,
+            there is currently no way to do this similarly for data.
+            HTTP cookies are intrinsically web-wide, once stored they will always be included in
+            resource requests, whether to embedded third-parties or to first-party websites.
+            The privacy concerns arising from this has led to cookies being increasingly blocked in third-party requests,
+            either by the browser or by user action.
+            Even when they are available users are much less likely to give their consent to tracking when there is
+            no guarantee it will be constrained to one site, or a defined subset of sites.
+            This means that if the user has agreed to site-specific tracking,
+            say within a publishers first-party site,
+            the persisted information has to recorded in a first-party cookie and communicated
+            to embedded third-parties somehow. Even if this can be done in a scalable way, for example by editing
+            the target URL with a mutually agreed encoding, the third-party could not persist it in one of its own cookies, because
+            even if cookies were not blocked the tracking data would then be available web-wide,
+            i.e on any site which embedded the same third-party.
+        </p>
+        <p>
+            This specification describes the ability for first-parties to efficiently communicate
+            site-specific values to embedded third-party servers,
+            but only after the user
+            has agreed to a site-specific Tracking Exception indicating consent.
+            This value is communicated to server in the DNT request header,
+            and to their associated browsing contexts in the
+            <code>navigator.doNotTrack</code> property.The data would be immediately available to the third-party server within the request, so
+            there would be no need for additional round-trip delays. Like cookies, it would be available in all requests to the domain, i.e. not just to particular resources,
+            and it would not need to be separately persisted. The value could be encoded by first-party script at any time, for any purpose for which then user had agreed,
+            and there would be no need for the logistically complex and inefficient mechanisms needed for user-specific URL editing.
+            The value is only transmitted to, or available to, first-party or embedded third-party servers in the context of a single site, or defined subset of the web, and this could be readily and externally verified.
+        </p>
+        <p>
+            As further security measures this value would only be settable when the registering API call is made within a user gesture,
+            similar to the way the WebKit [[StorageAPI]] <code>requestStorageAccess()</code> is constrained,
+            and only when the request is secure, i.e. delivered over <code>https</code>.
+        </p>
+        <p>
+            Browsers SHOULD support an ability to indicate to the user when a DNT header is carrying
+            a site-specific value, say in the browser chrome. How this information interacts with browser specific anti-tracking features is left to browser vendors.
+        </p>
+        <p>
+            The Tracking Exception API has been extended to support the ability of servers
+            to register a site-specific Tracking Exception value of "1", useful in situations
+            where a user has not configured their browser with a general Tracking Preference, and
+            servers are legally required to support a signal to indicate the right-to-object, for example
+            under the GDPR's Article 21.5.'
+        </p>
+    </section>
+
+
+
+
+    <section id='notational'>
+        <h2>Notational Conventions</h2>
+
+        <section id='requirements'>
+            <h3>Requirements</h3>
+
+            <p>
+                The key words <em title="must" class="rfc2119">must</em>,
+                <em title="must not" class="rfc2119">must not</em>,
+                <em title="required" class="rfc2119">required</em>,
+                <em title="should" class="rfc2119">should</em>,
+                <em title="should not" class="rfc2119">should not</em>,
+                <em title="recommended" class="rfc2119">recommended</em>,
+                <em title="may" class="rfc2119">may</em>, and
+                <em title="optional" class="rfc2119">optional</em> in this
+                specification are to be interpreted as described in [[!RFC2119]].
+            </p>
+        </section>
+
+        <section id='notation'>
+            <h3>Formal Syntax</h3>
+
+            <p>
+                This specification uses the Augmented Backus-Naur Form (ABNF)
+                notation of [[!RFC5234]] to define network protocol syntax and
+                WebIDL [[!WebIDL-20161215]] to define scripting APIs.
+                Conformance criteria and considerations regarding error handling are
+                defined in Section 2.5 of [RFC7230].
+            </p>
+            <p>
+                How to <dfn><a class="externalDFN" href="https://www.w3.org/TR/2016/REC-WebIDL-1-20161215/#dfn-throw">throw</a></dfn>
+                a <dfn><a class="externalDFN" href="https://www.w3.org/TR/2016/REC-WebIDL-1-20161215/#idl-DOMException">DOMexception</a></dfn>
+                and the <dfn><a class="externalDFN" href="https://www.w3.org/TR/2016/REC-WebIDL-1-20161215/#idl-exceptions">exceptions</a></dfn>
+                named "InvalidStateError", "SecurityError", and "SyntaxError" are
+                defined in [[!WebIDL-20161215]].
+            </p>
+            <p>
+                <dfn><a class="externalDFN" href="https://tc39.github.io/ecma262/#sec-promise-objects">Promise objects</a></dfn>
+                are defined in [[ECMASCRIPT]]; the phrases
+                <dfn><a class="externalDFN" href="https://www.w3.org/2001/tag/doc/promises-guide#promise-calling">promise-call</a></dfn>,
+                <dfn><a class="externalDFN" href="https://www.w3.org/2001/tag/doc/promises-guide#resolve-promise">resolve promise</a></dfn>,
+                <dfn><a class="externalDFN" href="https://www.w3.org/2001/tag/doc/promises-guide#reject-promise">reject promise</a></dfn>,
+                <dfn><a class="externalDFN" href="https://www.w3.org/2001/tag/doc/promises-guide#upon-fulfillment">upon fulfillment</a></dfn>, and
+                <dfn><a class="externalDFN" href="https://www.w3.org/2001/tag/doc/promises-guide#upon-rejection">upon rejection</a></dfn>
+                are used in accordance with [[PromiseGuide]].
+            </p>
+        </section>
+    </section>
+
+
+
+    <section id='expressing'>
+        <h2>Expressing a Tracking Preference</h2>
+
+
+        <section id='dnt-header-field'>
+            <h3><a href="https://www.w3.org/TR/tracking-dnt/#dnt-header-field">DNT Header Field for HTTP Requests</a></h3>
+
+            <p>
+                The following replaces the ABNF text and example
+           </p>
+            <pre class="abnf">
+            DNT-field-name  = "DNT"
+            DNT-field-value = ( "0" DNT-Consent / "1" )
+            DNT-Consent = %x21-2B / %x2D-7E ; excludes CTL, SP, comma
+            </pre>
+
+            <pre class="example">
+GET /something/DoNotTrack HTTP/1.1
+Host: example.com
+DNT: 1
+
+GET /something/consentGiven HTTP/1.1
+Host: example.com
+DNT: 02B3AC6
+</pre>
+            <section id='dnt-consent'>
+                <h4>The <dfn data-dfn-type="dfn">DNT-Consent</dfn> qualifier</h4>
+                <p>
+                    When a domain origin implements tracking for multiple distinct
+                    purposes, and these are described to the user before they are
+                    given the option to agree to one or more of them, the subset of
+                    purposes the user has selected must be communicated back to the
+                    origin. While cookies may be used for this, they may not be
+                    always available, and in any case an embedding parent context,
+                    e.g. a first-party origin, would not be able to set them for
+                    origins it had embedded.
+                </p>
+                <p>
+                    The <a>DNT-Consent</a> qualifier allows an arbitrarily encoded
+                    string to be communicated to servers solely in
+                    circumstances where the user has given their informed consent.
+                    It is denoted by "0" followed by one or more alphanumeric characters.
+                    The JavaScript Site-Specific <a href="#exception-javascript-api-store" class="sectionRef">storeTrackingException API</a>,
+                    with a <code>site</code>dictionary property not set to "*", must be used to specify
+                    a DNT field-value containing the <a>DNT-Consent</a> qualifier,
+                    which can be encoded in any way that the relevant server that receives it can decode.
+                    The browsing context executing it must be secure, i.e. the content has been delivered over <code>https</code>.
+                </p>
+                <p>
+                    If an origin server specifies a <a>DNT-Consent</a> qualifier it
+                    MUST implement a site-wide tracking status resource with a valid <a>Purposes</a> property.
+                    The <a>Purposes</a> property is a dynamically determined HTML resource
+                    containing a human-readable explanation of all the purposes for tracking that a domain origin implements, as well as the specific purposes a particular user has agreed
+                    to as communicated in the DNT header of the request to the site-wide tracking status resource.
+                </p>
+                <p>
+                    Browsers MUST make it easy for users to see if a <a>DNT-Consent</a> qualifier has been specified for any page and/or any
+                    of the embedded third-parties on the page, and MUST offer the ability to immediately cancel the associated Tracking Exception
+                    should they want.
+                </p>
+                <p>
+                    For example, a request containing  <pre>DNT:0 purpose=an,ad</pre>
+                    would indicate that the user had given consent for tracking, but solely for the purposes of analytics and advertising.
+                </p>
+                <p>
+                    Similarly, a request to a particular third-party server containing  <pre>DNT:0 audience=male>65</pre>
+                    would indicate that the user had given consent for an audience indication to be sent from the publisher to
+                    that third-party.
+                </p>
+            </section>
+        </section>
+
+    </section>
+
+    <section id='exceptions'>
+
+
+        <section id="exception-javascript-api">
+            <section id="exception-javascript-api-store">
+                <h4><a href="https://www.w3.org/TR/tracking-dnt/#exception-javascript-api-store">6.6.1 API to Store a Tracking Exception (amended)</a></h4>
+            <p>The following definition has had a new "fieldValue" property added</p>
+                <pre class="idl">
+        partial interface Navigator {
+            Promise&lt;TrackingExResult&gt; storeTrackingException (
+              TrackingExData properties
+            );
+        };
+        dictionary TrackingExData {
+           DOMString? site;
+           sequence&lt;DOMString&gt;? targets;
+           DOMString? name;
+           DOMString? explanation;
+           DOMString? details;
+           long?      maxAge;
+           DOMString  fieldValue;
+        };
+        dictionary TrackingExResult {
+          boolean isSiteWide;
+        };
+        </pre>
+                <p>The following text describes the new dictionary property "fieldValue"</p>
+                <dl data-dfn-for="TrackingExData">
+                    <dt><code><dfn>fieldValue</dfn></code></dt>
+                    <dd>
+                        When defined and not null or an empty string,
+                        <a data-link-for="TrackingExData">fieldValue</a> indicates the field-value
+                        of the DNT header to be sent to all domains for which this exception applies.
+                        Only a field-value consisting of either the single character "1",
+                        or a string whose first character is "0" and which complies with the definition of a <a>DNT-Consent</a> value,  is valid.
+                        A string whose first character is "0" can only be registered via this call
+                        when the browser is processing a user gesture in which user has given their informed consent,
+                        AND the Tracking Exception requested is site-specific (i.e. the <a data-link-for="TrackingExData">site</a> property is not "*"),
+                        AND the call is being executed within a secure top-level browsing context.
+                        For all other string values, or the executing browsing context is not secure,
+                        or the <a data-link-for="TrackingExData">site</a> property is "*",
+                        or the browser is not executing a user gesture,
+                        the user agent MUST NOT store the exception, and MUST reject the promise with a
+                        <a>DOMException</a> named "SyntaxError".
+                        <ul>
+                            <li>
+                                If <a data-link-for="TrackingExData">fieldValue</a> is equal to "1"
+                                the user agent must send a <code>DNT</code> header with the field-value set to "1" for all
+                                requests to domains for which this exception applies; or
+                            </li>
+                            <li>
+                                If the first character of <a data-link-for="TrackingExData">fieldValue</a> is "0",
+                                the executing context is top-level, secure and processing a user gesture, and
+                                the rest of the string is a valid <a>DNT-Consent</a> value, the user agent MUST send a <code>DNT</code>
+                                header with the field-value set to <a data-link-for="TrackingExData">fieldValue</a> for all requests
+                                to domains for which this exception applies; or
+                            </li>
+                            <li>
+                                If <a data-link-for="TrackingExData">fieldValue</a> is not defined, null or the empty string
+                                the user agent MUST send a <code>DNT</code> header with the field-value set to "0" for all
+                                requests to domains for which this exception applies; or
+                            </li>
+                            <li>
+                                If <a data-link-for="TrackingExData">fieldValue</a> is any other value then the user agent
+                                MUST NOT store an exception and MUST reject the promise with a <a>DOMException</a> named "SyntaxError".
+                            </li>
+                        </ul>
+                    </dd>
+                </dl>
+            </section>
+
+
+        </section>
+
+    </section>
+
+    <section id='responding'>
+        <h2>Communicating a Tracking Status</h2>
+
+
+
+        <section id='status-representation'>
+            <h3><a href="https://www.w3.org/TR/tracking-dnt/#status-representation">7.5 Tracking Status Representation (amended)</a></h3>
+            <section id='rep.status-object'>
+                <h4>Status Object</h4>
+                <p>
+                    The following has been changed to add the new "purposes" property.
+                </p>
+<pre class="orderly">
+object {
+    string tracking;                 // TSV
+    array { string; } compliance?;   // hrefs
+    string qualifiers?;              // compliance flags
+    array { string; } controller?;   // hrefs
+    array { string; } same-party?;   // domains
+    array { string; } audit?;        // hrefs
+    string policy?;                  // href
+    string config?;                  // href
+    string purposes?;                // href
+}*;
+</pre>
+
+                <p>
+                    The following example representation demonstrates a status object
+                    with all of the properties defined by this specification.
+                </p>
+<pre class="example">
+{
+  "tracking": "T",
+  "compliance": ["https://acme.example.org/tracking101"],
+  "qualifiers": "afc",
+  "controller": ["https://www.example.com/privacy"],
+  "same-party": [
+    "example.com",
+    "example_vids.net",
+    "example_stats.com"
+  ],
+  "audit": [
+    "http://auditor.example.org/727073"
+  ],
+  "policy": "/privacy.html#tracking",
+  "config": "http://example.com/your/data",
+  "purposes":"https://example.com/purposesAgreed/ "
+}
+</pre>
+            </section>
+
+            <section id='rep.purposes'>
+                <h4>Purposes Property</h4>
+                <p>
+                    An origin server MAY send a property named
+                    <code><dfn>purposes</dfn></code> with a string
+                    value containing a URI reference to a human-readable document that
+                    describes each of the purposes for tracking implemented by this
+                    origin server.
+                </p>
+                <p>
+                    If the origin server supports the DNT-Consent qualifier then this
+                    property MUST be supported and be dynamically generated by decoding
+                    the field-value of the request's DNT header, to highlight or otherwise
+                    indicate the specific subset of purpose the user has agreed to.
+                </p>
+            </section>
+        </section>
+
+
+    </section>
+
+
+
+    <section id='privacy'>
+        <h2><a href="https://www.w3.org/TR/tracking-dnt/#privacy">10. Privacy Considerations (Amended)</a></h2>
+
+        <section id='privacy.fingerprinting'>
+            <h3>Fingerprinting</h3>
+
+            <p>
+                Information communicated via the DNT header field is minimized to
+                avoid abuse of the field for fingerprinting or as a side-channel.
+                However, the <a>DNT-Consent</a> extension allows for the sending of additional
+                information when signaling consent for tracking via DNT:0, and could
+                be used to send persistent state information without the user's knowledge.
+                For this reason browsers MUST NOT register a <a>DNT-Consent</a> value when the browsing context
+                is insecure, the <a>Navigator.storeTrackingException</a> call is for a web-wide Tracking Exception,
+                or was not processed in the context of a user gesture.
+                Servers MUST ensure that a <a>DNT-Consent</a> value is only used when the user has given their consent.
+            </p>
+            <p>
+                Browsers SHOULD support an ability to indicate to the user in the browser chrome when a DNT header is carrying
+                a <a>DNT-Consent</a> extension.
+            </p>
+        </section>
+
+
+    </section>
+
+
+
+</body>
+</html>

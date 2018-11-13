@@ -8,22 +8,19 @@
     var respecConfig = {
       shortName:           "tracking-dnt",
       // status section for ED
-      // specStatus:          "ED",
+      specStatus:          "ED",
       // status section for CR
       // specStatus:          "CR",
       // publishDate:         "2017-10-19",
       // crEnd:               "2017-12-18",
       // implementationReportURI: "https://www.w3.org/wiki/Privacy/TPWG/TPE_Implementation_Report",
-      // status section for NOTE
-      specStatus:          "NOTE",
-      publishDate:         "2018-10-20",
       // end status
-      previousPublishDate: "2017-10-19",
+      previousPublishDate: "2015-08-20",
       previousMaturity:    "CR",
       edDraftURI:          "https://w3c.github.io/dnt/drafts/tracking-dnt.html",
       prevED : "https://www.w3.org/2011/tracking-protection/drafts/tracking-dnt.html",
       editors:  [
-          { name: "Roy T. Fielding", url: "https://roy.gbiv.com/",
+          { name: "Roy T. Fielding", url: "http://roy.gbiv.com/",
             company: "Adobe", companyURL: "https://www.adobe.com/",
             w3cid: 31828 },
           { name: "David Singer",
@@ -80,7 +77,7 @@
        "PromiseGuide":
         {
           "title": "Writing Promise-Using Specifications",
-          "href": "https://www.w3.org/2001/tag/doc/promises-guide",
+          "href": "http://www.w3.org/2001/tag/doc/promises-guide",
           "authors": [
             "Domenic Denicola"
           ],
@@ -157,18 +154,19 @@
 
   <section id='sotd'>
     <p>
-      This Note is a final outcome of the standardization process by the
-      Tracking Protection Working Group for the extensions to HTTP known
-      variously as DNT, Do Not Track, or Tracking Protection Expression.
-    </p>
-    <p>
-      Since its last publication as a Candidate Recommendation, there has not
-      been sufficient deployment of these extensions (as defined) to justify
-      further advancement, nor have there been indications of planned support
-      among user agents, third parties, and the ecosystem at large. The
-      working group has therefore decided to conclude its work and republish
-      the final product as this Note, with any future addendums to be
-      published separately.
+      This document is an editors' straw man reflecting a snapshot of live
+      discussions within the
+      <a href="https://www.w3.org/2011/tracking-protection/">Tracking
+      Protection Working Group</a>.  It does not necessarily constitute
+      working group consensus.
+      This draft has been prepared using the
+      <a href="https://github.com/w3c/dnt/">DNT github repository</a> and its
+      associated <a href="https://github.com/w3c/dnt/issues">issues list</a>.
+      However, see the previous
+      <a href="https://www.w3.org/2011/tracking-protection/track/issues/">issue
+      tracking system</a> for working group decisions prior to 2017.
+      See <a href="#changes" class="sectionRef"></a> for a summary of changes
+      since the first Candidate Recommendation.
     </p>
   </section>
 
@@ -206,7 +204,7 @@
       insertion of embedded elements on each page, resulting in a stream of
       data that connects a user's activity across multiple pages. A survey of
       these techniques and their privacy implications can be found in
-      [[?KnowPrivacy]].
+      [[KnowPrivacy]].
     </p>
     <p>
       Users need a mechanism to express their own preferences regarding
@@ -239,7 +237,7 @@
       the tracking status provides the ability to identify a set of compliance
       regimes to which the server claims to comply, with the assumption being
       that each regime defines its own requirements on compliant behavior.
-      For example, [[?TCS]] is a work-in-progress that intends to define such a
+      For example, [[TCS]] is a work-in-progress that intends to define such a
       compliance regime.
     </p>
   </section>
@@ -431,7 +429,7 @@
         notation of [[!RFC5234]] to define network protocol syntax and
         WebIDL [[!WebIDL-20161215]] to define scripting APIs.
         Conformance criteria and considerations regarding error handling are
-        defined in Section 2.5 of [[!RFC7230]].
+        defined in Section 2.5 of [RFC7230].
       </p>
       <p>
         How to <dfn><a class="externalDFN" href="https://www.w3.org/TR/2016/REC-WebIDL-1-20161215/#dfn-throw">throw</a></dfn>
@@ -442,13 +440,13 @@
       </p>
       <p>
         <dfn><a class="externalDFN" href="https://tc39.github.io/ecma262/#sec-promise-objects">Promise objects</a></dfn>
-        are defined in [[?ECMASCRIPT]]; the phrases
+        are defined in [[ECMASCRIPT]]; the phrases
         <dfn><a class="externalDFN" href="https://www.w3.org/2001/tag/doc/promises-guide#promise-calling">promise-call</a></dfn>,
         <dfn><a class="externalDFN" href="https://www.w3.org/2001/tag/doc/promises-guide#resolve-promise">resolve promise</a></dfn>,
         <dfn><a class="externalDFN" href="https://www.w3.org/2001/tag/doc/promises-guide#reject-promise">reject promise</a></dfn>,
         <dfn><a class="externalDFN" href="https://www.w3.org/2001/tag/doc/promises-guide#upon-fulfillment">upon fulfillment</a></dfn>, and
         <dfn><a class="externalDFN" href="https://www.w3.org/2001/tag/doc/promises-guide#upon-rejection">upon rejection</a></dfn>
-        are used in accordance with [[?PromiseGuide]].
+        are used in accordance with [[PromiseGuide]].
       </p>
     </section>
   </section>
@@ -612,93 +610,104 @@
       </p>
     </section>
 
-    <section id='dnt-header-field'>
-      <h3>DNT Header Field for HTTP Requests</h3>
+      <section id='dnt-header-field'>
+          <h3>DNT Header Field for HTTP Requests</h3>
 
-      <p>
-        The <code><dfn>DNT</dfn></code> header field is a mechanism for expressing the
-        user's tracking preference in an HTTP request ([[!RFC7230]]).
-        At most one <code>DNT</code> header field can be present in a valid request.
-      </p>
+          <p>
+              The <code><dfn>DNT</dfn></code> header field is a mechanism for expressing the
+              user's tracking preference in an HTTP request ([[!RFC7230]]).
+              At most one <code>DNT</code> header field can be present in a valid request.
+          </p>
 <pre class="abnf">
-DNT-field-name  = "DNT"
-DNT-field-value = ( "0" / "1" ) *DNT-extension
+<dfn>DNT-field-name</dfn> = "DNT"
+<dfn>DNT-field-value</dfn> = ("0" *( LWSP DNT-qualifiers "&") ) / "1" 
+<dfn>DNT-qualifiers</dfn> = (DNT-purpose-qualifier / *DNT-extension)) 
+<dfn>DNT-purposes-qualifier</dfn> = "p=" DNT-purposes-selector
+<dfn>DNT-purposes-selector</dfn> = 1*(%x21 %x23-25 / %x27-2B / %x2D-3A / %x3C-5B / %x5D-7E) 
+        ;A string which excludes "&", ";", CTL, SP, DQUOTE, comma, and backslash
+<dfn>DNT-extension</dfn> = ALPHA "=" *(%x21 %x23-25 / %x27-2B / %x2D-3A / %x3C-5B / %x5D-7E) 
+    ;An alphanumeric qualifier followed by "=" and a string which excludes "&", ";", CTL, SP, DQUOTE, comma, and backslash
 </pre>
-      <p>
-        A user agent MUST NOT generate a <code>DNT</code> header field if the
-        user's tracking preference is <a>not enabled</a>.
-      </p>
-      <p>
-        A user agent MUST generate a <code>DNT</code> header field with a
-        field-value that begins with the numeric character "1" if the user's
-        tracking preference is <a>enabled</a>, their preference is for
-        <a>DNT:1</a>, and no exception has been granted for the
-        target resource (see <a href="#exceptions" class="sectionRef"></a>).
-      </p>
-      <p>
-        A user agent MUST generate a <code>DNT</code> header field with a
-        field-value that begins with the numeric character "0" if the user's
-        tracking preference is <a>enabled</a> and their preference is for
-        <a>DNT:0</a>, or if an exception has been granted for
-        the target resource.
-      </p>
-      <p>
-        A proxy MUST NOT generate a <code>DNT</code> header field unless it has
-        been specifically installed or configured to do so by the user
-        making the request and adheres to the above requirements as if it
-        were a user agent.
-      </p>
+          <p>
+              There can be 0 or more <a>DNT-qualifiers</a>, each separated by a "&" character.
+              A user agent MUST NOT send any <a>DNT-qualifiers</a> if the first character of the
+              <a>DNT-field-value</a> is any character other than "0".
+          </p>
+          <p>
+              A user agent MUST NOT generate a <code>DNT</code> header field if the
+              user's tracking preference is <a>not enabled</a>,
+              or the JavaScript <a href="#exception-javascript-api-store" class="sectionRef">storeTrackingException API</a>
+              has not been called.
+          </p>
+          <p>
+              A user agent MUST generate a <code>DNT</code> header field with a
+              field-value that equals the numeric character "1" if the user's
+              tracking preference is <a>enabled</a>, their preference is for
+              <a>DNT:1</a>, and no exception has been granted for the
+              target resource (see <a href="#exceptions" class="sectionRef"></a>).
+          </p>
+          <p>
+              A user agent MUST generate a <code>DNT</code> header field with a
+              field-value that begins with the numeric character "0" if the user's
+              tracking preference is <a>enabled</a> and their general preference is for
+              <a>DNT:0</a>, or if a <code>DNT: 0</code> exception has been granted for
+              the target resource in which the <a data-link-for="TrackingExData">fieldValue</a>
+              was null, absent or an empty string, or had a
+              <a data-link-for="TrackingExData">fieldValue</a> property in which the first character was "0".
+          </p>
+          <p>
+              User agents that do not implement <a>DNT-qualifiers</a> MUST NOT send
+              <a>DNT-qualifiers</a> in the <a>DNT</a> field-value.
+              Servers that do not implement <a>DNT-qualifiers</a> SHOULD ignore
+              anything beyond the first character.
+          </p>
+          <p>
+              A proxy MUST NOT generate a <code>DNT</code> header field unless it has
+              been specifically installed or configured to do so by the user
+              making the request and adheres to the above requirements as if it
+              were a user agent.
+          </p>
 <pre class="example">
 GET /something/here HTTP/1.1
 Host: example.com
 DNT: 1
-
 </pre>
-
-      <section id='dnt-extensions'>
-        <h4>Extensions to the DNT Field Value</h4>
-
-        <p>
-          The remainder of the <a>DNT</a> field-value, after the initial character,
-          is reserved for future extensions. DNT extensions can only be
-          transmitted when a tracking preference is <a>enabled</a>.
-          The extension syntax is restricted to visible ASCII characters that
-          can be parsed as a single word in HTTP and safely embedded in a
-          JSON string without further encoding
-          (<a href="#status-representation" class="sectionRef"></a>).
-        </p>
-<pre class="abnf">
-DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
-                ; excludes CTL, SP, DQUOTE, comma, backslash
-</pre>
-        <p>
-          For example, additional characters might indicate modifiers to the
-          main preference expressed by the first digit, such that the main
-          preference will be understood if the recipient does not understand
-          the extension. Hence, a field-value of "1xyz" can be thought of
-          as <q>do not track, but if you understand the refinements defined
-          by x, y, or z, then adjust my preferences according to those
-          refinements.</q>
-        </p>
-        <p>
-          User agents that do not implement DNT extensions MUST NOT send
-          DNT-extension characters in the <a>DNT</a> field-value.
-          Servers that do not implement DNT extensions SHOULD ignore
-          anything beyond the first character.
-        </p>
-        <p class="note">
-          This DNT-extension feature is speculative because no known
-          extensions have been defined; implementers that do not read this
-          specification are likely to assume that DNT only has the
-          fixed values of "0" or "1". Furthermore, the potential benefits
-          of this mechanism are unclear given that extension information
-          could be supplied using separate request header fields.
-          Inappropriate extensions to the "1" value might cause the user's
-          requests to be more easily
-          <a href="#privacy.fingerprinting">fingerprinted</a>.
-        </p>
+          <section id='dnt-purposes'>
+              <h4>The <dfn data-dfn-type="dfn">DNT Purposes</dfn> qualifier</h4>
+              <p>
+                  When a particular domain originimplements tracking for multiple distinct purposes, described to the user before they
+                  are given the option to agree to one or more of them, the subset of purposes the user has selected must be communicated to the relevent domain origins.
+                  While cookies may be used for this, they may not be available to nested browsing contexts or other embedded sub-resources,
+                  and in any case the Same Origin Policy would stop them being set by an embedding domain origin,  e.g. by a parent or a first-party domain.
+              </p>
+              <p>
+                  The <a>DNT Purposes</a> qualifier allows an arbitrarily encoded purpose indication string to be communicated to servers solely in
+                  circumstances where the user has given their informed consent.
+                  It is denoted by "p=" followed by one or more alphanumeric characters (excluding "&", ";", CTL, SP, DQUOTE, comma or backslash).
+                  The JavaScript <a href="#exception-javascript-api-store" class="sectionRef">storeTrackingException API</a> can be used to specify
+                  a DNT field-value containing the <a>DNT Purposes</a> qualifier,
+                  which can be encoded in any way that the relevent server that receives it can decode,
+                  as long as the user can always easily ascertain what purposes they have agreed to.
+              </p>
+              <p>
+                  If an origin server implements the <a>DNT Purposes</a> qualifier it must only enable the tracking procedures it has described and to which the user has agreed, and
+                  MUST implement a <a>site-wide tracking status resource</a> with a valid <a>Purposes</a> property. The <a>Purposes</a> property is a dynamically determined HTML resource
+                  containing a human-readable explanation of all the purposes for tracking that a domain origin implements, as well as the specific purposes a particular user has agreed
+                  to as communicated in the the DNT header of the request to the <a>site-wide tracking status resource</a>.
+              </p>
+              <p>
+                  For example, a request containing  <pre>DNT:0 p=an,ad</pre>
+                  would indicate that the user had given consent for tracking, but solely for the purposes of analytics and advertising.
+              </p>
+          </section>
+          <section id='dnt-extensions'>
+              <h4>Extensions to the DNT Field Value</h4>
+              <p>
+                  Future extensions to the <a>DNT</a> header should be encoded as a name-value pair that corresponds to
+                  the ABNF <a>DNT-extension</a>, where the name is a single alphanumeric character and the value any string.
+              </p>
+          </section>
       </section>
-    </section>
 
     <section id='js-dom'>
       <h3>JavaScript Property to Detect Preference</h3>
@@ -982,25 +991,30 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
     <section id="exception-javascript-api">
       <h3>Client-side Scripting API</h3>
 
-      <section id="exception-javascript-api-store">
-        <h4>API to Store a Tracking Exception</h4>
+        <section id="exception-javascript-api-store">
+            <h4>API to Store a Tracking Exception</h4>
 
-        <p>
-          When a site has obtained consent for a
-          <a>user-granted exception</a>, a script running within an active
-          <a>browsing context</a> or <a>nested browsing context</a> of that
-          site can <a>promise-call</a>
-          <code><dfn>Navigator.storeTrackingException</dfn></code>
-          to store one or more tracking exceptions.
-          A <code><dfn>TrackingExData</dfn></code> object is
-          supplied as a parameter to define the exception's scope (the set of
-          [site, target] duplets that encompass the granted exception)
-          and optional information to be stored for that exception.
-          The call returns a promise which either resolves to a
-          <code><dfn>TrackingExResult</dfn></code> or is rejected with
-          a <code>DOMException</code> identifying the reason for the failure.
-        </p>
-        <pre class="idl">
+            <p>
+                When a site has obtained consent for a <a>user-granted exception</a>,
+                or a user has indicated their objection to lawfully exempted tracking
+                when their tracking preference is <dfn>not enabled</dfn>,
+                a script running within an active
+                <a>browsing context</a> or <a>nested browsing context</a> of that
+                site can <a>promise-call</a>
+                <code><dfn>Navigator.storeTrackingException</dfn></code>
+                to store one or more tracking exceptions. A script running within an active
+                <a>browsing context</a> or <a>nested browsing context</a> can <a>promise-call</a>
+                <code><dfn>Navigator.storeTrackingException</dfn></code>
+                to store one or more tracking exceptions.
+                A <code><dfn>TrackingExData</dfn></code> object is
+                supplied as a parameter to define the exception's scope (the set of
+                [site, target] duplets that encompass the granted exception)
+                and optional information to be stored for that exception.
+                The call returns a promise which either resolves to a
+                <code><dfn>TrackingExResult</dfn></code> or is rejected with
+                a <code>DOMException</code> identifying the reason for the failure.
+            </p>
+            <pre class="idl">
         partial interface Navigator {
             Promise&lt;TrackingExResult&gt; storeTrackingException (
               TrackingExData properties
@@ -1013,215 +1027,275 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
            DOMString? explanation;
            DOMString? details;
            long?      maxAge;
+           DOMString  fieldValue;
         };
         dictionary TrackingExResult {
           boolean isSiteWide;
         };
         </pre>
-        <p>
-          <a>Navigator.storeTrackingException</a> passes a
-          <a>TrackingExData</a> object. A user agent MUST ignore unknown
-          properties of the <a>TrackingExData</a> object (for future
-          extensibility). The following OPTIONAL properties are defined:
-        </p>
-        <dl data-dfn-for="TrackingExData">
-          <dt><code><dfn>site</dfn></code></dt>
-          <dd>The referring domain scope for which the exception applies:
-            <ul>
-              <li>If
-                <a data-link-for="TrackingExData">site</a> is
-                undefined, null, or the empty string, the exception's referring
-                domain scope defaults to the <a>script domain</a>.</li>
-              <li>If
-                <a data-link-for="TrackingExData">site</a> is
-                defined and equal to "<code>*</code>", the exception is
-                intended to be <a>web-wide</a> for the set of
-                <a data-link-for="TrackingExData">targets</a>.
-                A user agent MUST reject the promise with the
-                <code>DOMException</code> named "SecurityError" if both
-                <a data-link-for="TrackingExData">site</a> and
-                any of the <a data-link-for="TrackingExData">targets</a>
-                are "<code>*</code>".</li>
-              <li>Otherwise, the exception's referring domain scope is defined
-                by a domain found
-                in <a data-link-for="TrackingExData">site</a>
-                that is treated in the same way as the domain parameter to
-                cookies [[!RFC6265]], allowing subdomains to be included with
-                the prefix "<code>*.</code>". The value
-                can be set to a fully-qualified right-hand segment of the
-                document host name, up to one level below TLD.</li>
-            </ul></dd>
-          <dt><code><dfn>targets</dfn></code></dt>
-          <dd>An array of target domains for which the exception applies:
-            <ul>
-              <li>If <a data-link-for="TrackingExData">targets</a>
-                is undefined or null, the user-granted
-                exception to be stored is <code>[site,&nbsp;*]</code>, meaning
-                that the exception applies to all domains referenced by the
-                site.</li>
-              <li>If <a data-link-for="TrackingExData">targets</a>
-                is an empty array, the user-granted exception to be stored is
-                <code>[site,&nbsp;script&nbsp;domain]</code>, meaning that
-                the exception applies only to resources that share the same
-                domain as the <a>effective script origin</a>.</li>
-              <li>Otherwise, for each domain string in the
-                <a data-link-for="TrackingExData">targets</a>
-                array, a user-granted exception to be stored is the duplet
-                <code>[site,&nbsp;domain]</code>.</li>
-            </ul></dd>
-          <dt><code><dfn>name</dfn></code></dt>
-          <dd>When defined and not null or an empty string,
-            <a data-link-for="TrackingExData">name</a> is a
-            user-readable string for naming the exception, usually
-            descriptive of the targets or their intended purpose for this
-            site, encoded as UTF-8 and appropriate for the natural language(s)
-            used to inform consent for the exception.</dd>
-          <dt><code><dfn>explanation</dfn></code></dt>
-          <dd>When defined and not null or an empty string,
-            <a data-link-for="TrackingExData">explanation</a> is a
-            user-readable short explanation of the granted exception,
-            encoded as UTF-8 and in the same natural language(s)
-            used to inform consent for the exception.</dd>
-          <dt><code><dfn>details</dfn></code></dt>
-          <dd>When defined and not null or an empty string,
-            <a data-link-for="TrackingExData">details</a> is a URI
-            reference at which further information about the granted
-            exception can be found [[!RFC3986]].</dd>
-          <dt><code><dfn>maxAge</dfn></code></dt>
-          <dd>When defined and not null,
-            <a data-link-for="TrackingExData">maxAge</a> is a positive
-            number of seconds indicating the maximum lifetime of the grant:
-            <ul>
-              <li>If <code>maxAge</code> is supplied and not null, empty, or
-                negative, the user agent MUST remove the stored exception
-                no later than the specified number of seconds after being
-                stored.</li>
-              <li>If <code>maxAge</code> is not supplied, the user agent
-                MAY retain the stored grant indefinitely.</li>
-            </ul>
-          </dd>
-        </dl>
-        <p>
-          The properties <a data-link-for="TrackingExData">name</a>,
-          <a data-link-for="TrackingExData">explanation</a>, and
-          <a data-link-for="TrackingExData">details</a> are provided by the
-          caller for the sake of potential user interfaces.
-          If a user agent presents these properties to the user, it ought to
-          be clear that they are provided for informational value and are
-          less important than the exception's technical effect.
-        </p>
-        <p>
-          In addition to the data above, a user agent might also store
-          ambient information about the call, such as the URI associated
-          with the <a>top-level browsing context</a>,
-          the <a>effective script origin</a>, a current timestamp, or other
-          information potentially obtained from applicable tracking status
-          resources.
-        </p>
-        <p>
-          The calling <a>script domain</a> MUST have a
-          <a>site-wide tracking status resource</a> with a valid
-          <a href="#status-representation">tracking status representation</a>
-          that includes a <a>policy</a> property.
-          This allows a user agent to obtain and possibly store additional
-          information about the caller’s controller and tracking
-          policies at the time an exception is granted.
-        </p>
-        <p>
-          A user agent MAY reject the promise with a <a>DOMException</a>
-          named "InvalidStateError" if it cannot determine the
-          <a>effective script origin</a> or if the site corresponding to that
-          origin does not have a
-          <a>site-wide tracking status resource</a> with a valid
-          <a href="#status-representation">tracking status representation</a>.
-        </p>
-        <p>
-          For each <a>site-specific</a> exception being stored,
-          a user agent MUST NOT store the duplets and MUST reject the
-          promise with a <a>DOMException</a> named "SecurityError"
-          if the script would not be able to set a cookie on that duplet's
-          referring domain scope following the cookie domain rules [[!RFC6265]].
-        </p>
-        <p class="example">
-          For example, a script on <em>www.foo.bar.example.com</em> can set
-          the <a data-link-for="TrackingExData">site</a> as
-          <code>"bar.example.com"</code> or
-          <code>"example.com"</code>, but not to
-          <code>"something.else.example.com"</code> or <code>"com"</code>.
-        </p>
-        <p>
-          For each <a>web-wide</a> exception being stored,
-          a user agent MUST NOT store the duplets and MUST reject the
-          promise with a <a>DOMException</a> named "SecurityError"
-          if the script would not be able to set a cookie on that target
-          domain following the cookie domain rules [[!RFC6265]].
-          This limits storing of a web-wide exception to scripts that share
-          the same domain scope as the exception targets, but allows such
-          scripts to be embedded within iframes of a common consent portal.
-        </p>
-        <p>
-          For any other failure, such as an incorrectly formatted parameter in
-          the <a>TrackingExData</a>, the user agent MUST NOT store
-          any of the target duplets in the database and MUST reject the promise
-          with a <a>DOMException</a> named "SyntaxError".
-        </p>
-        <p>
-          <a>Upon fulfillment</a>, the user agent has added to its local
-          database one or more site-pair duplets [site, target], each
-          indicating that a request from that <a>site domain</a> to the
-          <a>target domain</a> will include <a>DNT:0</a> regardless of the
-          user's general tracking preference. The fulfilled promise object
-          contains the following <a>TrackingExResult</a> attribute:
-        </p>
-        <dl data-dfn-for="TrackingExResult">
-          <dt><code><dfn>isSiteWide</dfn></code></dt>
-          <dd><code>true</code> if the user agent stored a potentially
-            broader exception that applies to all domains (as opposed to just
-            the listed targets); otherwise, <code>false</code>.</dd>
-        </dl>
-        <p>
-          When a list of <a data-link-for="TrackingExData">targets</a>
-          is supplied for a <a>site-specific</a> exception,
-          the user agent MAY ignore that list, choosing instead to
-          store a <a>site-specific</a> exception for all domains
-          (<code>[site,&nbsp;*]</code>), if it also indicates that result by
-          setting the returned promise's
-          <a data-link-for="TrackingExResult">isSiteWide</a> property
-          to <code>true</code>.
-        </p>
-        <p>
-          User agents MAY instantiate <a>Navigator.storeTrackingException</a>
-          even when <a>Navigator.doNotTrack</a> is null. Scripts SHOULD test
-          for the existence of <a>Navigator.storeTrackingException</a> before
-          calling the method.
-        </p>
-        <p class="note" id="api-security">
-          There are some security concerns here regarding the ability of a
-          script with an <a>effective script origin</a> matching one site
-          being able to persist the DNT value received by resources on other
-          (target) sites. In particular, this feature could be abused to
-          set/unset an array of exceptions, similar to an array of bit values,
-          and be "read" as a persistent identifier by embedding requests to
-          those domains (which might all point to the same Internet host).
-          However, we expect that would leave an obvious trail on the
-          user agent, unlike other sources of fingerprinting.<br />
-          <br />
-          Likewise, allowing an exception to be stored within an iframe of
-          another site's page could be ripe for abuse unless the calling
-          script ensures that it is being run within a page where it expects
-          to be collecting user consent and where the context of that consent
-          is consistent with the exceptions being stored.<br />
-          <br />
-          This design is consistent with the fact that there is no technical
-          restraint from sites calling the API without having first obtained
-          an informed consent from the user. We are assuming that the social
-          and regulatory environment will be sufficient to punish
-          those who might misuse the API or abuse the scope of stored
-          exceptions. A user agent might further limit such risks by checking
-          for a <a>site-wide tracking status resource</a> when its presence is
-          required by the API.
-        </p>
-      </section>
+            <p>
+                <a>Navigator.storeTrackingException</a> passes a
+                <a>TrackingExData</a> object. A user agent MUST ignore unknown
+                properties of the <a>TrackingExData</a> object (for future
+                extensibility). The following OPTIONAL properties are defined:
+            </p>
+            <dl data-dfn-for="TrackingExData">
+                <dt><code><dfn>site</dfn></code></dt>
+                <dd>
+                    The referring domain scope for which the exception applies:
+                    <ul>
+                        <li>
+                            If
+                            <a data-link-for="TrackingExData">site</a> is
+                            undefined, null, or the empty string, the exception's referring
+                            domain scope defaults to the <a>script domain</a>.
+                        </li>
+                        <li>
+                            If
+                            <a data-link-for="TrackingExData">site</a> is
+                            defined and equal to "<code>*</code>", the exception is
+                            intended to be <a>web-wide</a> for the set of
+                            <a data-link-for="TrackingExData">targets</a>.
+                            A user agent MUST reject the promise with the
+                            <code>DOMException</code> named "SecurityError" if both
+                            <a data-link-for="TrackingExData">site</a> and
+                            any of the <a data-link-for="TrackingExData">targets</a>
+                            are "<code>*</code>".
+                        </li>
+                        <li>
+                            Otherwise, the exception's referring domain scope is defined
+                            by a domain found
+                            in <a data-link-for="TrackingExData">site</a>
+                            that is treated in the same way as the domain parameter to
+                            cookies [[!RFC6265]], allowing subdomains to be included with
+                            the prefix "<code>*.</code>". The value
+                            can be set to a fully-qualified right-hand segment of the
+                            document host name, up to one level below TLD.
+                        </li>
+                    </ul>
+                </dd>
+                <dt><code><dfn>targets</dfn></code></dt>
+                <dd>
+                    An array of target domains for which the exception applies:
+                    <ul>
+                        <li>
+                            If <a data-link-for="TrackingExData">targets</a>
+                            is undefined or null, the user-granted
+                            exception to be stored is <code>[site,&nbsp;*]</code>, meaning
+                            that the exception applies to all domains referenced by the
+                            site.
+                        </li>
+                        <li>
+                            If <a data-link-for="TrackingExData">targets</a>
+                            is an empty array, the user-granted exception to be stored is
+                            <code>[site,&nbsp;script&nbsp;domain]</code>, meaning that
+                            the exception applies only to resources that share the same
+                            domain as the <a>effective script origin</a>.
+                        </li>
+                        <li>
+                            Otherwise, for each domain string in the
+                            <a data-link-for="TrackingExData">targets</a>
+                            array, a user-granted exception to be stored is the duplet
+                            <code>[site,&nbsp;domain]</code>.
+                        </li>
+                    </ul>
+                </dd>
+                <dt><code><dfn>name</dfn></code></dt>
+                <dd>
+                    When defined and not null or an empty string,
+                    <a data-link-for="TrackingExData">name</a> is a
+                    user-readable string for naming the exception, usually
+                    descriptive of the targets or their intended purpose for this
+                    site.
+                </dd>
+                <dt><code><dfn>explanation</dfn></code></dt>
+                <dd>
+                    When defined and not null or an empty string,
+                    <a data-link-for="TrackingExData">explanation</a> is a
+                    user-readable short explanation of the granted exception.
+                </dd>
+                <dt><code><dfn>details</dfn></code></dt>
+                <dd>
+                    When defined and not null or an empty string,
+                    <a data-link-for="TrackingExData">details</a> is a URI
+                    reference at which further information about the granted
+                    exception can be found [[!RFC3986]].
+                </dd>
+                <dt><code><dfn>maxAge</dfn></code></dt>
+                <dd>
+                    When defined and not null,
+                    <a data-link-for="TrackingExData">maxAge</a> is a positive
+                    number of seconds indicating the maximum lifetime of the grant:
+                    <ul>
+                        <li>
+                            If <code>maxAge</code> is supplied and not null, empty, or
+                            negative, the user agent MUST remove the stored exception
+                            no later than the specified number of seconds after being
+                            stored.
+                        </li>
+                        <li>
+                            If <code>maxAge</code> is not supplied, the user agent
+                            MAY retain the stored grant indefinitely.
+                        </li>
+                    </ul>
+                </dd>
+                <dt><code><dfn>fieldValue</dfn></code></dt>
+                <dd>
+                    When defined and not null or an empty string,
+                    <a data-link-for="TrackingExData">fieldValue</a> indicates the field-value
+                    of the DNT header to be sent to all domains for which this exception applies.
+                    Only a field-value consisting of either the single character "1",
+                    or a string whose first character is "0" and which complies with the definition of a <a>DNT-field-value</a>,  is valid. A string whose first character is "0" can only be supplied
+                    in circumstances where the user has given their informed consent.
+                    For all other string values the user agent MUST NOT store the exception, and MUST reject the promise with a
+                    <a>DOMException</a> named "SyntaxError".
+                    <ul>
+                        <li>
+                            If <a data-link-for="TrackingExData">fieldValue</a> is equal to "1"
+                            the user agent must send a <code>DNT</code> header with the field-value set to "1" for all
+                            requests to domains for which this exception applies; or
+                        </li>
+                        <li>
+                            If the first character of <a data-link-for="TrackingExData">fieldValue</a> is "0", and
+                            the rest of the string is a valid <a>DNT-extension</a>, the user agent MUST send a <code>DNT</code>
+                            header with the field-value set to <a data-link-for="TrackingExData">fieldValue</a> for all requests
+                            to domains for which this exception applies ; or
+                        </li>
+                        <li>
+                            If <a data-link-for="TrackingExData">fieldValue</a> is not defined, null or the empty string
+                            the user agent MUST send a <code>DNT</code> header with the field-value set to "0" for all
+                            requests to domains for which this exception applies; or
+                        </li>
+                        <li>
+                            If <a data-link-for="TrackingExData">fieldValue</a> is any other value then the user agent
+                            MUST NOT store an exception and MUST reject the promise with a <a>DOMException</a> named "SyntaxError".
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
+            <p>
+                The properties <a data-link-for="TrackingExData">name</a>,
+                <a data-link-for="TrackingExData">explanation</a>, and
+                <a data-link-for="TrackingExData">details</a> are provided by the
+                caller for the sake of potential user interfaces.
+                If a user agent presents these properties to the user, it ought to
+                be clear that they are provided for informational value and are
+                less important than the exception's technical effect.
+            </p>
+            <p>
+                In addition to the data above, a user agent might also store
+                ambient information about the call, such as the URI associated
+                with the <a>top-level browsing context</a>,
+                the <a>effective script origin</a>, a current timestamp, or other
+                information potentially obtained from applicable tracking status
+                resources.
+            </p>
+            <p>
+                The calling <a>script domain</a> MUST have a
+                <a>site-wide tracking status resource</a> with a valid
+                <a href="#status-representation">tracking status representation</a>
+                that includes a <a>policy</a> property.
+                This allows a user agent to obtain and possibly store additional
+                information about the caller’s controller and tracking
+                policies at the time an exception is granted.
+            </p>
+            <p>
+                A user agent MAY reject the promise with a <a>DOMException</a>
+                named "InvalidStateError" if it cannot determine the
+                <a>effective script origin</a> or if the site corresponding to that
+                origin does not have a
+                <a>site-wide tracking status resource</a> with a valid
+                <a href="#status-representation">tracking status representation</a>.
+            </p>
+            <p>
+                For each <a>site-specific</a> exception being stored,
+                a user agent MUST NOT store the duplets and MUST reject the
+                promise with a <a>DOMException</a> named "SecurityError"
+                if the script would not be able to set a cookie on that duplet's
+                referring domain scope following the cookie domain rules [[!RFC6265]].
+            </p>
+            <p class="example">
+                For example, a script on <em>www.foo.bar.example.com</em> can set
+                the <a data-link-for="TrackingExData">site</a> as
+                <code>"bar.example.com"</code> or
+                <code>"example.com"</code>, but not to
+                <code>"something.else.example.com"</code> or <code>"com"</code>.
+            </p>
+            <p>
+                For each <a>web-wide</a> exception being stored,
+                a user agent MUST NOT store the duplets and MUST reject the
+                promise with a <a>DOMException</a> named "SecurityError"
+                if the script would not be able to set a cookie on that target
+                domain following the cookie domain rules [[!RFC6265]].
+                This limits storing of a web-wide exception to scripts that share
+                the same domain scope as the exception targets, but allows such
+                scripts to be embedded within iframes of a common consent portal.
+            </p>
+            <p>
+                For any other failure, such as an incorrectly formatted parameter in
+                the <a>TrackingExData</a>, the user agent MUST NOT store
+                any of the target duplets in the database and MUST reject the promise
+                with a <a>DOMException</a> named "SyntaxError".
+            </p>
+            <p>
+                <a>Upon fulfillment</a>, the user agent has added to its local
+                database one or more site-pair duplets [site, target], each
+                indicating that a request from that <a>site domain</a> to the
+                <a>target domain</a> will include <a>DNT:0</a> regardless of the
+                user's general tracking preference. The fulfilled promise object
+                contains the following <a>TrackingExResult</a> attribute:
+            </p>
+            <dl data-dfn-for="TrackingExResult">
+                <dt><code><dfn>isSiteWide</dfn></code></dt>
+                <dd>
+                    <code>true</code> if the user agent stored a potentially
+                    broader exception that applies to all domains (as opposed to just
+                    the listed targets); otherwise, <code>false</code>.
+                </dd>
+            </dl>
+            <p>
+                When a list of <a data-link-for="TrackingExData">targets</a>
+                is supplied for a <a>site-specific</a> exception,
+                the user agent MAY ignore that list, choosing instead to
+                store a <a>site-specific</a> exception for all domains
+                (<code>[site,&nbsp;*]</code>), if it also indicates that result by
+                setting the returned promise's
+                <a data-link-for="TrackingExResult">isSiteWide</a> property
+                to <code>true</code>.
+            </p>
+            <p>
+                User agents MAY instantiate <a>Navigator.storeTrackingException</a>
+                even when <a>Navigator.doNotTrack</a> is null. Scripts SHOULD test
+                for the existence of <a>Navigator.storeTrackingException</a> before
+                calling the method.
+            </p>
+            <p class="note" id="api-security">
+                There are some security concerns here regarding the ability of a
+                script with an <a>effective script origin</a> matching one site
+                being able to persist the DNT value received by resources on other
+                (target) sites. In particular, this feature could be abused to
+                set/unset an array of exceptions, similar to an array of bit values,
+                and be "read" as a persistent identifier by embedding requests to
+                those domains (which might all point to the same Internet host).
+                However, we expect that would leave an obvious trail on the
+                user agent, unlike other sources of fingerprinting.<br />
+                <br />
+                Likewise, allowing an exception to be stored within an iframe of
+                another site's page could be ripe for abuse unless the calling
+                script ensures that it is being run within a page where it expects
+                to be collecting user consent and where the context of that consent
+                is consistent with the exceptions being stored.<br />
+                <br />
+                This design is consistent with the fact that there is no technical
+                restraint from sites calling the API without having first obtained
+                an informed consent from the user. We are assuming that the social
+                and regulatory environment will be sufficient to punish
+                those who might misuse the API or abuse the scope of stored
+                exceptions. A user agent might further limit such risks by checking
+                for a <a>site-wide tracking status resource</a> when its presence is
+                required by the API.
+            </p>
+        </section>
 
       <section id="exception-javascript-api-cancel">
         <h4>API to Remove a Tracking Exception</h4>
@@ -1895,7 +1969,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
         </p>
         <pre>/.well-known/dnt/</pre>
         <p>
-          relative to the origin server's URI [[?RFC5785]].
+          relative to the origin server's URI [[RFC5785]].
         </p>
         <p>
           An origin server that receives a valid <code>GET</code> request
@@ -1930,7 +2004,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
         </p>
         <p>
           A <dfn>tracking status resource space</dfn> is defined by the
-          following URI Template [[?RFC6570]]:
+          following URI Template [[RFC6570]]:
         </p>
         <pre>/.well-known/dnt/{+status-id}</pre>
         <p>
@@ -1954,7 +2028,7 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
         <h4>Status Checks are Not Tracked</h4>
         <p>
           When sending a request for the tracking status, a user agent
-          SHOULD include any cookie data [[!RFC6265]] (set prior to the
+          SHOULD include any cookie data [[RFC6265]] (set prior to the
           request) that would be sent in a normal request to that origin
           server, since that data might be needed by the server to determine
           the current tracking status. For example, the cookie data might
@@ -2031,28 +2105,28 @@ id-char         =  ALPHA / DIGIT / "_" / "-" / "+" / "=" / "/"
       </section>
     </section>
 
-    <section id='status-representation'>
-      <h3>Tracking Status Representation</h3>
-      <p>
-        For each tracking status resource, an origin server MUST provide a
-        valid representation using the
-        <code><dfn>application/tracking-status+json</dfn></code> media type.
-        This media type consists of a <a>status object</a>
-        serialized as JSON [[!RFC8259]]. More information about the
-        <code>application/tracking-status+json</code> media type can be
-        found in <a href="#registrations" class="sectionRef"></a>.
-      </p>
+      <section id='status-representation'>
+          <h3>Tracking Status Representation</h3>
+          <p>
+              For each tracking status resource, an origin server MUST provide a
+              valid representation using the
+              <code><dfn>application/tracking-status+json</dfn></code> media type.
+              This media type consists of a <a>status object</a>
+              serialized as JSON [[!RFC7159]]. More information about the
+              <code>application/tracking-status+json</code> media type can be
+              found in <a href="#registrations" class="sectionRef"></a>.
+          </p>
 
-      <section id='rep.status-object'>
-        <h4>Status Object</h4>
-        <p>
-          A tracking status representation consists of a single
-          <dfn>status object</dfn> containing properties that
-          describe the tracking status applicable to the
-          <a>designated resource</a>.  Most of the properties are optional
-          and can be <a href="#rep.extension">extended over time</a>,
-          as illustrated by the following Orderly schema [[?Orderly]]:
-        </p>
+          <section id='rep.status-object'>
+              <h4>Status Object</h4>
+              <p>
+                  A tracking status representation consists of a single
+                  <dfn>status object</dfn> containing properties that
+                  describe the tracking status applicable to the
+                  <a>designated resource</a>.  Most of the properties are optional
+                  and can be <a href="#rep.extension">extended over time</a>,
+                  as illustrated by the following Orderly schema [[Orderly]]:
+              </p>
 <pre class="orderly">
 object {
     string tracking;                 // TSV
@@ -2063,13 +2137,14 @@ object {
     array { string; } audit?;        // hrefs
     string policy?;                  // href
     string config?;                  // href
+    string purposes?;                // href
 }*;
 </pre>
 
-<p>
-          The following example representation demonstrates a status object
-          with all of the properties defined by this specification.
-        </p>
+              <p>
+                  The following example representation demonstrates a status object
+                  with all of the properties defined by this specification.
+              </p>
 <pre class="example">
 {
   "tracking": "T",
@@ -2085,229 +2160,245 @@ object {
     "http://auditor.example.org/727073"
   ],
   "policy": "/privacy.html#tracking",
-  "config": "http://example.com/your/data"
+  "config": "http://example.com/your/data",
+  "purposes": "http://example.com/decoder-ring"
 }
 </pre>
-      </section>
+          </section>
 
-      <section id='rep.tracking'>
-        <h4>Tracking Property</h4>
-        <p>
-          A <a>status object</a> MUST have a property named
-          <code>tracking</code> with a string value containing
-          the tracking status value
-          (<a href="#tracking-status-value" class="sectionRef"></a>)
-          applicable to the <a>designated resource</a>.
-        </p>
-        <p>
-          For example, the following demonstrates a minimal tracking status
-          representation that is applicable to any resource that does not
-          perform tracking.
-        </p>
+          <section id='rep.tracking'>
+              <h4>Tracking Property</h4>
+              <p>
+                  A <a>status object</a> MUST have a property named
+                  <code>tracking</code> with a string value containing
+                  the tracking status value
+                  (<a href="#tracking-status-value" class="sectionRef"></a>)
+                  applicable to the <a>designated resource</a>.
+              </p>
+              <p>
+                  For example, the following demonstrates a minimal tracking status
+                  representation that is applicable to any resource that does not
+                  perform tracking.
+              </p>
 <pre class="example">
 {"tracking": "N"}
 </pre>
-      </section>
+          </section>
 
-      <section id='rep.compliance'>
-        <h4>Compliance Property</h4>
-        <p>
-          An origin server MAY send a property named
-          <code><dfn>compliance</dfn></code> with an array value containing
-          a list of URI references that identify specific regimes to which
-          the origin server claims to comply for the designated resource.
-          Communicating such a claim of compliance is presumed to improve
-          transparency, which might influence a user's decisions or
-          configurations regarding allowed tracking.
-        </p>
-        <p>
-          If an origin server sends a <a>TSV-extension</a> or an
-          <a href="#rep.extension">extension property in the status object</a>
-          that is not defined by successors of this specification, the
-          origin server MUST send a <code>compliance</code> property that
-          contains a reference to the definitive specification of that
-          extension. If more than one reference in the <code>compliance</code>
-          array defines the same extension value, the origin server SHOULD
-          list the array of references in order by intended precedence.
-        </p>
-      </section>
+          <section id='rep.compliance'>
+              <h4>Compliance Property</h4>
+              <p>
+                  An origin server MAY send a property named
+                  <code><dfn>compliance</dfn></code> with an array value containing
+                  a list of URI references that identify specific regimes to which
+                  the origin server claims to comply for the designated resource.
+                  Communicating such a claim of compliance is presumed to improve
+                  transparency, which might influence a user's decisions or
+                  configurations regarding allowed tracking.
+              </p>
+              <p>
+                  If an origin server sends a <a>TSV-extension</a> or an
+                  <a href="#rep.extension">extension property in the status object</a>
+                  that is not defined by successors of this specification, the
+                  origin server MUST send a <code>compliance</code> property that
+                  contains a reference to the definitive specification of that
+                  extension. If more than one reference in the <code>compliance</code>
+                  array defines the same extension value, the origin server SHOULD
+                  list the array of references in order by intended precedence.
+              </p>
+          </section>
 
-      <section id='rep.qualifiers'>
-        <h4>Qualifiers Property</h4>
-        <p>
-          An origin server MAY send a property named
-          <code><dfn>qualifiers</dfn></code> with a string value
-          containing a sequence of case sensitive characters corresponding
-          to explanations or limitations on the extent of tracking.
-          Multiple qualifiers indicate that multiple explanations or forms
-          of tracking might apply for the designated resource.
-          The meaning of each qualifier is presumed to be defined by one
-          or more of the regimes listed in <a>compliance</a>.
-        </p>
-      </section>
+          <section id='rep.qualifiers'>
+              <h4>Qualifiers Property</h4>
+              <p>
+                  An origin server MAY send a property named
+                  <code><dfn>qualifiers</dfn></code> with a string value
+                  containing a sequence of case sensitive characters corresponding
+                  to explanations or limitations on the extent of tracking.
+                  Multiple qualifiers indicate that multiple explanations or forms
+                  of tracking might apply for the designated resource.
+                  The meaning of each qualifier is presumed to be defined by one
+                  or more of the regimes listed in <a>compliance</a>.
+              </p>
+          </section>
 
-      <section id='rep.controller'>
-        <h4>Controller Property</h4>
-        <p>
-          An origin server MAY send a property named
-          <code><dfn>controller</dfn></code> with an array value containing
-          a list of URI references indirectly identifying the party or
-          set of parties that claims to be the responsible data controller
-          for personal data collected via the designated resource. An origin
-          server MUST send a <code>controller</code> property if the
-          responsible data controller does not own the designated resource's
-          domain name.
-        </p>
-        <p>
-          An origin server that does not send <code>controller</code>
-          is implying that its domain owner is the sole data controller;
-          information about the data controller ought to be found on the
-          designated resource's site root page, or by way of a clearly
-          indicated link from that page (i.e., an absent controller property
-          is equivalent to: <code>"controller":["/"]</code>).
-        </p>
-        <p>
-          If the <a>designated resource</a> has joint data controllers
-          (i.e., multiple parties have independent control over the
-          collected data), the origin server MUST send a
-          <code>controller</code> property that contains a reference
-          for each data controller.
-        </p>
-        <p>
-          Each URI reference provided in <code>controller</code> ought to
-          refer to a resource that, if a retrieval action is performed on
-          that URI, would provide the user with information regarding (at a
-          minimum) the identity of the corresponding party and its data
-          collection practices.
-        </p>
-      </section>
+          <section id='rep.controller'>
+              <h4>Controller Property</h4>
+              <p>
+                  An origin server MAY send a property named
+                  <code><dfn>controller</dfn></code> with an array value containing
+                  a list of URI references indirectly identifying the party or
+                  set of parties that claims to be the responsible data controller
+                  for personal data collected via the designated resource. An origin
+                  server MUST send a <code>controller</code> property if the
+                  responsible data controller does not own the designated resource's
+                  domain name.
+              </p>
+              <p>
+                  An origin server that does not send <code>controller</code>
+                  is implying that its domain owner is the sole data controller;
+                  information about the data controller ought to be found on the
+                  designated resource's site root page, or by way of a clearly
+                  indicated link from that page (i.e., an absent controller property
+                  is equivalent to: <code>"controller":["/"]</code>).
+              </p>
+              <p>
+                  If the <a>designated resource</a> has joint data controllers
+                  (i.e., multiple parties have independent control over the
+                  collected data), the origin server MUST send a
+                  <code>controller</code> property that contains a reference
+                  for each data controller.
+              </p>
+              <p>
+                  Each URI reference provided in <code>controller</code> ought to
+                  refer to a resource that, if a retrieval action is performed on
+                  that URI, would provide the user with information regarding (at a
+                  minimum) the identity of the corresponding party and its data
+                  collection practices.
+              </p>
+          </section>
 
-      <section id='rep.same-party'>
-        <h4>Same-party Property</h4>
-        <p>
-          Since a user's experience on a given site might be composed of
-          resources that are assembled from multiple domains, it might be
-          useful for a site to distinguish those domains that are subject to
-          their own control (i.e., share the same data controller as the
-          referring site).
-          An origin server MAY send a property named
-          <code><dfn>same-party</dfn></code> with an array value containing
-          a list of domain names that the origin server claims are the same
-          party, to the extent they are referenced by the designated
-          resource, if all data collected via those references share the
-          same data controller as the designated resource.
-        </p>
-        <p>
-          A user agent might use the <code>same-party</code> array,
-          when provided, to inform or enable different behavior for
-          references that are claimed to be same-party versus those for
-          which no claim is made. For example, a user agent might choose to
-          exclude, or perform additional pre-flight verification of,
-          requests to other domains that have not been claimed as same-party
-          by the referring site.
-        </p>
-      </section>
+          <section id='rep.same-party'>
+              <h4>Same-party Property</h4>
+              <p>
+                  Since a user's experience on a given site might be composed of
+                  resources that are assembled from multiple domains, it might be
+                  useful for a site to distinguish those domains that are subject to
+                  their own control (i.e., share the same data controller as the
+                  referring site).
+                  An origin server MAY send a property named
+                  <code><dfn>same-party</dfn></code> with an array value containing
+                  a list of domain names that the origin server claims are the same
+                  party, to the extent they are referenced by the designated
+                  resource, if all data collected via those references share the
+                  same data controller as the designated resource.
+              </p>
+              <p>
+                  A user agent might use the <code>same-party</code> array,
+                  when provided, to inform or enable different behavior for
+                  references that are claimed to be same-party versus those for
+                  which no claim is made. For example, a user agent might choose to
+                  exclude, or perform additional pre-flight verification of,
+                  requests to other domains that have not been claimed as same-party
+                  by the referring site.
+              </p>
+          </section>
 
-      <section id='rep.audit'>
-        <h4>Audit Property</h4>
-        <p>
-          An origin server MAY send a property named
-          <code><dfn>audit</dfn></code> with an array value containing a
-          list of URI references to external audits of the designated
-          resource's privacy policy and tracking behavior.
-          Preferably, the audit references are to resources that describe
-          the auditor and the results of that audit; however, if such a
-          resource is not available, a reference to the auditor is
-          sufficient.
-        </p>
-      </section>
+          <section id='rep.audit'>
+              <h4>Audit Property</h4>
+              <p>
+                  An origin server MAY send a property named
+                  <code><dfn>audit</dfn></code> with an array value containing a
+                  list of URI references to external audits of the designated
+                  resource's privacy policy and tracking behavior.
+                  Preferably, the audit references are to resources that describe
+                  the auditor and the results of that audit; however, if such a
+                  resource is not available, a reference to the auditor is
+                  sufficient.
+              </p>
+          </section>
 
-      <section id='rep.policy'>
-        <h4>Policy Property</h4>
-        <p>
-          An origin server MAY send a property named
-          <code><dfn>policy</dfn></code> with a string value containing a
-          URI reference to a human-readable document that describes the
-          relevant privacy policy for the designated resource.
-          This document can inform users about data that might be collected
-          when the designated resource is accessed and how collection, use,
-          or sharing of such data might differ based on receipt of an
-          expressed tracking preference (<a>DNT:1</a> or <a>DNT:0</a>).
-        </p>
-        <p>
-          An origin server MUST send a <code>policy</code> property if that
-          server is the <a>effective script origin</a> of a script that calls
-          the JavaScript API for storing a <a>user-granted exception</a>, as
-          described in
-          <a href="#exception-granting" class="sectionRef"></a>.
-        </p>
-        <p>
-          The content of such a policy document is beyond the
-          scope of this protocol and only supplemental to what is described
-          in the machine-readable tracking status representation.
-          If no <code>policy</code> property is provided, this
-          information might be obtained via the links provided in
-          <a>controller</a>.
-        </p>
-        <p>
-          If the policy associated with a designated resource happens to be
-          defined as a common standard that is applicable to multiple sites,
-          or includes such a standard by reference, that standard ought to be
-          referenced by a URI within the machine-readable <a>compliance</a>
-          property.
-        </p>
-      </section>
+          <section id='rep.policy'>
+              <h4>Policy Property</h4>
+              <p>
+                  An origin server MAY send a property named
+                  <code><dfn>policy</dfn></code> with a string value containing a
+                  URI reference to a human-readable document that describes the
+                  relevant privacy policy for the designated resource.
+                  This document can inform users about data that might be collected
+                  when the designated resource is accessed and how collection, use,
+                  or sharing of such data might differ based on receipt of an
+                  expressed tracking preference (<a>DNT:1</a> or <a>DNT:0</a>).
+              </p>
+              <p>
+                  An origin server MUST send a <code>policy</code> property if that
+                  server is the <a>effective script origin</a> of a script that calls
+                  the JavaScript API for storing a <a>user-granted exception</a>, as
+                  described in
+                  <a href="#exception-granting" class="sectionRef"></a>.
+              </p>
+              <p>
+                  The content of such a policy document is beyond the
+                  scope of this protocol and only supplemental to what is described
+                  in the machine-readable tracking status representation.
+                  If no <code>policy</code> property is provided, this
+                  information might be obtained via the links provided in
+                  <a>controller</a>.
+              </p>
+              <p>
+                  If the policy associated with a designated resource happens to be
+                  defined as a common standard that is applicable to multiple sites,
+                  or includes such a standard by reference, that standard ought to be
+                  referenced by a URI within the machine-readable <a>compliance</a>
+                  property.
+              </p>
+          </section>
 
-      <section id='rep.config'>
-        <h4>Config Property</h4>
-        <p>
-          An origin server MAY send a property named
-          <code><dfn>config</dfn></code> with a string value containing a
-          URI reference to a resource for giving the user control over
-          personal data collected via the designated resource (and possibly
-          other resources).
-          If the tracking status value indicates prior consent
-          (<a>C</a>), the origin server MUST send a
-          <code>config</code> property referencing a resource that
-          describes how such consent is established and how to revoke that
-          consent.
-        </p>
-        <p>
-          A config resource might include the ability to review
-          past data collected, delete some or all of the data, provide
-          additional data (if desired), or <q>opt-in</q>, <q>opt-out</q>,
-          or otherwise modify an out-of-band consent status regarding
-          data collection. The design of such a resource,
-          the extent to which it can provide access to that data, and
-          how one might implement an out-of-band consent mechanism are
-          beyond the scope of this protocol.
-        </p>
-        <p>
-          If no <code>config</code> property is provided, this
-          information might be obtained via the links provided in
-          <a>controller</a> or <a>policy</a>.
-        </p>
+          <section id='rep.config'>
+              <h4>Config Property</h4>
+              <p>
+                  An origin server MAY send a property named
+                  <code><dfn>config</dfn></code> with a string value containing a
+                  URI reference to a resource for giving the user control over
+                  personal data collected via the designated resource (and possibly
+                  other resources).
+                  If the tracking status value indicates prior consent
+                  (<a>C</a>), the origin server MUST send a
+                  <code>config</code> property referencing a resource that
+                  describes how such consent is established and how to revoke that
+                  consent.
+              </p>
+              <p>
+                  A config resource might include the ability to review
+                  past data collected, delete some or all of the data, provide
+                  additional data (if desired), or <q>opt-in</q>, <q>opt-out</q>,
+                  or otherwise modify an out-of-band consent status regarding
+                  data collection. The design of such a resource,
+                  the extent to which it can provide access to that data, and
+                  how one might implement an out-of-band consent mechanism are
+                  beyond the scope of this protocol.
+              </p>
+              <p>
+                  If no <code>config</code> property is provided, this
+                  information might be obtained via the links provided in
+                  <a>controller</a> or <a>policy</a>.
+              </p>
+          </section>
+          <section id='rep.purposes'>
+              <h4>Purposes Property</h4>
+              <p>
+                  An origin server MAY send a property named
+                  <code><dfn>purposes</dfn></code> with a string value containing a
+                  URI reference to a human-readable document that describes the different
+                  purposes for tracking implemented by this origin server.
+              </p>
+              <p>
+                  If the origin server supports the <a>DNT Purposes</a> qualifier then this property MUST be supported,
+                  and be dynamically generated by decoding the field-value of the request's DNT header, in order to highlite or otherwise
+                  indicate the specific subset of purpose the user has agreed to.
+              </p>
+          </section>
+          <section id='rep.extension'>
+                      <h4>Extensions to the Status Object</h4>
+              <p>
+                  Extensibility of the status object ensures that this protocol will
+                  continue to be usable as regional laws and regulatory environments
+                  evolve over time and compliance specifications are developed
+                  accordingly.
+              </p>
+              <p>
+                  An origin server MAY send additional properties in the <a>
+                      status
+                      object
+                  </a> if those extensions have been defined by a future
+                  version of this specification or a compliance regime
+                  identified within the <a>compliance</a> property.
+                  Aside from storage or presentation of a server's response,
+                  a recipient MUST ignore extension properties that it does
+                  not recognize.
+              </p>
+          </section>
       </section>
-
-      <section id='rep.extension'>
-        <h4>Extensions to the Status Object</h4>
-        <p>
-          Extensibility of the status object ensures that this protocol will
-          continue to be usable as regional laws and regulatory environments
-          evolve over time and compliance specifications are developed
-          accordingly.
-        </p>
-        <p>
-          An origin server MAY send additional properties in the <a>status
-          object</a> if those extensions have been defined by a future
-          version of this specification or a compliance regime
-          identified within the <a>compliance</a> property.
-          Aside from storage or presentation of a server's response,
-          a recipient MUST ignore extension properties that it does
-          not recognize.
-        </p>
-      </section>
-    </section>
 
     <section id='response-error'>
       <h3>Status Code for Tracking Required</h3>
@@ -2516,10 +2607,8 @@ object {
   <section id="registrations" class='appendix'>
     <h2>Registrations</h2>
 
-    <section id='reg.tracking-status.json'>
-      <h3>Registration of application/tracking-status+json</h3>
     <p>
-      The media type <a>application/tracking-status+json</a> is
+      The Internet media type <a>application/tracking-status+json</a> is
       used for tracking status representations
       (<a href="#status-representation" class="sectionRef"></a>).
     </p>
@@ -2530,7 +2619,7 @@ object {
       <dt>Optional parameters:</dt><dd>N/A</dd>
       <dt>Encoding considerations:</dt><dd>binary</dd>
       <dt>Security considerations:</dt>
-        <dd>See JSON [RFC8259], Section 12.</dd>
+        <dd>See JSON [RFC7159], Section 12.</dd>
       <dt>Interoperability considerations:</dt><dd>N/A</dd>
       <dt>Published specification:</dt>
         <dd>Tracking Preference Expression (DNT),
@@ -2552,83 +2641,11 @@ object {
       <dt>Author(s):</dt><dd>Roy T. Fielding and David Singer</dd>
       <dt>Change controller:</dt><dd>W3C</dd>
     </dl>
-    </section>
-
-    <section id='reg.DNT'>
-      <h3>Registration of DNT Header Field</h3>
-
-      <p>
-        The DNT header field, defined in
-        <a href="#dnt-header-field" class="sectionRef"></a>, is to be
-        registered in the Message Headers registry for the protocol "http"
-        [[?RFC3864]].
-      </p>
-      <p>
-        DNT's use by this specification is limited to providing control data
-        within an HTTP request consisting of a single value that excludes the
-        comma list separator; multiple DNT header fields per message are not
-        allowed. DNT is intended to pass through intermediaries unmodified and
-        end-to-end; it is not intended to be listed in Connection.
-        Although unlikely to be used in a PUT request, the field is not part
-        of a representation and is not intended to be stored as such.
-      </p>
-      <p>
-        Both <a href="#dnt-header-field">DNT</a> and
-        <a href="#response-header-field">Tk</a> have been specifically
-        designed to avoid the need for responses that vary based on DNT
-        value. However, a server that chooses to generate different content
-        based on the received value of DNT can indicate that by including the
-        DNT field name within a Vary header field of its response.
-      </p>
-    </section>
-
-    <section id='reg.Tk'>
-      <h3>Registration of Tk Header Field</h3>
-
-      <p>
-        The Tk header field, defined in
-        <a href="#response-header-field" class="sectionRef"></a>, is to be
-        registered in the Message Headers registry for the protocol "http"
-        [[?RFC3864]].
-      </p>
-      <p>
-        Tk's use by this specification is limited to providing control data
-        within an HTTP response consisting of a single value that excludes the
-        comma list separator; multiple Tk header fields per message are not
-        allowed. Tk is intended to pass through intermediaries unmodified and
-        end-to-end; it is not intended to be listed in Connection.
-      </p>
-    </section>
-
-    <section id='reg.well-known.dnt'>
-      <h3>Registration of URI /.well-known/dnt</h3>
-
-      <p>
-        The well-known URI space for tracking status resources, defined in
-        <a href="#status-resource" class="sectionRef"></a>,
-        is to be registered in the Well-Known URIs registry [[?RFC5785]].
-      </p>
-    </section>
   </section>
 
   <section id="changes" class='appendix'>
-    <h2>Changes</h2>
+    <h2>Changes since first CR</h2>
 
-    <section id="changes-CR2" class='appendix'>
-    <h2>Since Second CR</h2>
-    <p>
-      The name and explanation parameters on tracking exceptions have been
-      further defined as UTF-8 and in the same natural language as used for
-      informing consent.
-    </p>
-    <p>
-      Appendices have been added for registration of DNT and Tk header fields,
-      plus registration of well-known dnt URI space.
-    </p>
-    </section>
-
-    <section id="changes-CR1" class='appendix'>
-    <h2>Since First CR</h2>
     <p>
       The client-side scripting API has been rewritten to use fewer
       functions and to return Promises. The API names have also been changed
