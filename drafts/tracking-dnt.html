@@ -1004,7 +1004,7 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
         <pre class="idl">
         partial interface Navigator {
             Promise&lt;TrackingExResult&gt; storeTrackingException (
-              TrackingExData properties
+              optional TrackingExData properties = {}
             );
         };
         dictionary TrackingExData {
@@ -1242,8 +1242,8 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
         </p>
         <pre class="idl">
         partial interface Navigator {
-          Promise&lt;void&gt; removeTrackingException (
-            TrackingExData properties
+          Promise&lt;undefined&gt; removeTrackingException (
+            optional TrackingExData properties = {}
           );
         };
         </pre>
@@ -1344,7 +1344,7 @@ DNT-extension   = %x21 / %x23-2B / %x2D-5B / %x5D-7E
         <pre class="idl">
         partial interface Navigator {
           Promise&lt;boolean&gt; trackingExceptionExists (
-            TrackingExData properties
+            optional TrackingExData properties = {}
           );
         };
         </pre>
